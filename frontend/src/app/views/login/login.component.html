@@ -1,0 +1,22 @@
+<div class="content login">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="login">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password">
+        </mat-form-field>
+        <p *ngIf="errorMessage">{{errorMessage}}</p>
+
+        <button mat-raised-button type="submit" color="primary" [disabled]="!loginForm.valid">Log In</button>
+
+        <a [routerLink]="['/register']" class="create-link">Create new <mat-icon>chevron_right</mat-icon></a>
+    </form>
+
+    <div *ngIf="loading" class="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

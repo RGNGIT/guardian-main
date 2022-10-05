@@ -1,0 +1,27 @@
+<h1 class="settings-title">Change settings</h1>
+<div *ngIf="!isLoading; else spinner">
+    <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="submit-field" appearance="outline">
+            <mat-label>OPERATOR ID:</mat-label>
+            <input matInput name="OPERATOR_ID" type="text" formControlName="operatorId">
+        </mat-form-field>
+
+        <mat-form-field class="submit-field" appearance="outline">
+            <mat-label>OPERATOR KEY:</mat-label>
+            <input matInput name="OPERATOR_KEY" type="password" placeholder="Enter secret key" formControlName="operatorKey">
+        </mat-form-field>
+
+        <mat-form-field class="submit-field" appearance="outline">
+            <mat-label>IPFS STORAGE API KEY:</mat-label>
+            <input matInput name="IPFS_STORAGE_API_KEY" type="password" placeholder="Enter secret key" formControlName="ipfsStorageApiKey">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" class="submit-button"
+            [disabled]="!dataForm.valid">Ok</button>
+    </form>
+
+</div>
+
+<ng-template #spinner>
+    <mat-spinner class="loading"></mat-spinner>
+</ng-template>

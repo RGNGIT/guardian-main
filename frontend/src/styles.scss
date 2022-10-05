@@ -1,0 +1,170 @@
+/* You can add global styles to this file, and also import other style files */
+@import './variables.scss';
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';
+@import '~codemirror/addon/fold/foldgutter.css';
+@import '~codemirror/addon/lint/lint.css';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+}
+
+.mat-subheading-1,.mat-typography h4 {
+    font-size: 20px;
+    line-height: 23px;
+    flex: 0 0 190px;
+}
+
+.signed-in {
+    &>.content {
+        background: #fff;
+    }
+
+    .content.header {
+        background-color: var(--header-background-color);
+
+        .btn-home {
+            color: #fff;
+        }
+
+        .example-icon mat-icon {
+            color: rgba(255, 255, 255, 0.54);
+        }
+    }
+}
+
+.embedded-btn {
+    padding: 0 0 !important;
+    width: 140px;
+    height: 34px !important;
+    color: #fff !important;
+    position: relative;
+    top: -6px;
+}
+
+.user-profile .list {
+    margin: 20px auto !important;
+}
+
+.list {
+    border: unset !important;
+}
+
+.list-button button.mat-raised-button {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+.mat-table {
+    tr.mat-header-row {
+        box-shadow: 0 3px 6px rgb(0 0 0 / 16%);
+        position: relative;
+    }
+
+    tr.mat-row,
+    tr.mat-footer-row {
+        height: var(--table-row-height);
+
+        &:hover {
+            background-color: rgba(112, 112, 112, 0.04);
+        }
+
+        td {
+            font-size: 20px;
+            line-height: 23px;
+            padding: 0 10px;
+
+            a,
+            .btn-field,
+            .btn-link {
+                width: auto;
+                font-size: 20px;
+                color: #0B73F8;
+                text-decoration: none;
+                display: inline-block;
+                border-bottom: 3px solid #0C77FF;
+                padding-bottom: 3px;
+                font-weight: normal;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+
+.guardian-tooltip {
+    font-size: 16px;
+}
+
+button.mat-raised-button,
+button.mat-button {
+    /*width: 260px;*/
+    height: 47px;
+    /*background: #000000 0% 0% no-repeat padding-box;*/
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 24px;
+    padding: 0 41px;
+    /*opacity: 0.65;*/
+
+    &.mat-primary {
+        background-color: var(--button-primary-color);
+    }
+}
+
+.cdk-overlay-pane {
+    .mat-dialog-container {
+        border-radius: 30px;
+
+        .mat-dialog-content {
+            max-height: unset;
+        }
+    }
+
+    .mat-menu-panel {
+        max-width: unset;
+        max-height: unset;
+    }
+}
+
+* {
+    -webkit-overflow-scrolling: auto;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    /*margin: 54px 0 53px;*/
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    box-shadow: rgba(255,255,255,0.3) 0 0 0 1px;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.45);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.55);
+}
+
+.mat-datepicker-content .mat-calendar {
+    height: unset !important;
+}
+
+.not-editable-text {
+    color: gray;
+}

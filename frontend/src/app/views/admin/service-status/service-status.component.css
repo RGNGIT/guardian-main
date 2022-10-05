@@ -1,0 +1,52 @@
+.icon-status {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+}
+
+.icon-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.service-status-row, .service-status-row td {
+    padding: 0 10px;
+}
+
+.ready-status {
+    color: green;
+}
+
+.stopped-status {
+    color: red;
+}
+
+.service-status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 60%;
+    font-size: xx-large;
+    background: #fff;
+}
+
+.info-message {
+    text-align: center;
+    font-size: xx-large;
+}
+
+.a, a:visited {
+    color: blue;
+}
+
+.back {
+    color: rgb(0, 0, 238);
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 20px;
+    height: 20px;
+    padding: 6px;
+    margin-top: 20px;
+}
