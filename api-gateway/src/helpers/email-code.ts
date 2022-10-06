@@ -7,7 +7,8 @@ const {
     NOTIFICATION_EMAIL_FROM_PORT,
     NOTIFICATION_EMAIL_FROM_USERNAME,
     NOTIFICATION_EMAIL_FROM_PASSWORD,
-    NOTIFICATION_EMAIL_FROM_SECURE
+    NOTIFICATION_EMAIL_FROM_SECURE,
+    PORTAL_URL
 } = process.env;
 
 let pendingUsers: Array<IPendingUser> = [];
@@ -46,7 +47,7 @@ export class EmailCode {
             from: 'Serapis',
             to: email,
             subject: "Serapis registration confirmation",
-            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><p href="http://serapis.19ivt.ru/confirm?u=${u}&c=${c}">Confirm</p>`,
+            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><p href="${PORTAL_URL}/confirm?u=${u}&c=${c}">Confirm</p>`,
         });
         return u + c;
     }
@@ -54,6 +55,7 @@ export class EmailCode {
     public checkCode(checkSum: string): IPendingUser | null {
         for(const user of pendingUsers) {
             if(user.checkSum === checkSum) {
+                pendingUsers.filter(item => item.checkSum !== user.checkSum);
                 return user;
             }
         }
