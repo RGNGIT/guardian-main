@@ -4,6 +4,7 @@ import { Users } from '@helpers/users';
 import { AuthenticatedRequest, Logger } from '@guardian/common';
 import { Guardians } from '@helpers/guardians';
 import { UserRole } from '@guardian/interfaces';
+import { EmailCode } from '@helpers/email-code';
 
 /**
  * User account route
@@ -26,16 +27,36 @@ accountAPI.get('/session', async (req: Request, res: Response) => {
     }
 });
 
-accountAPI.post('/register', async (req: Request, res: Response) => {
-    const users = new Users();
+accountAPI.get('/confirm', async (req: Request, res: Response) => {
     try {
-        const { username, password } = req.body;
-        let { role } = req.body;
+        const users = new Users();
+        const {c, u} = req.query;
+        const checkCode = await new EmailCode().checkCode(u.toString() + c.toString());
+        if(checkCode) {
+            res.send(checkCode);
+        } else {
+            res.send("Wrong code");
+        }
+    } catch(error) {
+        new Logger().error(error, ['API_GATEWAY']);
+        res.status(500).send({ code: 500, message: 'Server error' });
+    }
+});
+
+accountAPI.post('/register', async (req: Request, res: Response) => {
+    try {
+        const { username, password, email } = req.body;
+        // Role was gotten by body, but now USER by default
+        // let { role } = req.body;
+        const role = 'USER';
         // @deprecated 2022-10-01
+        /*
         if (role === 'ROOT_AUTHORITY') {
             role = UserRole.STANDARD_REGISTRY;
         }
-        res.status(201).json(await users.registerNewUser(username, password, role));
+        */
+        await new EmailCode().addToQueue({username, password, role, email, checkSum: null});
+        res.status(201).send("User added to the confirmation queue");
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send({ code: 500, message: 'Server error' });

@@ -59,7 +59,7 @@ export class AccountService {
             try {
                 const userRepository = new DataBaseHelper(User);
 
-                const { username, password, role } = msg;
+                const { username, password, email, role } = msg;
                 const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
 
                 const checkUserName = await userRepository.count({ username }) > 0;
@@ -70,6 +70,7 @@ export class AccountService {
                 const user = userRepository.create({
                     username,
                     password: passwordDigest,
+                    email,
                     role,
                     walletToken: crypto.createHash('sha1').update(Math.random().toString()).digest('hex'),
                     parent: null,

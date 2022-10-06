@@ -9,6 +9,10 @@ export interface IAuthUser {
      */
     username: string;
     /**
+     * Email
+     */
+    email: string;
+    /**
      * Role
      */
     role: UserRole;

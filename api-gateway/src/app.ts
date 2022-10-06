@@ -31,6 +31,7 @@ Promise.all([
     MessageBrokerChannel.connect('API_GATEWAY'),
 ]).then(async ([cn]) => {
     const app = express();
+    app.use(express.urlencoded({extended: true}));
     app.use(express.json());
     app.use(express.raw({
         inflate: true,

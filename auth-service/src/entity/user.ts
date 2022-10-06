@@ -22,6 +22,12 @@ export class User extends BaseEntity implements IUser {
     password?: string;
 
     /**
+     * User role
+     */
+    @Property({ nullable: true})
+    email?: string;
+
+    /**
      * User DID
      */
     @Property({ nullable: true })
