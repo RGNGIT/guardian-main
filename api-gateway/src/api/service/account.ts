@@ -31,11 +31,11 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
     try {
         const users = new Users();
         const {c, u} = req.query;
-        const checkCode = await new EmailCode().checkCode(u.toString() + c.toString());
-        if(checkCode) {
-            res.send(checkCode);
+        const user = await new EmailCode().checkCode(u.toString() + c.toString());
+        if(user) {
+            res.status(201).json(await users.registerNewUser(user.username, user.password, user.email, user.role));
         } else {
-            res.send("Wrong code");
+            res.status(201).send("Wrong link");
         }
     } catch(error) {
         new Logger().error(error, ['API_GATEWAY']);

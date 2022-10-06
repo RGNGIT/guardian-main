@@ -56,6 +56,9 @@ Promise.all([
     ////////////////////////////////////////
 
     // Config routes
+    app.get('/', (req, res) => {
+        res.send('Hello World!');
+    });
     app.use('/policies', authorizationHelper, policyAPI);
     app.use('/accounts/', accountAPI);
     app.use('/profiles/', authorizationHelper, profileAPI);

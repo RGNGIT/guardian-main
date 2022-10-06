@@ -3,6 +3,32 @@ import WebSocket from 'ws';
 import { UserRole } from '@guardian/interfaces';
 
 /**
+ * Pending confirmation user interface
+ */
+export interface IPendingUser {
+    /**
+     * User account name
+     */
+    username: string;
+    /**
+     * User account password
+     */
+    password: string;
+    /**
+     * User account role
+     */
+    role: string;
+    /**
+     * User account email
+     */
+    email: string;
+    /**
+     * User account check sum
+     */
+    checkSum: string;
+}
+
+/**
  * Authenticated user interface
  */
 export interface IAuthUser {
