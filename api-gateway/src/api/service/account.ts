@@ -48,7 +48,7 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         const {first_name, last_name, username, password, email } = req.body;
         // Role meant to be get by body, but now USER by default
         // let { role } = req.body;
-        const role = 'USER';
+        const role = UserRole.USER;
         // @deprecated 2022-10-01
         /*
         if (role === 'ROOT_AUTHORITY') {
