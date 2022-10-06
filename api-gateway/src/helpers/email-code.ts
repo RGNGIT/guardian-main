@@ -47,7 +47,7 @@ export class EmailCode {
             from: 'Serapis',
             to: email,
             subject: "Serapis registration confirmation",
-            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/confirm?u=${u}&c=${c}">Click to confirm</a>`,
+            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/accounts/confirm?u=${u}&c=${c}">Click to confirm</a>`,
         });
         return u + c;
     }
