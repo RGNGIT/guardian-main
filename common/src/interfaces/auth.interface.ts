@@ -56,6 +56,10 @@ export interface IAuthUser {
      * Wallet token
      */
     walletToken?: string;
+    /**
+     * User account email
+     */
+    email: string;
 }
 
 /**
