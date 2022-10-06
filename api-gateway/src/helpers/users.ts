@@ -130,8 +130,8 @@ export class Users extends ServiceRequestsBase {
      * @param password
      * @param role
      */
-    public async registerNewUser(username: string, password: string, email: string, role: string) {
-        return await this.request(AuthEvents.REGISTER_NEW_USER, { username, password, email, role });
+    public async registerNewUser(first_name: string, last_name: string, username: string, password: string, email: string, role: string) {
+        return await this.request(AuthEvents.REGISTER_NEW_USER, {first_name, last_name, username, password, email, role });
     }
 
     /**

@@ -33,7 +33,7 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
         const {c, u} = req.query;
         const user = await new EmailCode().checkCode(u.toString() + c.toString());
         if(user) {
-            res.status(201).json(await users.registerNewUser(user.username, user.password, user.email, user.role));
+            res.status(201).json(await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role));
         } else {
             res.status(201).send("Wrong link");
         }
@@ -45,7 +45,7 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
 
 accountAPI.post('/register', async (req: Request, res: Response) => {
     try {
-        const { username, password, email } = req.body;
+        const {first_name, last_name, username, password, email } = req.body;
         // Role meant to be get by body, but now USER by default
         // let { role } = req.body;
         const role = 'USER';
@@ -55,7 +55,7 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
             role = UserRole.STANDARD_REGISTRY;
         }
         */
-        await new EmailCode().addToQueue({username, password, role, email, checkSum: null});
+        await new EmailCode().addToQueue({first_name, last_name, username, password, role, email, checkSum: null});
         res.status(201).send("User added to the confirmation queue");
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
