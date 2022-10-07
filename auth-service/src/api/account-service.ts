@@ -20,6 +20,7 @@ import {
     IGetDemoUserResponse,
     IGetUserMessage,
     IUpdateUserMessage,
+    IUpdateUserPasswordMessage,
     ISaveUserMessage,
     IGetUserByIdMessage,
     IGetUsersByIdMessage,
@@ -27,7 +28,7 @@ import {
     IUser,
     IStandardRegistryUserResponse,
     IGetUsersByAccountMessage,
-    IGetUserByEmail
+    IGetUserByEmailMessage
 } from '@guardian/interfaces';
 
 /**
@@ -168,6 +169,17 @@ export class AccountService {
             }
         });
 
+        this.channel.response<IGetUserByEmailMessage, User>(AuthEvents.GET_USER_BY_EMAIL, async (msg) => {
+            const { email } = msg;
+
+            try {
+                return new MessageResponse(await new DataBaseHelper(User).findOne({ email: email }));
+            } catch (error) {
+                new Logger().error(error, ['AUTH_SERVICE']);
+                return new MessageError(error);
+            }
+        });
+
         this.channel.response<IGetUserByIdMessage, IUser>(AuthEvents.GET_USER_BY_ID, async (msg) => {
             const { did } = msg;
 
@@ -184,16 +196,6 @@ export class AccountService {
 
             try {
                 return new MessageResponse(await new DataBaseHelper(User).findOne({ hederaAccountId: account }));
-            } catch (error) {
-                new Logger().error(error, ['AUTH_SERVICE']);
-                return new MessageError(error);
-            }
-        });
-
-        this.channel.response<IGetUserByEmail, IUser>(AuthEvents.GET_USER_BY_EMAIL, async (msg) => {
-            const {email} = msg;
-            try {
-                return new MessageResponse(await new DataBaseHelper(User).findOne({ email: email }));
             } catch (error) {
                 new Logger().error(error, ['AUTH_SERVICE']);
                 return new MessageError(error);
@@ -231,6 +233,19 @@ export class AccountService {
 
             try {
                 return new MessageResponse(await new DataBaseHelper(User).update(item, { username }));
+            } catch (error) {
+                new Logger().error(error, ['AUTH_SERVICE']);
+                return new MessageError(error);
+            }
+        });
+
+        this.channel.response<IUpdateUserPasswordMessage, any>(AuthEvents.UPDATE_PASSWORD, async (msg) => {
+            const { email, password } = msg;
+
+            const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
+
+            try {
+                return new MessageResponse(await new DataBaseHelper(User).update({ password: passwordDigest }, { email }));
             } catch (error) {
                 new Logger().error(error, ['AUTH_SERVICE']);
                 return new MessageError(error);

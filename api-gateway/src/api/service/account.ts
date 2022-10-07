@@ -81,6 +81,33 @@ accountAPI.post('/login', async (req: Request, res: Response) => {
     }
 });
 
+accountAPI.post('/reset', async (req: Request, res: Response) => {
+    const users = new Users();
+    try {
+        const { email } = req.body;
+        const user =  await users.getUserByEmail(email);
+        if (user) {
+            await new EmailCode().sendLinkToRestore(email);
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        new Logger().error(error, ['API_GATEWAY']);
+        res.status(error.code).send({ code: error.code, message: error.message });
+    }
+});
+
+accountAPI.post('/update', async (req: Request, res: Response) => {
+    const users = new Users();
+    try {
+        const { email, password } = req.body;
+        const user =  await users.updateUserPassword(email, password);
+        res.status(200).json(user);
+    } catch (error) {
+        new Logger().error(error, ['API_GATEWAY']);
+        res.status(error.code).send({ code: error.code, message: error.message });
+    }
+});
+
 accountAPI.get('/', authorizationHelper, permissionHelper(UserRole.STANDARD_REGISTRY),async (req: AuthenticatedRequest, res: Response) => {
     try {
         const users = new Users();

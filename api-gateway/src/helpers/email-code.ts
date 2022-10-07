@@ -62,4 +62,13 @@ export class EmailCode {
         return null;
     }
 
+    public async sendLinkToRestore(email: string) {
+        await this.transporter.sendMail({
+            from: 'Serapis',
+            to: email,
+            subject: "Serapis password recovery",
+            html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/accounts/">Reset password</a>`,
+        });
+    }
+
 }

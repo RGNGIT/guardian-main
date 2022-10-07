@@ -104,7 +104,7 @@ export class Users extends ServiceRequestsBase {
      * @param role
      */
     public async getUsersByRole(role: UserRole): Promise<IAuthUser[]> {
-        return await this.request(AuthEvents.GET_USERS_BY_ROLE, {role});;
+        return await this.request(AuthEvents.GET_USERS_BY_ROLE, {role});
     }
 
     /**
@@ -114,6 +114,10 @@ export class Users extends ServiceRequestsBase {
      */
     public async updateCurrentUser(username: string, item: any) {
         return await this.request(AuthEvents.UPDATE_USER, { username, item });
+    }
+
+    public async updateUserPassword(email: string, password: string) {
+        return await this.request(AuthEvents.UPDATE_PASSWORD, { email, password });
     }
 
     /**

@@ -12,6 +12,16 @@ export interface IGetUserMessage {
 }
 
 /**
+ * Get user by email interface
+ */
+export interface IGetUserByEmailMessage {
+    /**
+     * Email
+     */
+    email: string;
+}
+
+/**
  * Get user by token message
  */
 export interface IGetUserByTokenMessage {
@@ -132,6 +142,20 @@ export interface IUpdateUserMessage {
      * User update fields
      */
     item: Partial<IUser>;
+}
+
+/**
+ * Update user password interface
+ */
+export interface IUpdateUserPasswordMessage {
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * User password
+     */
+    password: string;
 }
 
 /**
