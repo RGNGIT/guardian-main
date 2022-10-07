@@ -153,7 +153,15 @@ export interface IGetUserByIdMessage {
      */
     did: string;
 }
-
+/**
+ * Get user by id enail
+ */
+ export interface IGetUserByEmail {
+    /**
+     * User email
+     */
+    email: string;
+}
 /**
  * Get users by ids message interface
  */

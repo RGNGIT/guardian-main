@@ -26,7 +26,8 @@ import {
     IGetUsersByIRoleMessage,
     IUser,
     IStandardRegistryUserResponse,
-    IGetUsersByAccountMessage
+    IGetUsersByAccountMessage,
+    IGetUserByEmail
 } from '@guardian/interfaces';
 
 /**
@@ -183,6 +184,16 @@ export class AccountService {
 
             try {
                 return new MessageResponse(await new DataBaseHelper(User).findOne({ hederaAccountId: account }));
+            } catch (error) {
+                new Logger().error(error, ['AUTH_SERVICE']);
+                return new MessageError(error);
+            }
+        });
+
+        this.channel.response<IGetUserByEmail, IUser>(AuthEvents.GET_USER_BY_EMAIL, async (msg) => {
+            const {email} = msg;
+            try {
+                return new MessageResponse(await new DataBaseHelper(User).findOne({ email: email }));
             } catch (error) {
                 new Logger().error(error, ['AUTH_SERVICE']);
                 return new MessageError(error);

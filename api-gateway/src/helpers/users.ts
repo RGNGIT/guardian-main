@@ -68,6 +68,14 @@ export class Users extends ServiceRequestsBase {
     }
 
     /**
+     * Return user by email
+     * @param email
+     */
+    public async getUserByEmail(email: string): Promise<IAuthUser> {
+        return await this.request(AuthEvents.GET_USER_BY_EMAIL, {email});
+    }
+
+    /**
      * Return user by did
      * @param did
      */

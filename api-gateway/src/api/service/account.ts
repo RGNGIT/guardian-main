@@ -45,7 +45,14 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
 
 accountAPI.post('/register', async (req: Request, res: Response) => {
     try {
+        const users = new Users();
         const {first_name, last_name, username, password, email } = req.body;
+        const userWithProvidedName = await users.getUser(username);
+        const userWithProvidedEmail = await users.getUserByEmail(email);
+        if(userWithProvidedName || userWithProvidedEmail) {
+            res.status(201).send("User with the same name or email already exists!");
+            return;
+        }
         // Role meant to be get by body, but now USER by default
         // let { role } = req.body;
         const role = UserRole.USER;
