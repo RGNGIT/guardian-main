@@ -1,5 +1,5 @@
 import nodemailer, { Transporter } from 'nodemailer';
-import { IPendingUser } from '@guardian/common';
+import { IPendingUser, IUserUpdatePassword } from '@guardian/common';
 import crypto from 'crypto';
 
 const {
@@ -11,14 +11,24 @@ const {
     PORTAL_URL
 } = process.env;
 
-let pendingUsers: Array<IPendingUser> = [];
+let pendingUsers: IPendingUser[] = [];
+let pendingUpdatePassword: IUserUpdatePassword[] = [];
 
+/**
+ * Email service
+ */
 export class EmailCode {
 
+    /**
+     * Transport for sending email
+     */
     private transporter: Transporter;
 
-    private generateRandom() {
-        return Math.floor(100000 + Math.random() * 900000);
+    /**
+     * Random generation of code
+     */
+    private static generateRandom() {
+        return Math.floor(Math.random() * 900000 + 100000);
     }
 
     constructor() {
@@ -33,42 +43,76 @@ export class EmailCode {
         });
     }
 
+    /**
+     * Add to queue of users for confirmation
+     *
+     * @param {Object} pendingUser - user in queue
+     */
     public async addToQueue(pendingUser: IPendingUser): Promise<void> {
-        const checkSum = await this.sendCode(pendingUser.username, pendingUser.email);
-        pendingUser.checkSum = checkSum;
+        pendingUser.checkSum = await this.sendCode(pendingUser.username, pendingUser.email);
         pendingUsers.push(pendingUser);
     }
 
+    /**
+     * Add to queue of users for reset password
+     *
+     * @param {Object} pendingUserUpdatePassword - user in queue
+     */
+    public async addToQueueToResetPassword(pendingUserUpdatePassword: IUserUpdatePassword): Promise<void> {
+        const code = EmailCode.generateRandom().toString();
+        const u = crypto.createHash('sha1').update(pendingUserUpdatePassword.email).digest('hex');
+        const c = crypto.createHash('sha1').update(code).digest('hex');
+        await this.transporter.sendMail({
+            from: 'Serapis',
+            to: pendingUserUpdatePassword.email,
+            subject: 'Serapis password recovery',
+            html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/accounts/update-password?u=${u}&c=${c}">Reset password</a>`,
+        });
+        pendingUserUpdatePassword.checkSum = u + c;
+        pendingUpdatePassword.push(pendingUserUpdatePassword);
+    }
+
+    /**
+     * Send email with link to confirmation
+     */
     private async sendCode(username: string, email: string): Promise<string> {
-        const code = this.generateRandom().toString();
+        const code = EmailCode.generateRandom().toString();
         const u = crypto.createHash('sha1').update(username).digest('hex');
         const c = crypto.createHash('sha1').update(code).digest('hex');
         await this.transporter.sendMail({
             from: 'Serapis',
             to: email,
-            subject: "Serapis registration confirmation",
-            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/accounts/confirm?u=${u}&c=${c}">Click to confirm</a>`,
+            subject: 'Serapis registration confirmation',
+            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/accounts/confirm?">Click to confirm</a>`,
         });
         return u + c;
     }
 
+    /**
+     * Check given checkSum with checkSum of user in queue
+     */
     public checkCode(checkSum: string): IPendingUser | null {
         for(const user of pendingUsers) {
             if(user.checkSum === checkSum) {
-                pendingUsers.filter(item => item.checkSum !== user.checkSum);
+                pendingUsers = pendingUsers.filter(item => item.checkSum !== user.checkSum);
                 return user;
             }
         }
         return null;
     }
 
-    public async sendLinkToRestore(email: string) {
-        await this.transporter.sendMail({
-            from: 'Serapis',
-            to: email,
-            subject: "Serapis password recovery",
-            html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/accounts/">Reset password</a>`,
-        });
+    /**
+     * Check given checkSum with checkSum of user in queue to reset password
+     */
+    public checkCodeForPassword(checkSum: string): IUserUpdatePassword | null {
+        for(const user of pendingUpdatePassword) {
+            if(user.checkSum === checkSum) {
+                console.log(pendingUpdatePassword);
+                pendingUpdatePassword = pendingUpdatePassword.filter(item => item.checkSum !== user.checkSum);
+                console.log(pendingUpdatePassword);
+                return user;
+            }
+        }
+        return null;
     }
-
 }

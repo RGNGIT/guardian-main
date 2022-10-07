@@ -5,8 +5,29 @@ import { UserRole } from '@guardian/interfaces';
 /**
  * Pending confirmation user interface
  */
+export interface IUserUpdatePassword {
+    /**
+     * User account email
+     */
+    email: string;
+    /**
+     * User account check sum
+     */
+    checkSum: string;
+}
+
+/**
+ * Pending confirmation user interface
+ */
 export interface IPendingUser {
+    /**
+     * First name of user
+     */
     first_name: string;
+
+    /**
+     * Last name of user
+     */
     last_name: string;
     /**
      * User account name
@@ -34,7 +55,14 @@ export interface IPendingUser {
  * Authenticated user interface
  */
 export interface IAuthUser {
+    /**
+     * First name of user
+     */
     first_name: string;
+
+    /**
+     * Last name of user
+     */
     last_name: string;
     /**
      * User account name

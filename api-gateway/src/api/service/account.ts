@@ -35,7 +35,7 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
         if(user) {
             res.status(201).json(await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role));
         } else {
-            res.status(201).send("Wrong link");
+            res.status(201).send('Wrong link');
         }
     } catch(error) {
         new Logger().error(error, ['API_GATEWAY']);
@@ -50,7 +50,7 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         const userWithProvidedName = await users.getUser(username);
         // const userWithProvidedEmail = await users.getUserByEmail(email);
         if(userWithProvidedName /*|| userWithProvidedEmail*/) {
-            res.status(201).send("User with the same name or email already exists!");
+            res.status(201).send('User with the same name or email already exists!');
             return;
         }
         // Role meant to be get by body, but now USER by default
@@ -63,7 +63,7 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         }
         */
         await new EmailCode().addToQueue({first_name, last_name, username, password, role, email, checkSum: null});
-        res.status(201).send("User added to the confirmation queue");
+        res.status(201).send('User added to the confirmation queue');
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send({ code: 500, message: 'Server error' });
@@ -86,9 +86,10 @@ accountAPI.post('/reset', async (req: Request, res: Response) => {
     try {
         const { email } = req.body;
         const user =  await users.getUserByEmail(email);
-        if (user) {
-            await new EmailCode().sendLinkToRestore(email);
+        if (!user) {
+            res.status(404).json('User with that email not found');
         }
+        await new EmailCode().addToQueueToResetPassword({ email, checkSum: null});
         res.status(200).json(user);
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
@@ -96,12 +97,17 @@ accountAPI.post('/reset', async (req: Request, res: Response) => {
     }
 });
 
-accountAPI.post('/update', async (req: Request, res: Response) => {
+accountAPI.post('/update-password', async (req: Request, res: Response) => {
     const users = new Users();
     try {
+        const { c, u } = req.query;
         const { email, password } = req.body;
-        const user =  await users.updateUserPassword(email, password);
-        res.status(200).json(user);
+        const user = await new EmailCode().checkCodeForPassword(u.toString() + c.toString());
+        if(user) {
+            res.status(201).json(await users.updateUserPassword(email, password));
+        } else {
+            res.status(201).send('Wrong link');
+        }
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(error.code).send({ code: error.code, message: error.message });
