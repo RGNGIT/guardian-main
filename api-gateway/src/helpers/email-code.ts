@@ -73,7 +73,7 @@ export class EmailCode {
             from: 'Serapis',
             to: pendingUserUpdatePassword.email,
             subject: 'Serapis password recovery',
-            html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/accounts/update-password?u=${u}&c=${c}">Reset password</a>`,
+            html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/auth/password-change?u=${u}&c=${c}">Reset password</a>`,
         });
         pendingUserUpdatePassword.checkSum = u + c;
         pendingUpdatePassword.push(pendingUserUpdatePassword);
@@ -90,7 +90,7 @@ export class EmailCode {
             from: 'Serapis',
             to: email,
             subject: 'Serapis registration confirmation',
-            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/accounts/confirm?">Click to confirm</a>`,
+            html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/auth/confirm?u=${u}&c=${c}">Click to confirm</a>`,
         });
         return u + c;
     }
