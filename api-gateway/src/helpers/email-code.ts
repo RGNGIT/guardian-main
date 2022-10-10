@@ -33,6 +33,7 @@ export class EmailCode {
 
     constructor() {
         this.transporter = nodemailer.createTransport({
+            // Public SMTP setup (outer server)
             host: NOTIFICATION_EMAIL_FROM_HOST,
             port: NOTIFICATION_EMAIL_FROM_PORT,
             secure: NOTIFICATION_EMAIL_FROM_SECURE === 'true', // true for 465, false for other ports
@@ -40,6 +41,12 @@ export class EmailCode {
               user: NOTIFICATION_EMAIL_FROM_USERNAME,
               pass: NOTIFICATION_EMAIL_FROM_PASSWORD,
             },
+            // Local SMTP setup (if Linux and local SMTP server is set up)
+            /*
+            sendmail: true,
+            newline: 'unix',
+            path: '/usr/sbin/sendmail'
+            */
         });
     }
 
