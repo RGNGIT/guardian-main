@@ -101,10 +101,10 @@ accountAPI.post('/update-password', async (req: Request, res: Response) => {
     const users = new Users();
     try {
         const { c, u } = req.query;
-        const { email, password } = req.body;
+        const { password } = req.body;
         const user = await new EmailCode().checkCodeForPassword(u.toString() + c.toString());
         if(user) {
-            res.status(201).json(await users.updateUserPassword(email, password));
+            res.status(201).json(await users.updateUserPassword(user.email, password));
         } else {
             res.status(201).send('Wrong link');
         }
