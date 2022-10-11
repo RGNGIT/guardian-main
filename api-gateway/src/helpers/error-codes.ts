@@ -14,5 +14,5 @@ export enum ResponseCode {
     RESET_PASSWORD_QUEUE_UPDATED = 6,
     RESET_PASSWORD_UPDATED = 7,
     RESET_PASSWORD_WRONG_LINK = 8,
-
+    USER_EXISTS = 9
 }
