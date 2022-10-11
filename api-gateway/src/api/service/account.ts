@@ -5,7 +5,7 @@ import { AuthenticatedRequest, Logger } from '@guardian/common';
 import { Guardians } from '@helpers/guardians';
 import { UserRole } from '@guardian/interfaces';
 import { EmailCode } from '@helpers/email-code';
-import { ResponseCode, HTTPCodeResponse } from '@helpers/error-codes';
+import { ResponseCode, formResponse } from '@helpers/response-manager';
 
 /**
  * User account route
@@ -34,19 +34,16 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
         const {c, u} = req.query;
         const user = await new EmailCode().checkCode(u.toString() + c.toString());
         if(user) {
-            res.status(201).json({
-                code: ResponseCode.REGISTRATION_CONFIRMED, 
-                alias: 'REGISTRATION_CONFIRMED', 
-                message: await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role)} as HTTPCodeResponse);
+            res.status(201).json(formResponse(
+                ResponseCode.REGISTRATION_CONFIRMED, 
+                await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role), 
+                'REGISTRATION_CONFIRMED'));
         } else {
-            res.status(201).json({
-                code: ResponseCode.REGISTRATION_CONFIRMATION_WRONG_LINK, 
-                alias: 'REGISTRATION_CONFIRMATION_WRONG_LINK', 
-                message: 'Wrong link provided'} as HTTPCodeResponse);
+            res.status(201).json(formResponse(ResponseCode.REGISTRATION_CONFIRMATION_WRONG_LINK, 'Wrong link provided', 'REGISTRATION_CONFIRMATION_WRONG_LINK'));
         }
     } catch(error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).json({ code: 500, message: 'Server error' } as HTTPCodeResponse);
+        res.status(500).json(formResponse(500, 'Server error'));
     }
 });
 
@@ -57,10 +54,7 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         const userWithProvidedName = await users.getUser(username);
         // const userWithProvidedEmail = await users.getUserByEmail(email);
         if(userWithProvidedName /*|| userWithProvidedEmail*/) {
-            res.status(201).send({
-                code: ResponseCode.USER_EXISTS, 
-                alias: 'USER_EXISTS', 
-                message: 'User with the same name or email already exists!'} as HTTPCodeResponse);
+            res.status(201).json(formResponse(ResponseCode.USER_EXISTS, 'User with the same name or email already exists!', 'USER_EXISTS'));
             return;
         }
         // Role meant to be get by body, but now USER by default
@@ -73,13 +67,10 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         }
         */
         await new EmailCode().addToQueue({first_name, last_name, username, password, role, email, checkSum: null});
-        res.status(201).json({
-            code: ResponseCode.REGISTRATION_QUEUE_UPDATED, 
-            alias: 'REGISTRATION_QUEUE_UPDATED', 
-            message: 'User added to the confirmation queue'} as HTTPCodeResponse);
+        res.status(201).json(formResponse(ResponseCode.REGISTRATION_QUEUE_UPDATED, 'User added to the confirmation queue', 'REGISTRATION_QUEUE_UPDATED'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).json({ code: 500, message: 'Server error' } as HTTPCodeResponse);
+        res.status(500).json(formResponse(500, 'Server error'));
     }
 });
 
@@ -87,13 +78,10 @@ accountAPI.post('/login', async (req: Request, res: Response) => {
     const users = new Users();
     try {
         const { username, password } = req.body;
-        res.status(200).json({
-            code: ResponseCode.LOGIN_SUCCESS, 
-            alias: 'LOGIN_SUCCESS', 
-            message: await users.generateNewToken(username, password)} as HTTPCodeResponse);
+        res.status(200).json(formResponse(ResponseCode.LOGIN_SUCCESS, await users.generateNewToken(username, password), 'LOGIN_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(error.code).json({ code: error.code, message: error.message } as HTTPCodeResponse);
+        res.status(error.code).json(formResponse(error.code, error.message));
     }
 });
 
@@ -103,19 +91,13 @@ accountAPI.post('/reset', async (req: Request, res: Response) => {
         const { email } = req.body;
         const user =  await users.getUserByEmail(email);
         if (!user) {
-            res.status(404).json({
-                code: ResponseCode.RESET_PASSWORD_USER_NOT_FOUND, 
-                alias: 'RESET_PASSWORD_USER_NOT_FOUND', 
-                message: 'User with provided email cannot be found'} as HTTPCodeResponse);
+            res.status(404).json(formResponse(ResponseCode.RESET_PASSWORD_USER_NOT_FOUND, 'User with provided email cannot be found', 'RESET_PASSWORD_USER_NOT_FOUND'));
         }
         await new EmailCode().addToQueueToResetPassword({ email, checkSum: null});
-        res.status(200).json({
-            code: ResponseCode.RESET_PASSWORD_QUEUE_UPDATED, 
-            alias: 'RESET_PASSWORD_QUEUE_UPDATED', 
-            message: 'User added to the reset queue'} as HTTPCodeResponse);
+        res.status(200).json(formResponse(ResponseCode.RESET_PASSWORD_QUEUE_UPDATED, 'User added to the reset queue', 'RESET_PASSWORD_QUEUE_UPDATED'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(error.code).json({ code: error.code, message: error.message } as HTTPCodeResponse);
+        res.status(error.code).json(formResponse(error.code, error.message));
     }
 });
 
@@ -126,19 +108,13 @@ accountAPI.post('/update-password', async (req: Request, res: Response) => {
         const { password } = req.body;
         const user = await new EmailCode().checkCodeForPassword(u.toString() + c.toString());
         if(user) {
-            res.status(201).json({
-                code: ResponseCode.RESET_PASSWORD_UPDATED, 
-                alias: 'RESET_PASSWORD_UPDATED', 
-                message: await users.updateUserPassword(user.email, password)} as HTTPCodeResponse);
+            res.status(201).json(formResponse(ResponseCode.RESET_PASSWORD_UPDATED, await users.updateUserPassword(user.email, password), 'RESET_PASSWORD_UPDATED'));
         } else {
-            res.status(201).send({
-                code: ResponseCode.RESET_PASSWORD_WRONG_LINK, 
-                alias: 'RESET_PASSWORD_WRONG_LINK', 
-                message: 'Wrong link provided'} as HTTPCodeResponse);
+            res.status(201).json(formResponse(ResponseCode.RESET_PASSWORD_WRONG_LINK, 'Wrong link provided', 'RESET_PASSWORD_WRONG_LINK'));
         }
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(error.code).json({ code: error.code, message: error.message } as HTTPCodeResponse);
+        res.status(error.code).json(formResponse(error.code, error.message));
     }
 });
 
