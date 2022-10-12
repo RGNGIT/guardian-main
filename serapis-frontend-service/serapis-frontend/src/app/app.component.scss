@@ -1,0 +1,17 @@
+.main-content {
+  flex: 1;
+  position: relative;
+}
+
+.main-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+

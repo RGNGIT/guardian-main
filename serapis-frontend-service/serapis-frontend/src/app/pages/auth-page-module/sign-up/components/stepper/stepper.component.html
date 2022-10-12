@@ -1,0 +1,24 @@
+<div class="wrapper">
+  <div class="steps">
+    <div *ngFor="let step of steps; let i = index" class="step" (click)="stepClickHandler(i)"
+         [class.current]="(step.state | async) === stepState.CURRENT"
+         [class.disable]="(step.state | async) === stepState.DISABLE"
+         [class.complete]="(step.state | async) === stepState.COMPLETE"
+         [class.enable]="(step.state | async) === stepState.ENABLE"
+    >
+      <div class="counter">
+        <mat-icon *ngIf="(step.state | async) === stepState.COMPLETE; else stepNumber">check</mat-icon>
+        <ng-template #stepNumber>{{i + 1}}</ng-template>
+      </div>
+      <div class="title">
+        {{step.title}}
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <ng-content>
+
+    </ng-content>
+  </div>
+</div>
+

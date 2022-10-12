@@ -1,0 +1,51 @@
+<div class="confirm">
+  <div class="title">
+    <span *ngIf="!userInfo; else success">Confirmation</span>
+    <ng-template #success>Success!</ng-template>
+  </div>
+  <div *ngIf="!userInfo; else successBlock">
+    <div class="retry-button" (click)="sendRequest()">
+      <mat-icon
+        [svgIcon]="'retryIcon'"
+        aria-hidden="false"
+      ></mat-icon>
+    </div>
+    <div class="confirm-label">
+      <span *ngIf="!errorInfo; else labelError">Pending Confirmation</span>
+      <ng-template #labelError>Confirmation Failed</ng-template>
+    </div>
+    <div class="confirm-text">
+      <span *ngIf="!errorInfo; else errorText">Sending a request for user confirmation</span>
+      <ng-template #errorText>
+        <div>Message: {{errorInfo?.message}}</div>
+        <div>Please retry or contact support </div>
+      </ng-template>
+    </div>
+    <div class="buttons link-font">
+      <div class="button"><app-serapis-button title="Contact Support" type="empty" ></app-serapis-button></div>
+    </div>
+  </div>
+  <ng-template #successBlock>
+    <div>
+      <div class="retry-button">
+        <mat-icon
+          [svgIcon]="'checkIcon'"
+          aria-hidden="false"
+        ></mat-icon>
+      </div>
+      <div class="confirm-label">
+        {{userInfo.message.username}}.{{userInfo.message.role}}
+      </div>
+      <div class="confirm-text">
+
+      </div>
+      <div class="buttons link-font">
+        <div class="button"><app-serapis-button title="Log In"></app-serapis-button></div>
+      </div>
+      <div class="buttons link-font">
+        <div class="button"><app-serapis-button title="Contact Support" type="empty" ></app-serapis-button></div>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

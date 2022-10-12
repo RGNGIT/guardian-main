@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+
+}
+
+.content {
+
+}
+
+.steps {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.step {
+  display: flex;
+  flex-direction: row;
+  line-height: 24px;
+}
+
+.step + .step {
+  margin-left: 24px;
+}
+
+.step .counter {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.step .title {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.step.current {
+  cursor: pointer;
+}
+.step.current .title{
+  color: #1960EC;
+}
+.step.current .counter {
+  border: 2px solid #1960EC;
+  color: #1960EC;
+  cursor: pointer;
+}
+
+.step.enable {
+  cursor: pointer;
+}
+.step.enable .title{
+  color: #333333;
+}
+.step.enable .counter {
+  border: 2px solid #333333;
+  color: #333333;
+  cursor: pointer;
+}
+
+.step.disable {
+  cursor: default;
+}
+.step.disable .counter {
+  color: rgba(51, 51, 51, 0.5);
+  background: rgba(51, 51, 51, 0.15);
+}
+.step.disable .title {
+  color: rgba(51, 51, 51, 0.5);
+}
+
+.step.complete {
+  cursor: pointer;
+}
+.step.complete .counter {
+  background-color: #1960EC;
+  color: #f2f2f2;
+}
+.step.complete .title {
+  color: #1960EC;
+}
+
+
+

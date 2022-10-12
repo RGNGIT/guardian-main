@@ -1,0 +1,40 @@
+@use 'abstracts' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.filled {
+  background: $blue-100;
+  box-shadow: 0 6px 16px rgba(159, 198, 244, 0.63);
+  color: $white-200;
+}
+
+.empty {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(51, 51, 51, 0.25);
+  color: #1960EC;
+}
+
+.inactivated {
+  background: #C3C3C3;
+  color: $white-200;
+}
+
+

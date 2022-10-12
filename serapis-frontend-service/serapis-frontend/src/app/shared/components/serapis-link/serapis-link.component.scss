@@ -1,0 +1,10 @@
+@use 'abstracts' as *;
+
+.wrapper {
+  cursor: pointer;
+  color: $blue-100;
+}
+
+.wrapper:hover {
+  text-decoration: underline;
+}

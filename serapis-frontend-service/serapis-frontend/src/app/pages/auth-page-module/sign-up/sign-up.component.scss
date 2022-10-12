@@ -1,0 +1,107 @@
+@use 'abstracts' as *;
+
+:host {
+  background: $white-100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host {
+  ::ng-deep {
+    .mat-input-element {
+      font-size: 20px;
+      line-height: 20px;
+    }
+    .mat-form-field-label-wrapper {
+      font-size: 16px !important;
+    }
+    input:-webkit-autofill {
+      -webkit-box-shadow: inset 0 0 0 50px $white-100;
+      font-size: 20px !important;
+    }
+  }
+}
+
+.sign-up-form {
+  width: 500px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: -0.04em;
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+:host {
+  ::ng-deep {
+    .mat-stepper-horizontal-line {
+      visibility: hidden;
+    }
+    .mat-step-label {
+      font-size: 20px;
+    }
+  }
+}
+
+.check-circle {
+  color: #A7E48A;
+}
+
+.retry-button {
+  background: #FFFFFF;
+  box-shadow: 0 16px 32px #EDF2F7;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+mat-icon {
+  font-size: 37px;
+}
+
+.confirm-label {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  margin: 30px 0;
+}
+
+.confirm-text {
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.buttons {
+  margin-top: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 182px;
+}
+
+.link-font {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.button {
+  width: 184px;
+  height: 56px;
+}

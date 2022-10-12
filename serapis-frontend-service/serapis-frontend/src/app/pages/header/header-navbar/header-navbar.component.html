@@ -1,0 +1,15 @@
+<ul class="navbar-items-container">
+  <li class="navbar-item" *ngFor="let navItem of navItems">
+    <a
+      class="navbar-item-link"
+      [routerLink]="navItem.routerLink"
+      [routerLinkActive]="'navbar-item-link-active'"
+      ><mat-icon
+        *ngIf="navItem.icon"
+        [svgIcon]="navItem.icon"
+        aria-hidden="false"
+      ></mat-icon>
+      <div class="navbar-item-link-text">{{ navItem.title }}</div></a
+    >
+  </li>
+</ul>
