@@ -90,10 +90,10 @@ export class AccountService {
 
         this.channel.response<IGenerateTokenMessage, IGenerateTokenResponse>(AuthEvents.GENERATE_NEW_TOKEN, async (msg) => {
             try {
-                const { username, password } = msg;
+                const { email, password } = msg;
                 const passwordDigest = crypto.createHash('sha256').update(password).digest('hex');
 
-                const user = await new DataBaseHelper(User).findOne({ username });
+                const user = await new DataBaseHelper(User).findOne({ email });
                 if (user && passwordDigest === user.password) {
                     const accessToken = sign({
                         username: user.username,

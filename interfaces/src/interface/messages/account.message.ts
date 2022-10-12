@@ -59,7 +59,7 @@ export interface IGenerateTokenMessage {
     /**
      * Username
      */
-    username: string;
+    email: string;
     /**
      * Password
      */

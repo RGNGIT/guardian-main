@@ -18,13 +18,13 @@ accountAPI.get('/session', async (req: Request, res: Response) => {
         const authHeader = req.headers.authorization;
         if (authHeader) {
             const token = authHeader.split(' ')[1];
-            res.status(200).json(await users.getUserByToken(token));
+            res.status(200).json(formResponse(ResponseCode.SESSION_GET_SUCCESS, await users.getUserByToken(token), 'SESSION_GET_SUCCESS'));
         } else {
             res.sendStatus(401);
         }
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).send({ code: 500, message: error.message });
+        res.status(500).send(formResponse(ResponseCode.SESSION_GET_FAIL, error.message, 'SESSION_GET_FAIL'));
     }
 });
 
@@ -77,8 +77,8 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
 accountAPI.post('/login', async (req: Request, res: Response) => {
     const users = new Users();
     try {
-        const { username, password } = req.body;
-        res.status(200).json(formResponse(ResponseCode.LOGIN_SUCCESS, await users.generateNewToken(username, password), 'LOGIN_SUCCESS'));
+        const { email, password } = req.body;
+        res.status(200).json(formResponse(ResponseCode.LOGIN_SUCCESS, await users.generateNewToken(email, password), 'LOGIN_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(error.code).json(formResponse(error.code, error.message));
@@ -118,13 +118,13 @@ accountAPI.post('/update-password', async (req: Request, res: Response) => {
     }
 });
 
-accountAPI.get('/', authorizationHelper, permissionHelper(UserRole.STANDARD_REGISTRY),async (req: AuthenticatedRequest, res: Response) => {
+accountAPI.get('/', authorizationHelper, permissionHelper(UserRole.STANDARD_REGISTRY), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const users = new Users();
-        res.status(200).json(await users.getAllUserAccounts());
+        res.status(200).json(formResponse(ResponseCode.GET_ALL_USERS_SUCCESS, await users.getAllUserAccounts(), 'GET_ALL_USERS_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).send({ code: 500, message: 'Server error' });
+        res.status(500).send(formResponse(ResponseCode.GET_ALL_USERS_FAIL, 'Server error', 'GET_ALL_USERS_FAIL'));
     }
 });
 
@@ -146,10 +146,10 @@ accountAPI.get('/standard-registries', authorizationHelper, async (req: Request,
     try {
         const users = new Users();
         const standardRegistries = await users.getAllStandardRegistryAccounts();
-        res.json(standardRegistries);
+        res.json(formResponse(ResponseCode.GET_STANDARD_REGISTRY_SUCCESS, standardRegistries, 'GET_STANDARD_REGISTRY_SUCCESS'));
     } catch (error) {
         new Logger().error(error.message, ['API_GATEWAY']);
-        res.json('null');
+        res.json(formResponse(ResponseCode.GET_STANDARD_REGISTRY_FAIL, error.message, 'GET_STANDARD_REGISTRY_FAIL'));
     }
 });
 
@@ -164,20 +164,20 @@ accountAPI.get('/balance', async (req: Request, res: Response) => {
                 if (user) {
                     const guardians = new Guardians();
                     const balance = await guardians.getBalance(user.username);
-                    res.json(balance);
+                    res.json(formResponse(ResponseCode.GET_BALANCE_SUCCESS, balance, 'GET_BALANCE_SUCCESS'));
                     return;
                 } else {
-                    res.json('null');
+                    res.json(formResponse(ResponseCode.GET_BALANCE_FAIL, 'User cannot be found', 'GET_BALANCE_FAIL'));
                     return;
                 }
             } catch (error) {
-                res.json('null');
+                res.json(formResponse(ResponseCode.GET_BALANCE_FAIL, error.message, 'GET_BALANCE_FAIL'));
                 return;
             }
         }
-        res.json('null');
+        res.json(formResponse(ResponseCode.GET_BALANCE_FAIL, 'Balance cannot be fetched', 'GET_BALANCE_FAIL'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.json('null');
+        res.json(formResponse(ResponseCode.GET_BALANCE_FAIL, error.message, 'GET_BALANCE_FAIL'));
     }
 });

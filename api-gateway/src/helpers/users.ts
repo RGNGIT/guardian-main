@@ -151,8 +151,8 @@ export class Users extends ServiceRequestsBase {
      * @param username
      * @param password
      */
-    public async generateNewToken(username: string, password: string) {
-        return await this.request(AuthEvents.GENERATE_NEW_TOKEN, { username, password });
+    public async generateNewToken(email: string, password: string) {
+        return await this.request(AuthEvents.GENERATE_NEW_TOKEN, { email, password });
     }
 
     /**
