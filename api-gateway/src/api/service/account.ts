@@ -52,8 +52,8 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
         const users = new Users();
         const {first_name, last_name, username, password, email } = req.body;
         const userWithProvidedName = await users.getUser(username);
-        // const userWithProvidedEmail = await users.getUserByEmail(email);
-        if(userWithProvidedName /*|| userWithProvidedEmail*/) {
+        const userWithProvidedEmail = await users.getUserByEmail(email);
+        if(userWithProvidedName || userWithProvidedEmail) {
             res.status(201).json(formResponse(ResponseCode.USER_EXISTS, 'User with the same name or email already exists!', 'USER_EXISTS'));
             return;
         }
