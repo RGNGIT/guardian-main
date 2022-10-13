@@ -1,5 +1,5 @@
 const execSync = require('child_process').execSync;
-const spaw = require('child_process').spawn;
+const spawn = require('child_process').spawn;
 const fs = require('fs');
 
 (async () => {
@@ -19,7 +19,7 @@ const fs = require('fs');
 
         await new Promise((resolve) => {
             log('Watching changes...');
-            const child = spaw('yarn', ['--cwd', folder, 'dev'], { shell: true });
+            const child = spawn('yarn', ['--cwd', folder, 'dev'], { shell: true });
 
             child.stdout.on('data', log);
             child.stderr.on('data', log);
@@ -35,7 +35,7 @@ const fs = require('fs');
         "interfaces",
         "common",
         "logger-service",
-        "frontend",
+        "serapis-frontend",
         "auth-service",
         "guardian-service",
         "api-gateway",

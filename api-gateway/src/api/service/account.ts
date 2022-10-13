@@ -48,9 +48,9 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
 });
 
 accountAPI.post('/register', async (req: Request, res: Response) => {
+    const users = new Users();
     try {
-        const users = new Users();
-        const {first_name, last_name, username, password, email } = req.body;
+        const { first_name, last_name, username, password, email } = req.body;
         let userWithProvidedName = null, userWithProvidedEmail = null;
         userWithProvidedName = await users.getUser(username);
         if(!userWithProvidedName) {
