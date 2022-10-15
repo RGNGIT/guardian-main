@@ -34,10 +34,7 @@ accountAPI.get('/confirm', async (req: Request, res: Response) => {
         const {c, u} = req.query;
         const user = await new EmailCode().checkCode(u.toString() + c.toString());
         if(user) {
-            res.status(201).json(formResponse(
-                ResponseCode.REGISTRATION_CONFIRMED, 
-                await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role), 
-                'REGISTRATION_CONFIRMED'));
+            res.status(201).json(formResponse(ResponseCode.REGISTRATION_CONFIRMED, await users.registerNewUser(user.first_name, user.last_name, user.username, user.password, user.email, user.role), 'REGISTRATION_CONFIRMED'));
         } else {
             res.status(201).json(formResponse(ResponseCode.REGISTRATION_CONFIRMATION_WRONG_LINK, 'Wrong link provided', 'REGISTRATION_CONFIRMATION_WRONG_LINK'));
         }
@@ -51,7 +48,8 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
     const users = new Users();
     try {
         const { first_name, last_name, username, password, email } = req.body;
-        let userWithProvidedName = null, userWithProvidedEmail = null;
+        let userWithProvidedName = null
+        let userWithProvidedEmail = null;
         userWithProvidedName = await users.getUser(username);
         if(!userWithProvidedName) {
             userWithProvidedEmail = await users.getUserByEmail(email);

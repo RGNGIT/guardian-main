@@ -22,7 +22,7 @@ export class EmailCode {
     /**
      * Transport for sending email
      */
-    private transporter: Transporter;
+    private readonly transporter: Transporter;
 
     /**
      * Random generation of code

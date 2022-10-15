@@ -35,7 +35,13 @@ export interface IGetUserByTokenMessage {
  * Register new user message interface
  */
 export interface IRegisterNewUserMessage {
+    /**
+     * User's first name
+     */
     first_name: string;
+    /**
+     * User's last name
+     */
     last_name: string;
     /**
      * Username
@@ -49,6 +55,9 @@ export interface IRegisterNewUserMessage {
      * Role
      */
     role: UserRole;
+    /**
+     * Email
+     */
     email: string;
 }
 
