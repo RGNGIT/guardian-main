@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthStateService } from './services/auth-state.service';
-import { WebSocketService } from './services/web-socket.service';
+import {NavigationStart, Router} from "@angular/router";
+import {LoaderService} from "@app/services/loader-service";
+import {UserService} from "@app/services/user.service";
+import {userInfo} from "os";
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,13 @@ import { WebSocketService } from './services/web-socket.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'guardian';
+  title = 'serapis-frontend';
 
-  constructor(public authState: AuthStateService, public wsService: WebSocketService) {}
+  get showHeader(): boolean {
+    return this._userService.isAuth()
+  }
+
+  constructor(private router: Router, public _loaderService: LoaderService, private _userService: UserService) {
+
+  }
 }

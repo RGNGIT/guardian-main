@@ -35,12 +35,12 @@ const fs = require('fs');
         "interfaces",
         "common",
         "logger-service",
-        "serapis-frontend",
+        "frontend",
         "auth-service",
         "guardian-service",
         "api-gateway",
         "mrv-sender",
         "ipfs-client",
         "topic-viewer"
-    ].map(project => buildAndWatch(project, project === "frontend")));
+    ].map(project => buildAndWatch(project, project === "serapis-frontend")));
 })();

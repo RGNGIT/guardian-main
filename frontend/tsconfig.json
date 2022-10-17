@@ -6,6 +6,8 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -14,16 +16,31 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
     "paths": {
-      "crypto": ["./node_modules/crypto-browserify/index.js"],
-      "process": ["./node_modules/process/browser.js"],
-      "stream": ["./node_modules/stream-browserify/index.js"]
+      "@app/shared/*": [
+        "src/app/shared/*"
+      ],
+      "@app/models/*": [
+        "src/app/models/*"
+      ],
+      "@app/constants/*": [
+        "src/app/constants/*"
+      ],
+      "@app/utils/*": [
+        "src/app/utils/*"
+      ],
+      "@app/services/*": [
+        "src/app/services/*"
+      ],
+      "@app/enums/*": [
+        "src/app/enums/*"
+      ]
     }
   },
   "angularCompilerOptions": {
