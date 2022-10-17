@@ -23,11 +23,11 @@ export class SignUpComponent {
   canCompleteThirdStep = false;
 
   firstFormGroup = this._formBuilder.group({
-    first_name: ['', Validators.required],
-    last_name: ['', Validators.required],
+    first_name: ['', [Validators.required]],
+    last_name: ['', [Validators.required]],
   });
   secondFormGroup = this._formBuilder.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, ]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
@@ -37,7 +37,6 @@ export class SignUpComponent {
     }
   );
   urlsRoutes = URLS_PATHS;
-
 
   get emailFormControl(): FormControl {
     return this.secondFormGroup.controls['email'] as FormControl;
@@ -84,9 +83,19 @@ export class SignUpComponent {
         untilDestroyed(this),
         finalize( ()=> { this._loadingService.disable() })
       )
-      .subscribe( _ => {
-        this.canCompleteThirdStep = true;
-        this.stepperComponent.stepClickHandler(2, true);
+      .subscribe( result => {
+        switch (result.code) {
+          case 9:
+            this.usernameFormControl.setErrors( { exist: true } )
+            this.emailFormControl.setErrors( { exist: true } )
+            break;
+
+          default:
+            this.canCompleteThirdStep = true;
+            this.stepperComponent.stepClickHandler(2, true);
+            break;
+        }
+
       })
   }
 

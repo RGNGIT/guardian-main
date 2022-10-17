@@ -12,6 +12,7 @@ import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import { GoalsComponent } from './pages/goals/goals.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {CUSTOM_ICONS} from "../assets/icons/custom-icons";
+import {MatMenuModule} from "@angular/material/menu";
 
 export function appInitServiceFactory(
   _sanitizer: DomSanitizer,
@@ -37,7 +38,8 @@ export function appInitServiceFactory(
       BrowserAnimationsModule,
       RouterModule,
       MatIconModule,
-      MatProgressBarModule
+      MatProgressBarModule,
+      MatMenuModule
   ],
   providers: [
     {

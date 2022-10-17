@@ -35,6 +35,9 @@
               <mat-error *ngIf="usernameFormControl.hasError('required')">
                 Username is <strong>required</strong>
               </mat-error>
+              <mat-error *ngIf="usernameFormControl.hasError('exist')">
+                An account with the specified <strong>username or email exists</strong>
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="full-width mat-input" appearance="standard" >
               <mat-label>Email</mat-label>
@@ -45,6 +48,9 @@
               </mat-error>
               <mat-error *ngIf="emailFormControl.hasError('required')">
                 Email is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('exist')">
+                An account with the specified <strong>username or email exists</strong>
               </mat-error>
             </mat-form-field>
             <mat-form-field class="full-width" appearance="standard">

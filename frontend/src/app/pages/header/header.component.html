@@ -3,11 +3,17 @@
   <app-header-navbar [navItems]="menuItems"></app-header-navbar>
   <div class="user-settings-container">
     <div class="user-name-text">User Name</div>
-    <div class="user-name-image">UN</div>
+    <div class="menu-container">
+    <div class="user-name-image" [matMenuTriggerFor]="menu">UN</div>
     <mat-icon
       class="user-settings-icon"
       svgIcon="rectangleDownIcon"
       aria-hidden="false"
+      [matMenuTriggerFor]="menu"
     ></mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Logout</button>
+    </mat-menu>
+    </div>
   </div>
 </div>
