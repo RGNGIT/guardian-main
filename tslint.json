@@ -49,5 +49,10 @@
         "no-string-throw": true,
         "no-angle-bracket-type-assertion": true
     },
+    "linterOptions": {
+        "exclude": [
+            "serapis-frontend/*"
+        ]
+    },
     "jsRules": true
 }

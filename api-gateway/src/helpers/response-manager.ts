@@ -1,9 +1,24 @@
+/**
+ * Interface for answer
+ */
 interface IHTTPCodeResponse {
+    /**
+     * Local code
+     */
     code: number;
+    /**
+     * Alias for answer
+     */
     alias?: string;
+    /**
+     * Payload
+     */
     message: any;
 }
 
+/**
+ * Response codes
+ */
 export enum ResponseCode {
     REGISTRATION_QUEUE_UPDATED = 0,
     REGISTRATION_CONFIRMED = 1,
@@ -26,11 +41,11 @@ export enum ResponseCode {
 }
 /**
  * Forms respond JSON
-* @param {number} code Code of the action
-* @param {any} message Message to send
-* @param {string} alias Alias of the code (optional)
-* @returns {IHTTPCodeResponse} Formed JSON
-*/
+ * @param {number} code Code of the action
+ * @param {any} message Message to send
+ * @param {string} alias Alias of the code (optional)
+ * @returns {IHTTPCodeResponse} Formed JSON
+ */
 export function formResponse(code: number, message: any, alias?: string): IHTTPCodeResponse {
     return {code, alias: alias ? alias : null, message} as IHTTPCodeResponse;
 }

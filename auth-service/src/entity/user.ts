@@ -9,10 +9,16 @@ import { BaseEntity } from '@guardian/common';
 @Unique({ properties: ['username'], options: { partialFilterExpression: { username: { $type: 'string' }}}})
 @Unique({ properties: ['did'], options: { partialFilterExpression: { did: { $type: 'string' }}}})
 export class User extends BaseEntity implements IUser {
+    /**
+     * First name
+     */
     @Property({ nullable: true })
-    first_name?: string;
+    firsName?: string;
+    /**
+     * Last name
+     */
     @Property({ nullable: true })
-    last_name?: string;
+    lastName?: string;
     /**
      * Username
      */

@@ -115,7 +115,11 @@ export class Users extends ServiceRequestsBase {
     public async updateCurrentUser(username: string, item: any) {
         return await this.request(AuthEvents.UPDATE_USER, { username, item });
     }
-
+    /**
+     * Update current user password
+     * @param email
+     * @param password
+     */
     public async updateUserPassword(email: string, password: string) {
         return await this.request(AuthEvents.UPDATE_PASSWORD, { email, password });
     }
@@ -142,8 +146,8 @@ export class Users extends ServiceRequestsBase {
      * @param password
      * @param role
      */
-    public async registerNewUser(first_name: string, last_name: string, username: string, password: string, email: string, role: string) {
-        return await this.request(AuthEvents.REGISTER_NEW_USER, {first_name, last_name, username, password, email, role });
+    public async registerNewUser(firstName: string, lastName: string, username: string, password: string, email: string, role: string) {
+        return await this.request(AuthEvents.REGISTER_NEW_USER, { firstName, lastName, username, password, email, role });
     }
 
     /**

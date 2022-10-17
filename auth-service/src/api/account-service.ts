@@ -173,7 +173,7 @@ export class AccountService {
             const { email } = msg;
 
             try {
-                return new MessageResponse(await new DataBaseHelper(User).findOne({ email: email }));
+                return new MessageResponse(await new DataBaseHelper(User).findOne({ email }));
             } catch (error) {
                 new Logger().error(error, ['AUTH_SERVICE']);
                 return new MessageError(error);
