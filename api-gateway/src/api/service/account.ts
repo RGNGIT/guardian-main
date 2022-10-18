@@ -58,15 +58,11 @@ accountAPI.post('/register', async (req: Request, res: Response) => {
             res.status(201).json(formResponse(ResponseCode.USER_EXISTS, 'User with the same name or email already exists!', 'USER_EXISTS'));
             return;
         }
-        // Role meant to be get by body, but now USER by default
-        // let { role } = req.body;
-        const role = UserRole.USER;
+        let { role } = req.body;
         // @deprecated 2022-10-01
-        /*
         if (role === 'ROOT_AUTHORITY') {
             role = UserRole.STANDARD_REGISTRY;
         }
-        */
         await new EmailCode().addToQueue({first_name, last_name, username, password, role, email, checkSum: null});
         res.status(201).json(formResponse(ResponseCode.REGISTRATION_QUEUE_UPDATED, 'User added to the confirmation queue', 'REGISTRATION_QUEUE_UPDATED'));
     } catch (error) {
@@ -90,7 +86,7 @@ accountAPI.post('/reset', async (req: Request, res: Response) => {
     const users = new Users();
     try {
         const { email } = req.body;
-        const user =  await users.getUserByEmail(email);
+        const user = await users.getUserByEmail(email);
         if (!user) {
             res.status(404).json(formResponse(ResponseCode.RESET_PASSWORD_USER_NOT_FOUND, 'User with provided email cannot be found', 'RESET_PASSWORD_USER_NOT_FOUND'));
         }

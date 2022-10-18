@@ -24,7 +24,6 @@ export interface IPendingUser {
      * First name of user
      */
     first_name: string;
-
     /**
      * Last name of user
      */
