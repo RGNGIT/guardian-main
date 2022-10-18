@@ -20,8 +20,8 @@ export class SignService {
 
   }
 
-  public registerUser(user: RegisterUserRequest): Observable<any> {
-    return this._http.post(API_URLS.auth.register, user);
+  public registerUser(user: RegisterUserRequest): Observable<BaseResponse<unknown, unknown>> {
+    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.auth.register, user);
   }
 
   public signIn(user: RegisterUserRequest): Observable<AuthUserResponse> {

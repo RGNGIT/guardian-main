@@ -11,6 +11,12 @@ export const installerMenuItems: NavItem[] = [
     icon: 'questionCircleIcon'
   }
 ];
-export const rootAuthorityMenuItems: NavItem[] = [];
+export const rootAuthorityMenuItems: NavItem[] = [
+  { title: 'Config', routerLink: '/config' },
+  { title: 'IoT Insights', routerLink: '/iot-insights' },
+  { title: 'Schemes', routerLink: '/config' },
+  { title: 'Tokens', routerLink: '/config' },
+  { title: 'Policies', routerLink: '/config' },
+];
 export const auditorMenuItems: NavItem[] = [];
 export const defaultMenuItems: NavItem[] = [];

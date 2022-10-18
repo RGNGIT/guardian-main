@@ -13,6 +13,9 @@
           <mat-error *ngIf="emailFormControl.hasError('required')">
             Email is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="emailFormControl.hasError('authError')">
+            Email or password are <strong>incorrect</strong>
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" appearance="standard">
           <mat-label>Password</mat-label>
@@ -21,6 +24,9 @@
           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           <mat-error *ngIf="passwordFormControl.hasError('required')">
             Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="passwordFormControl.hasError('authError')">
+            Email or password are <strong>incorrect</strong>
           </mat-error>
         </mat-form-field>
       </form>

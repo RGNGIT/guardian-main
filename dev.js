@@ -42,5 +42,5 @@ const fs = require('fs');
         "mrv-sender",
         "ipfs-client",
         "topic-viewer"
-    ].map(project => buildAndWatch(project, project === "serapis-frontend")));
+    ].map(project => buildAndWatch(project, project === "frontend")));
 })();

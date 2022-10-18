@@ -1,6 +1,13 @@
 import {Component, OnInit} from "@angular/core";
-import {Form, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
-import {ErrorStateMatcher} from "@angular/material/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {URLS_PATHS} from "@app/constants/path";
 import {SerapisErrorStateMatcher} from "@app/utils/utils";
 import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
@@ -10,7 +17,7 @@ import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {UserService} from "@app/services/user.service";
 import {Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
-import {finalize} from "rxjs";
+import {catchError, finalize, throwError} from "rxjs";
 
 
 @UntilDestroy()
@@ -63,7 +70,15 @@ export class SignInComponent implements OnInit {
   auth(): void {
     this._loadService.enable();
     this._apiService.signIn(this.signInForm.value)
-      .pipe(untilDestroyed(this), finalize(() => this._loadService.disable()))
+      .pipe(
+        catchError( (err) => {
+          this.emailFormControl.setErrors( { authError: true } )
+          this.passwordFormControl.setErrors( { authError: true } )
+          return throwError(() => err)
+        }),
+        untilDestroyed(this),
+        finalize(() => this._loadService.disable())
+      )
       .subscribe( user => {
         this._userService.setUser(user.message);
         this._router.navigateByUrl('/')
