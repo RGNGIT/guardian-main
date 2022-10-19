@@ -6,7 +6,8 @@ import {
     schemaAPI,
     tokenAPI,
     externalAPI,
-    ipfsAPI
+    ipfsAPI,
+    dashboardAPI
 } from '@api/service';
 import { Guardians } from '@helpers/guardians';
 import express from 'express';
@@ -72,6 +73,7 @@ Promise.all([
     app.use('/ipfs', authorizationHelper, ipfsAPI);
     app.use('/logs', authorizationHelper, loggerAPI);
     app.use('/tasks/', taskAPI);
+    app.use('/dashboard', authorizationHelper, dashboardAPI);
     /////////////////////////////////////////
 
     server.listen(PORT, () => {
