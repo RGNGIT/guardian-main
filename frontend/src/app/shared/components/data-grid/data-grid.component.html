@@ -1,0 +1,14 @@
+<table mat-table [dataSource]="dataSource" matSort class="main-data-grid">
+  <ng-container
+    *ngFor="let column of columnDefs; let i = index"
+    [matColumnDef]="column.columnKey"
+  >
+    <th class="header-cell" mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ column.label }}
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element[column.columnKey] }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

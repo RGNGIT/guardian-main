@@ -22,7 +22,7 @@
           </form>
         </div>
         <div class="buttons link-font">
-          <div class="button"><app-serapis-button [routerLink]="urlsRoutes.auth.signIn" type="empty" title="Cancel"></app-serapis-button></div>
+          <div class="button"><app-serapis-button [routerLink]="urlsRoutes.auth.base + urlsRoutes.auth.signIn" type="empty" title="Cancel"></app-serapis-button></div>
           <div class="button"><app-serapis-button appStepNextButton [disabled]="!firstFormGroup.valid" title="Next"></app-serapis-button></div>
         </div>
       </app-sign-up-step>
@@ -38,6 +38,14 @@
               <mat-error *ngIf="usernameFormControl.hasError('exist')">
                 An account with the specified <strong>username or email exists</strong>
               </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width mat-input" appearance="standard">
+              <mat-label>Role</mat-label>
+              <mat-select formControlName="role" required>
+                <mat-option *ngFor="let role of roles" [value]="role">
+                  {{role}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
             <mat-form-field class="full-width mat-input" appearance="standard" >
               <mat-label>Email</mat-label>

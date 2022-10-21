@@ -1,7 +1,10 @@
 export const URLS_PATHS: any = {
   auth: {
-    base: 'auth',
-    signIn: '/auth/sign-in',
-    signUp: '/auth/sign-up',
-  }
+    base: '/auth',
+    signIn: '/sign-in',
+    signUp: '/sign-up',
+    passwordChange: '/password-change',
+    confirm: '/confirm'
+  },
+  finishRegistration: '/finish-registration'
 }

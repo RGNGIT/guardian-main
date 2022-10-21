@@ -1,9 +1,17 @@
 export const API_URLS = {
-  auth: {
-    login: '/api/v1/accounts/login',
-    register: '/api/v1/accounts/register',
-    confirm: '/api/v1/accounts/confirm',
-    passwordReset: '/api/v1/accounts/reset',
-    passwordChange: '/api/v1/accounts/update-password'
+  accounts: {
+    login: '/accounts/login',
+    register: '/accounts/register',
+    confirm: '/accounts/confirm',
+    passwordReset: '/accounts/reset',
+    passwordChange: '/accounts/update-password',
+    standardRegistries: '/accounts/standard-registries'
+  },
+  profile: {
+    base: '/profiles/{username}',
+    balance: '/profiles/{username}/balance'
+  },
+  schemas: {
+    entity: 'schemas/system/entity/{entityName}'
   }
 }

@@ -20,6 +20,9 @@ import {PasswordChangeComponent} from "./password-change/password-change.compone
 import {SignService} from "./services/sign.service";
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmComponent} from "./confirm/confirm.component";
+import {replaceUrlFirstSlash} from "@app/utils/utils";
+import {URLS_PATHS} from "@app/constants/path";
+import {MatSelectModule} from "@angular/material/select";
 
 const components = [
   SignInComponent,
@@ -41,19 +44,19 @@ const routes: Routes = [
     pathMatch: "full",
   },
   {
-    path: 'sign-in',
+    path: replaceUrlFirstSlash(URLS_PATHS.auth.signIn),
     component: SignInComponent
   },
   {
-    path: 'sign-up',
+    path: replaceUrlFirstSlash(URLS_PATHS.auth.signUp),
     component: SignUpComponent
   },
   {
-    path: 'password-change',
+    path: replaceUrlFirstSlash(URLS_PATHS.auth.passwordChange),
     component: PasswordChangeComponent
   },
   {
-    path: 'confirm',
+    path: replaceUrlFirstSlash(URLS_PATHS.auth.confirm),
     component: ConfirmComponent
   }
 ]
@@ -72,7 +75,8 @@ const routes: Routes = [
     MatStepperModule,
     MatButtonModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule
   ],
   providers: [
     SignService

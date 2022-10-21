@@ -1,6 +1,18 @@
 {
   "/accounts": {
-    "target": "http://v8.serapis.19ivt.ru",
+    "target": "http://178.44.173.187:3002",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/profiles": {
+    "target": "http://178.44.173.187:3002",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/schemas": {
+    "target": "http://178.44.173.187:3002",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true

@@ -1,7 +1,9 @@
 <div class="main-wrapper">
-  <app-header *ngIf="showHeader"></app-header>
+  <app-header *ngIf="showHeader | async"></app-header>
   <mat-progress-bar mode="indeterminate" *ngIf="_loaderService.loading$ | async"></mat-progress-bar>
+
   <div class="main-content">
+    <div *ngIf="_loaderService.loading$ | async" class="backdrop"></div>
     <router-outlet></router-outlet>
   </div>
 </div>

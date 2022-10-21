@@ -21,22 +21,22 @@ export class SignService {
   }
 
   public registerUser(user: RegisterUserRequest): Observable<BaseResponse<unknown, unknown>> {
-    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.auth.register, user);
+    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.accounts.register, user);
   }
 
   public signIn(user: RegisterUserRequest): Observable<AuthUserResponse> {
-    return this._http.post<AuthUserResponse>(API_URLS.auth.login, user);
+    return this._http.post<AuthUserResponse>(API_URLS.accounts.login, user);
   }
 
   public passwordReset(data: PasswordReset): Observable<BaseResponse<unknown, unknown>> {
-    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.auth.passwordReset, data);
+    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.accounts.passwordReset, data);
   }
 
   public passwordChange(data: PasswordChangeRequest) {
     let params = new HttpParams()
       .append('c', data.c)
       .append('u', data.u);
-    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.auth.passwordChange, {password: data.password}, { params });
+    return this._http.post<BaseResponse<unknown, unknown>>(API_URLS.accounts.passwordChange, {password: data.password}, { params });
   }
 
   public confirmUser(user: ConfirmUserRequest): Observable<ConfirmUserResponse> {
@@ -44,7 +44,7 @@ export class SignService {
       .append('c', user.c)
       .append('u', user.u);
 
-    return this._http.get<ConfirmUserResponse>(API_URLS.auth.confirm, { params })
+    return this._http.get<ConfirmUserResponse>(API_URLS.accounts.confirm, { params })
   }
 
 }

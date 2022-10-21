@@ -3,6 +3,8 @@ import {NavigationStart, Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
 import {UserService} from "@app/services/user.service";
 import {userInfo} from "os";
+import {Observable, of} from "rxjs";
+import {IAuthUser} from "@app/models/user";
 
 @Component({
   selector: 'app-root',
@@ -12,8 +14,8 @@ import {userInfo} from "os";
 export class AppComponent {
   title = 'serapis-frontend';
 
-  get showHeader(): boolean {
-    return this._userService.isAuth()
+  get showHeader(): Observable<IAuthUser | null> {
+    return this._userService.currentUser;
   }
 
   constructor(private router: Router, public _loaderService: LoaderService, private _userService: UserService) {

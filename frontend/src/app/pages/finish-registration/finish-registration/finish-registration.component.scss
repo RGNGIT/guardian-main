@@ -1,0 +1,38 @@
+@use 'abstracts' as *;
+
+.title {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 38px;
+  /* identical to box height */
+  letter-spacing: -0.04em;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  width: 500px;
+}
+
+:host {
+  ::ng-deep {
+    .mat-input-element {
+      font-size: 20px;
+      line-height: 20px;
+    }
+    .mat-form-field-label-wrapper {
+      font-size: 16px !important;
+    }
+    input:-webkit-autofill {
+      -webkit-box-shadow: inset 0 0 0 50px $white-100;
+      font-size: 20px !important;
+    }
+  }
+}
+
+.submit-button {
+  margin-top: 56px;
+  height: 56px;
+}
