@@ -8,6 +8,7 @@ const {
     NOTIFICATION_EMAIL_FROM_USERNAME,
     NOTIFICATION_EMAIL_FROM_PASSWORD,
     NOTIFICATION_EMAIL_FROM_SECURE,
+    NOTIFICATION_EMAIL_FROM_ALIAS,
     PORTAL_URL
 } = process.env;
 
@@ -70,7 +71,7 @@ export class EmailCode {
         const u = crypto.createHash('sha1').update(pendingUserUpdatePassword.email).digest('hex');
         const c = crypto.createHash('sha1').update(code).digest('hex');
         await this.transporter.sendMail({
-            from: 'Serapis',
+            from: NOTIFICATION_EMAIL_FROM_ALIAS,
             to: pendingUserUpdatePassword.email,
             subject: 'Serapis password recovery',
             html: `<h1>Link to reset password:</h1> <br><a href="${PORTAL_URL}/auth/password-change?u=${u}&c=${c}">Reset password</a>`,
@@ -87,7 +88,7 @@ export class EmailCode {
         const u = crypto.createHash('sha1').update(username).digest('hex');
         const c = crypto.createHash('sha1').update(code).digest('hex');
         await this.transporter.sendMail({
-            from: 'Serapis',
+            from: NOTIFICATION_EMAIL_FROM_ALIAS,
             to: email,
             subject: 'Serapis registration confirmation',
             html: `<h1>Hello, ${username}! Your confirmation link:</h1> <br><a href="${PORTAL_URL}/auth/confirm?u=${u}&c=${c}">Click to confirm</a>`,
