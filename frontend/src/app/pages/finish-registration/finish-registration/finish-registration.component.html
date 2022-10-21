@@ -1,0 +1,45 @@
+<div class="final-step-wrapper">
+  <div class="title">Final Registration Step</div>
+  <div *ngIf="userProfile" class="flex-column flex-align-center">
+    <div [ngSwitch]="(userProfile | async)?.role" class="form">
+      <form [formGroup]="hederaForm" (ngSubmit)="onHederaSubmit()">
+        <div *ngSwitchCase="userRoles.USER || userRoles.AUDITOR || userRoles.INSTALLER">
+          <mat-form-field class="full-width mat-input" appearance="standard">
+            <mat-label>Choose Standard Registry</mat-label>
+            <mat-select formControlName="standardRegistry" required>
+              <mat-option *ngFor="let registry of standardRegistries" [value]="registry.did">
+                {{registry.username}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngSwitchCase="userRoles.STANDARD_REGISTRY">
+
+        </div>
+        <app-schema-form [formGroup]="vcForm" [schema]="schema" [private-fields]="hideVC"
+                         (change)="onChangeForm()">
+        </app-schema-form>
+
+
+        <mat-form-field class="full-width mat-input" appearance="standard">
+          <mat-label>OPERATOR ID:</mat-label>
+          <input matInput placeholder="0.0.1548173" formControlName="id">
+        </mat-form-field>
+
+        <mat-form-field class="full-width mat-input" appearance="standard">
+          <mat-label>OPERATOR KEY:</mat-label>
+          <input matInput placeholder="302e020100300506.........7e74946abca993f543cf9509c8edc"
+                 formControlName="key">
+        </mat-form-field>
+
+        <button mat-raised-button type="submit" (click)="randomKey()">Generate</button>
+
+        <div class="submit-button">
+          <app-serapis-button title="Submit" [disabled]="!hederaForm.valid" (click)="onHederaSubmit()">
+          </app-serapis-button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

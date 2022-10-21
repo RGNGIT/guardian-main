@@ -1,0 +1,60 @@
+<div class="schemas-header-container">
+  <app-serapis-button
+    title="Add New Schema"
+    type="filled"
+    class="add-new-schema-button"
+    [iconTemplate]="plusIcon"
+    ><ng-template #plusIcon
+      ><mat-icon
+        class="action-icon"
+        svgIcon="plus"
+        aria-hidden="false"
+      ></mat-icon></ng-template
+  ></app-serapis-button>
+  <app-serapis-button
+    title="Import"
+    type="empty"
+    class="schemas-action-button"
+    [iconTemplate]="importIcon"
+  >
+    <ng-template #importIcon
+      ><mat-icon
+        class="action-icon"
+        svgIcon="import"
+        aria-hidden="false"
+      ></mat-icon
+    ></ng-template>
+  </app-serapis-button>
+  <app-serapis-button
+    title="Export"
+    type="empty"
+    class="schemas-action-button"
+    [iconTemplate]="exportIcon"
+  >
+    <ng-template #exportIcon
+      ><mat-icon
+        class="action-icon"
+        svgIcon="export"
+        aria-hidden="false"
+      ></mat-icon
+    ></ng-template>
+  </app-serapis-button>
+</div>
+<div class="schemas-main-container">
+  <app-data-grid [data]="data">
+    <ng-template #documentColumnCellTemplate let-element="element">
+      <div class="document-column-cell">
+        <mat-icon class="action-icon" svgIcon="export" aria-hidden="false"></mat-icon>
+        <div style="margin-left: 13px">View</div>
+      </div>
+    </ng-template>
+
+    <ng-template #checkboxColumnHeaderTemplate let-element="element">
+      <mat-checkbox class="example-margin"></mat-checkbox>
+    </ng-template>
+
+    <ng-template #checkboxColumnCellTemplate let-element="element">
+      <mat-checkbox class="example-margin"></mat-checkbox>
+    </ng-template>
+  </app-data-grid>
+</div>

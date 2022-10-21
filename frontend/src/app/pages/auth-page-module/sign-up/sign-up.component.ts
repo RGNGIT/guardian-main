@@ -17,6 +17,10 @@ import {LoaderService} from "@app/services/loader-service";
 export class SignUpComponent {
   @ViewChild('stepperComponent') stepperComponent!: StepperComponent;
 
+  roles: string[] = [
+    'USER', 'STANDARD_REGISTRY', 'AUDITOR', 'INSTALLER'
+  ];
+
   matcher = new SerapisErrorStateMatcher();
   hide = true;
   canActivateThirdStep = false;
@@ -29,6 +33,7 @@ export class SignUpComponent {
   secondFormGroup = this._formBuilder.group({
       username: ['', [Validators.required, ]],
       email: ['', [Validators.required, Validators.email]],
+      role: ['USER', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     },

@@ -1,11 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from "@angular/forms";
 import {URLS_PATHS} from "@app/constants/path";

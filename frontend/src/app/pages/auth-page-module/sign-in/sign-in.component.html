@@ -38,6 +38,6 @@
     <div class="login-button"><app-serapis-button title="Log In" (click)="auth()"></app-serapis-button></div>
   </div>
   <div class="sign-up-link link-font">
-    <app-serapis-link title="Don’t have an account? Sign Up" [routerLink]="urlsRoutes.auth.signUp"></app-serapis-link>
+    <app-serapis-link title="Don’t have an account? Sign Up" [routerLink]="urlsRoutes.auth.base + urlsRoutes.auth.signUp"></app-serapis-link>
   </div>
 </div>

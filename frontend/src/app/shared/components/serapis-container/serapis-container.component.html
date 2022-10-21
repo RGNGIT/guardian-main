@@ -1,0 +1,17 @@
+<div class="container-wrapper">
+  <div class="content">
+    {{content}}
+  </div>
+  <div class="copy-button" *ngIf="enableCopyButton">
+    <mat-icon
+      [cdkCopyToClipboard]="content"
+      [appTooltip]="test"
+      svgIcon="clipboard"
+      aria-hidden="false"
+    ></mat-icon>
+  </div>
+</div>
+
+<ng-template #test>
+  Copy data to clipboard
+</ng-template>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {HeaderMenuService} from "@app/services/header-menu.service";
 import {NavItem} from "@app/models/header.model";
+import {UserService} from "@app/services/user.service";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -10,13 +12,16 @@ import {NavItem} from "@app/models/header.model";
 })
 export class HeaderComponent implements OnInit {
 
-  menuItems!: NavItem[];
+  menuItems: Observable<NavItem[]> = this._headMenuService.currentMenuItems;
 
-  constructor(private _headMenuService: HeaderMenuService) {
-    this.menuItems = this._headMenuService.getMenuItems();
+  constructor(private _headMenuService: HeaderMenuService, private _userService: UserService) {
+
   }
 
   ngOnInit(): void {}
 
 
+  logoutHandler() {
+    this._userService.logout();
+  }
 }

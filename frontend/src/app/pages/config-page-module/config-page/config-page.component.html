@@ -1,0 +1,54 @@
+<div class="flex-row">
+  <div class="column">
+    <div class="flex-row item">
+      <div class="item-title">DID Document</div>
+      <div class="item-content config-page-wrapper flex-align-center cursor-pointer" [appTooltip]="showDocument">
+        <mat-icon
+          svgIcon="document"
+          aria-hidden="false"
+        ></mat-icon>
+        <span class="show-document-title">View</span>
+      </div>
+    </div>
+    <div class="flex-row item">
+      <div class="item-title">VC Document</div>
+      <div class="item-content">
+        <div class="item-content config-page-wrapper flex-align-center cursor-pointer" [appTooltip]="showDocument">
+          <mat-icon
+            svgIcon="document"
+            aria-hidden="false"
+          ></mat-icon>
+          <span class="show-document-title">View</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row item">
+      <div class="item-title">Balance</div>
+      <div class="item-content">test</div>
+    </div>
+    <div class="flex-row item">
+      <div class="item-title">User Topic</div>
+      <div class="item-content">test</div>
+    </div>
+    <div class="flex-row item">
+      <div class="item-title">Initialization topic</div>
+      <div class="item-content">test</div>
+    </div>
+  </div>
+  <div>
+    <div class="flex-row item">
+      <div class="item-title">Hedera Account Id</div>
+      <div class="item-content">test</div>
+    </div>
+    <div class="flex-row item">
+      <div class="item-title">DID</div>
+      <div class="item-content container">
+        <app-serapis-container
+          content="did:hedera:testnet:CJw1SUWRFmvGcTckaB9nPfvXE5tJivaDV15ZkGfu5Fri;hedera:testnet:fid=0.0.2799029 1 1">
+        </app-serapis-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #showDocument>View document</ng-template>

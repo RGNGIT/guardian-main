@@ -1,14 +1,21 @@
 import {Injectable} from "@angular/core";
 import {NavItem} from "@app/models/header.model";
-import {installerMenuItems} from "@app/constants/menu";
+import {DEFAULT_MENU} from "@app/constants/menu";
+import {UntilDestroy} from "@ngneat/until-destroy";
+import {BehaviorSubject} from "rxjs";
 
+@UntilDestroy()
 @Injectable({
   providedIn: 'root'
 })
 export class HeaderMenuService {
+  public readonly currentMenuItems: BehaviorSubject<NavItem[]> = new BehaviorSubject<NavItem[]>(DEFAULT_MENU);
 
-  // todo rewrite it
+  constructor() {
+
+  }
+
   public getMenuItems(): NavItem[] {
-    return installerMenuItems
+    return this.currentMenuItems.value;
   }
 }

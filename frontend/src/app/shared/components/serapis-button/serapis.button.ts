@@ -15,6 +15,7 @@ export class SerapisButton {
     this._disabled = inactive;
     this.currentClass = inactive ? 'inactivated' : this._type || 'filled';
   }
+  @Input() iconTemplate: any;
 
   private _disabled = false;
   private _type!: string;
