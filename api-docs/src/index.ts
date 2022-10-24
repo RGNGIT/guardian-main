@@ -20,6 +20,14 @@ function ReadSwaggerConfig() {
     });
 }
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested With, Content-Type, Accept');
+    next();
+});
+app.use('/serapis/:parameter', (req, res) => {
+    res.redirect(`http://v8.serapis.19ivt.ru/${req.params.parameter}`);
+});
 app.use('/', swaggerUi.serve);
 app.get('/', swaggerUi.setup(ReadSwaggerConfig(), false));
 

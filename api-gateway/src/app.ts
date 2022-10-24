@@ -25,6 +25,7 @@ import { MessageBrokerChannel, Logger } from '@guardian/common';
 import { taskAPI } from '@api/service/task';
 import { TaskManager } from '@helpers/task-manager';
 import { singleSchemaRoute } from '@api/service/schema';
+import cors from 'cors';
 
 const PORT = process.env.PORT || 3002;
 
@@ -56,7 +57,13 @@ Promise.all([
 
     ////////////////////////////////////////
 
+    const corsOpt = {
+        origin: "*",
+        optionsSuccessStatus: 200
+    };
+
     // Config routes
+    app.use(cors(corsOpt));
     app.get('/', (req, res) => {
         res.send('Hello World!');
     });
