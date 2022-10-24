@@ -15,6 +15,7 @@ import {UserService} from "@app/services/user.service";
 import {Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
 import {catchError, finalize, throwError} from "rxjs";
+import {LocalStorageService} from "@app/services/local-storage";
 
 
 @UntilDestroy()
@@ -35,7 +36,8 @@ export class SignInComponent implements OnInit {
     private _router: Router,
     private _apiService: SignService,
     private _userService: UserService,
-    private _loadService: LoaderService
+    private _loadService: LoaderService,
+    private _localStorage: LocalStorageService
   ) {
 
   }
@@ -65,19 +67,21 @@ export class SignInComponent implements OnInit {
   }
 
   auth(): void {
+    this._localStorage.clear();
     this._loadService.enable();
     this._apiService.signIn(this.signInForm.value)
       .pipe(
         catchError( (err) => {
           this.emailFormControl.setErrors( { authError: true } )
           this.passwordFormControl.setErrors( { authError: true } )
+          this._loadService.disable()
           return throwError(() => err)
         }),
         untilDestroyed(this),
-        finalize(() => this._loadService.disable())
       )
       .subscribe( user => {
         this._userService.setUser(user.message);
+        this._loadService.disable()
         this._router.navigateByUrl('/')
     })
   }

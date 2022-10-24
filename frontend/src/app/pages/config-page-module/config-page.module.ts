@@ -3,6 +3,8 @@ import {ConfigPageComponent} from "./config-page/config-page.component";
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "@app/shared/shared.module";
 import {MatIconModule} from "@angular/material/icon";
+import {AsyncPipe, JsonPipe, NgIf} from "@angular/common";
+import {ClipboardModule} from "@angular/cdk/clipboard";
 
 const routes: Routes = [
   {
@@ -22,7 +24,11 @@ const components = [
   imports: [
     RouterModule.forChild(routes),
     SharedModule,
-    MatIconModule
+    MatIconModule,
+    AsyncPipe,
+    NgIf,
+    JsonPipe,
+    ClipboardModule
   ],
   exports: [
     ...components

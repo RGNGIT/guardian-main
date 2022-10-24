@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, catchError, Observable, throwError} from "rxjs";
+import {BehaviorSubject, catchError, Observable, Subject, throwError} from "rxjs";
 import {IAuthUser, IStandardRegistryAccount, IStandardRegistryAccountResponse, IUserProfile} from "@app/models/user";
 import {LocalStorageService} from "@app/services/local-storage";
 import {HttpClient} from "@angular/common/http";
@@ -11,6 +11,7 @@ import {URLS_PATHS} from "@app/constants/path";
   providedIn: 'root'
 })
 export class UserService {
+  public readonly accessTokenSubject: Subject<string | null> = new Subject<string | null>();
   public readonly currentUser: BehaviorSubject<IAuthUser | null> = new BehaviorSubject<IAuthUser | null>(null);
   public readonly currentProfile: BehaviorSubject<IUserProfile | null> = new BehaviorSubject<IUserProfile | null>(null);
 
@@ -57,8 +58,22 @@ export class UserService {
   public setUser(user: IAuthUser) {
     this.currentUser.next(user);
     this._storage.setItem("user", JSON.stringify(user));
-    this._storage.setItem("accessToken", user.accessToken);
-    // this.loadProfile();
+    this.setAccessToken(user.accessToken)
+    this.loadProfile();
+  }
+
+  public getAccessToken(): string {
+    return this._storage.getItem("accessToken") as string ?? null;
+  }
+
+  public setAccessToken(accessToken: string) {
+    localStorage.setItem('accessToken', accessToken);
+    this.accessTokenSubject.next(accessToken);
+  }
+
+  public removeAccessToken() {
+    localStorage.removeItem('accessToken');
+    this.accessTokenSubject.next(null);
   }
 
   public getUser(): IAuthUser | null {
@@ -75,8 +90,12 @@ export class UserService {
     return this._http.get<IUserProfile>(API_URLS.profile.base.replace('{username}', this.userName));
   }
 
-  public getBalance(): Observable<string> {
-    return this._http.get<string>(API_URLS.profile.balance.replace('{username}', this.userName));
+  public pushSetProfile(profile: IUserProfile): Observable<{ taskId: string, expectation: number }> {
+    return this._http.put<{ taskId: string, expectation: number }>(API_URLS.profile.push.replace('{username}', this.userName), profile);
+  }
+
+  public getBalance(): Observable<any> {
+    return this._http.get<any>(API_URLS.accounts.balance);
   }
 
 }

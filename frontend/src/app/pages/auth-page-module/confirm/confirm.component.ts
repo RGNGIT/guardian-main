@@ -6,6 +6,7 @@ import {ConfirmUserResponse} from "../model/user";
 import {ActivatedRoute} from "@angular/router";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {BaseResponse} from "@app/models/base-response";
+import {URLS_PATHS} from "@app/constants/path";
 
 @UntilDestroy()
 @Component({
@@ -17,6 +18,7 @@ export class ConfirmComponent implements OnInit {
   userInfo!: ConfirmUserResponse;
   errorInfo?: BaseResponse<any, any>;
   private params!: { u: string, c: string} | any;
+  urlsRoutes = URLS_PATHS;
 
   constructor(private loadingService: LoaderService, private _apiService: SignService, private _route: ActivatedRoute) {
     this.loadingService.enable();

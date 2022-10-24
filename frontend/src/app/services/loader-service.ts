@@ -8,10 +8,12 @@ export class LoaderService {
   readonly loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   enable(): void {
-    this.loading$.next(true);
+    // todo fix it
+    setTimeout(() => this.loading$?.next(true), 0)
   }
 
   disable(): void {
-    this.loading$.next(false);
+    // todo fix it
+    setTimeout(() => this.loading$?.next(false), 0)
   }
 }

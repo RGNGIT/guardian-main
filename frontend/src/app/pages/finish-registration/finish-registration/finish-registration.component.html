@@ -1,6 +1,15 @@
 <div class="final-step-wrapper">
   <div class="title">Final Registration Step</div>
-  <div *ngIf="userProfile" class="flex-column flex-align-center">
+
+  <div *ngIf="loading && taskId" class="loading">
+    <async-progress class="loading-progress"
+                    [taskId]="taskId"
+                    [expected]="expectedTaskMessages"
+                    (error)="onAsyncError($event)"
+                    (completed)="onAsyncCompleted()"></async-progress>
+  </div>
+
+  <div *ngIf="userProfile && !loading && !taskId" class="flex-column flex-align-center">
     <div [ngSwitch]="(userProfile | async)?.role" class="form">
       <form [formGroup]="hederaForm" (ngSubmit)="onHederaSubmit()">
         <div *ngSwitchCase="userRoles.USER || userRoles.AUDITOR || userRoles.INSTALLER">
@@ -16,7 +25,7 @@
         <div *ngSwitchCase="userRoles.STANDARD_REGISTRY">
 
         </div>
-        <app-schema-form [formGroup]="vcForm" [schema]="schema" [private-fields]="hideVC"
+        <app-schema-form *ngIf="schema" [formGroup]="vcForm" [schema]="schema" [private-fields]="hideVC"
                          (change)="onChangeForm()">
         </app-schema-form>
 

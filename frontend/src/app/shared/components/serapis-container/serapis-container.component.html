@@ -5,13 +5,13 @@
   <div class="copy-button" *ngIf="enableCopyButton">
     <mat-icon
       [cdkCopyToClipboard]="content"
-      [appTooltip]="test"
+      [appTooltip]="copyToClipboard"
       svgIcon="clipboard"
       aria-hidden="false"
     ></mat-icon>
   </div>
 </div>
 
-<ng-template #test>
+<ng-template #copyToClipboard>
   Copy data to clipboard
 </ng-template>

@@ -5,9 +5,10 @@ import {UserService} from "@app/services/user.service";
 import {HeaderMenuService} from "@app/services/header-menu.service";
 import {Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
-import {combineLatest, filter, finalize, forkJoin, from, map, of, Subscription, switchMap, withLatestFrom} from "rxjs";
+import {combineLatest, filter, Observable, Subscription} from "rxjs";
 import {URLS_PATHS} from "@app/constants/path";
 import {USER_ROLES} from "@app/enums/user-roles";
+import {IAuthUser} from "@app/models/user";
 
 @UntilDestroy()
 @Component({
@@ -28,13 +29,12 @@ export class MainPageComponent implements OnDestroy {
     this._loaderService.enable();
 
     this.subscription = combineLatest([
-      _userService.currentUser.pipe(filter( (value) => !!value)),
-      _userService.currentProfile.pipe(filter( (value) => !!value)),
+      _userService.currentUser.pipe(filter( (value) => value != null)),
+      _userService.currentProfile.pipe(filter( (value) => value != null)),
     ]).pipe(
       untilDestroyed(this)
     )
     .subscribe( ([user, profile])  => {
-      // this._loaderService.disable();
       switch (user?.role) {
         case USER_ROLES.STANDARD_REGISTRY:
           this._headerMenuService.currentMenuItems.next(ROOT_AUTHORITY_MENU);
@@ -46,13 +46,12 @@ export class MainPageComponent implements OnDestroy {
           this._headerMenuService.currentMenuItems.next(DEFAULT_MENU);
           break;
       }
-
       if (profile?.confirmed) {
         this._router.navigateByUrl(this._headerMenuService.currentMenuItems.value[0].routerLink)
       } else {
         this._router.navigateByUrl(URLS_PATHS.finishRegistration)
       }
-      //
+      this._loaderService.disable();
     } );
   }
 

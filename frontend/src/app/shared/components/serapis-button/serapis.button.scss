@@ -12,6 +12,7 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
+  padding: 0 24px;
 }
 
 .title {
@@ -30,6 +31,12 @@
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(51, 51, 51, 0.25);
   color: #1960EC;
+}
+
+.empty-gray {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(51, 51, 51, 0.25);
+  color: black;
 }
 
 .inactivated {

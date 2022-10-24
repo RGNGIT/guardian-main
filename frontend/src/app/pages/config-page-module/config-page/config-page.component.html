@@ -1,19 +1,56 @@
-<div class="flex-row">
+<div class="flex-row" *ngIf="configInfo | async as info">
   <div class="column">
     <div class="flex-row item">
       <div class="item-title">DID Document</div>
-      <div class="item-content config-page-wrapper flex-align-center cursor-pointer" [appTooltip]="showDocument">
+      <div class="item-content config-page-wrapper flex-align-center cursor-pointer"
+           [appTooltip]="showDocument"
+           (click)="openDialog(didDialog)">
         <mat-icon
           svgIcon="document"
           aria-hidden="false"
         ></mat-icon>
         <span class="show-document-title">View</span>
       </div>
+      <ng-template #didDialog>
+        <app-base-dialog>
+          <div header>DID Document</div>
+          <div body>
+            <div class="body">
+              <div class="body-content">
+                <pre *ngIf="info.didDocument; else noDidData">
+{{info.didDocument | json}}
+                </pre>
+                <ng-template #noDidData>
+                  <div class="full-width flex-row flex-align-center flex-justify-center">No data</div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div footer>
+            <div class="flex-row justify-between footer">
+              <app-serapis-button title="Copy to Clipboard" type="empty-gray"
+                                  [cdkCopyToClipboard]="getDid()"
+                                  [disabled]="!info.didDocument"
+              >
+                <mat-icon style="margin-right: 12px"
+                  svgIcon="clipboard"
+                  aria-hidden="false"
+                ></mat-icon>
+              </app-serapis-button>
+              <app-serapis-button title="Cancel" type="empty" (click)="closeDialog()">
+
+              </app-serapis-button>
+            </div>
+          </div>
+        </app-base-dialog>
+      </ng-template>
     </div>
     <div class="flex-row item">
       <div class="item-title">VC Document</div>
       <div class="item-content">
-        <div class="item-content config-page-wrapper flex-align-center cursor-pointer" [appTooltip]="showDocument">
+        <div class="item-content config-page-wrapper flex-align-center cursor-pointer"
+             [appTooltip]="showDocument"
+             (click)="openDialog(vcDialog)">
           <mat-icon
             svgIcon="document"
             aria-hidden="false"
@@ -21,34 +58,66 @@
           <span class="show-document-title">View</span>
         </div>
       </div>
+      <ng-template #vcDialog>
+        <app-base-dialog >
+          <div header>VC Document</div>
+          <div body>
+            <div class="body">
+              <div class="body-content">
+                <pre *ngIf="info.vcDocument; else noVcData">
+{{info.vcDocument | json}}
+                </pre>
+                <ng-template #noVcData>
+                  <div class="full-width flex-row flex-align-center flex-justify-center">No data</div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div footer>
+            <div class="flex-row justify-between footer">
+              <app-serapis-button title="Copy to Clipboard" type="empty-gray" [disabled]="!info.vcDocument" [cdkCopyToClipboard]="getVc()">
+                <mat-icon style="margin-right: 12px"
+                          svgIcon="clipboard"
+                          aria-hidden="false"
+                ></mat-icon>
+              </app-serapis-button>
+              <app-serapis-button title="Cancel" type="empty" (click)="closeDialog()">
+
+              </app-serapis-button>
+            </div>
+          </div>
+        </app-base-dialog>
+      </ng-template>
     </div>
     <div class="flex-row item">
       <div class="item-title">Balance</div>
-      <div class="item-content">test</div>
+      <div class="item-content">{{balance}}</div>
     </div>
     <div class="flex-row item">
       <div class="item-title">User Topic</div>
-      <div class="item-content">test</div>
+      <div class="item-content">{{info.topicId}}</div>
     </div>
     <div class="flex-row item">
       <div class="item-title">Initialization topic</div>
-      <div class="item-content">test</div>
+      <div class="item-content">{{info.parentTopicId}}</div>
     </div>
   </div>
   <div>
     <div class="flex-row item">
       <div class="item-title">Hedera Account Id</div>
-      <div class="item-content">test</div>
+      <div class="item-content">{{info.hederaAccountId}}</div>
     </div>
     <div class="flex-row item">
       <div class="item-title">DID</div>
       <div class="item-content container">
         <app-serapis-container
-          content="did:hedera:testnet:CJw1SUWRFmvGcTckaB9nPfvXE5tJivaDV15ZkGfu5Fri;hedera:testnet:fid=0.0.2799029 1 1">
+          [content]="info.did">
         </app-serapis-container>
       </div>
     </div>
   </div>
 </div>
+
+
 
 <ng-template #showDocument>View document</ng-template>

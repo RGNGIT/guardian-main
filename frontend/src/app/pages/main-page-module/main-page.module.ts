@@ -7,7 +7,12 @@ import {AuthGuard} from "@app/services/guards/auth.guard";
 import {replaceUrlFirstSlash} from "@app/utils/utils";
 import {URLS_PATHS} from "@app/constants/path";
 import {ConfirmedUserGuard} from "@app/services/guards/confirmed-user.guard";
-import {AsyncPipe, NgIf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {HeaderComponent} from "../header/header.component";
+import {HeaderNavbarComponent} from "../header/header-navbar/header-navbar.component";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatIconModule} from "@angular/material/icon";
 
 // todo configure route in dependent role
 const routes: Routes = [
@@ -36,7 +41,8 @@ const routes: Routes = [
         path: 'schemas',
         loadChildren: () => import('../schemes-page-module/schemas-page.module').then(
           m => m.SchemasPageModule
-        )
+        ),
+        canLoad: [ AuthGuard, ConfirmedUserGuard ]
       },
       {
         path: replaceUrlFirstSlash(URLS_PATHS.finishRegistration),
@@ -52,9 +58,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    MainPageComponent
+    MainPageComponent,
+    HeaderComponent,
+    HeaderNavbarComponent,
   ],
-  imports: [RouterModule.forChild(routes), AsyncPipe, NgIf],
+  imports: [RouterModule.forChild(routes), AsyncPipe, NgIf, MatProgressBarModule, MatMenuModule, MatIconModule, NgForOf],
   exports: [],
   bootstrap: []
 })

@@ -1,4 +1,5 @@
 <div class="wrapper" [ngClass]="currentClass" (click)="buttonClickHandler($event)">
   <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+  <ng-content></ng-content>
   <div class="title">{{title}}</div>
 </div>

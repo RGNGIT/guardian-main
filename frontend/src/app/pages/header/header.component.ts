@@ -20,6 +20,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  get userName(): string {
+    return this._userService.userName
+  }
 
   logoutHandler() {
     this._userService.logout();

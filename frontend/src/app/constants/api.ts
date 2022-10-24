@@ -5,11 +5,13 @@ export const API_URLS = {
     confirm: '/accounts/confirm',
     passwordReset: '/accounts/reset',
     passwordChange: '/accounts/update-password',
-    standardRegistries: '/accounts/standard-registries'
+    standardRegistries: '/accounts/standard-registries',
+    balance: '/accounts/balance',
   },
   profile: {
     base: '/profiles/{username}',
-    balance: '/profiles/{username}/balance'
+    balance: '/profiles/{username}/balance',
+    push: '/profiles/push/{username}'
   },
   schemas: {
     allSchemas: '/schemas',

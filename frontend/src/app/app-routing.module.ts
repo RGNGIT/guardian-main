@@ -4,6 +4,7 @@ import {URLS_PATHS} from "@app/constants/path";
 import {AuthGuard} from "@app/services/guards/auth.guard";
 import * as path from "path";
 import {replaceUrlFirstSlash} from "@app/utils/utils";
+import {PageNotFoundComponent} from "./404page/page-not-found.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
     canLoad: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
   },
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  }
 ];
 
 @NgModule({

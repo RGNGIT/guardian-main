@@ -20,8 +20,24 @@
 }
 
 
-.column {
+.body {
+  overflow: hidden;
+  word-break: break-all;
+  border: 1px solid rgba(51, 51, 51, 0.15);
+  border-radius: 4px;
+  padding: 16px 8px 16px 12px;
+}
 
+.body-content {
+  overflow: auto;
+}
+
+.footer {
+  padding: 28px 16px 24px 16px;
+  app-serapis-button {
+    height: 48px;
+    min-width: 160px;
+  }
 }
 
 .item {
@@ -43,7 +59,9 @@
 }
 
 .item-content {
-
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.02em;
 }
 
 .container {

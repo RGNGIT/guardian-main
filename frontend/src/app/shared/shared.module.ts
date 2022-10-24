@@ -20,6 +20,10 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgxMatDatetimePickerModule, NgxMatTimepickerModule} from "@angular-material-components/datetime-picker";
 import {MatButtonModule} from "@angular/material/button";
+import {AsyncProgressComponent} from "@app/shared/components/async-progress/async-progress.component";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatListModule} from "@angular/material/list";
+import {BaseDialogComponent} from "@app/shared/components/base-dialog/base-dialog.component";
 
 const components = [
   SerapisButton,
@@ -28,7 +32,9 @@ const components = [
   SharedTooltipDirective,
   SharedTooltipComponent,
   DataGridComponent,
-  SchemaFormComponent
+  SchemaFormComponent,
+  AsyncProgressComponent,
+  BaseDialogComponent
 ];
 
 @NgModule({
@@ -59,6 +65,8 @@ const components = [
     ReactiveFormsModule,
     MatButtonModule,
     NgxMatDatetimePickerModule,
+    MatProgressBarModule,
+    MatListModule,
   ],
   exports: [
     ...components

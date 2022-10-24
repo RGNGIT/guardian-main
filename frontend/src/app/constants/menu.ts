@@ -21,6 +21,5 @@ export const ROOT_AUTHORITY_MENU: NavItem[] = [
 export const AUDITOR_MENU: NavItem[] = [];
 export const DEFAULT_MENU: NavItem[] = [
   { title: 'Config', routerLink: '/config' },
-  { title: 'Schemas', routerLink: '/schemas' },
   { title: 'Policies', routerLink: '/policies' },
 ];

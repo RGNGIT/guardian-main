@@ -7,7 +7,7 @@ import {Component, Input, OnInit} from "@angular/core";
 })
 export class SerapisButton {
   @Input() title!: string;
-  @Input() set type(type: 'filled' | 'empty') {
+  @Input() set type(type: string) {
     this.currentClass = type;
     this._type = type;
   }

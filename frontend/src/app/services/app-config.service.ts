@@ -13,7 +13,7 @@ export class AppConfigService {
   load(defaults?: {}): Promise<{}> {
     return new Promise<{}>((resolve) => {
       this.http
-        .get('app.config.json')
+        .get('/assets/config/app.config.json')
         .pipe(
           take(1),
           untilDestroyed(this),

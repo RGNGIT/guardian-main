@@ -1,20 +1,48 @@
 {
   "/accounts": {
-    "target": "http://178.44.173.187:3002",
+    "target": "http://v8.serapis.19ivt.ru",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
   },
   "/profiles": {
-    "target": "http://178.44.173.187:3002",
+    "target": "http://v8.serapis.19ivt.ru",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
   },
   "/schemas": {
-    "target": "http://178.44.173.187:3002",
+    "target": "http://v8.serapis.19ivt.ru",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
+  },
+  "/api/v1": {
+    "target": "http://v8.serapis.19ivt.ru",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/demo": {
+    "target": "http://v8.serapis.19ivt.ru",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/tasks": {
+    "target": "http://v8.serapis.19ivt.ru",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/ws/*": {
+    "target": "http://v8.serapis.19ivt.ru",
+    "secure": false,
+    "ws": true,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "/ws": ""
+    }
   }
 }

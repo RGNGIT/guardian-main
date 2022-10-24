@@ -20,12 +20,16 @@ export class ConfirmedUserGuard implements CanActivate, CanLoad, CanActivateChil
   }
 
   private userIsConfirmed(): boolean {
-    if (this._userService.currentProfile?.value?.confirmed) {
-      return true;
-    } else {
-      this._router.navigate([URLS_PATHS.finishRegistration])
-      return false;
+    const profile = this._userService.currentProfile.value;
+    if (profile) {
+      if (profile.confirmed) {
+        return true;
+      } else {
+        this._router.navigate([URLS_PATHS.finishRegistration])
+        return false;
+      }
     }
+    return false;
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

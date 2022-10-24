@@ -22,6 +22,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {NgxMatDatetimePickerModule, NgxMatTimepickerModule} from "@angular-material-components/datetime-picker";
 import {MatInputModule} from "@angular/material/input";
 import {AppConfigService} from "@app/services/app-config.service";
+import {DEFAULT_DIALOG_CONFIG} from "@angular/cdk/dialog";
+import {PageNotFoundComponent} from "./404page/page-not-found.component";
 
 export function appInitServiceFactory(
   _sanitizer: DomSanitizer,
@@ -40,10 +42,9 @@ export function appInitServiceFactory(
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    HeaderNavbarComponent,
     DashboardComponent,
-    GoalsComponent
+    GoalsComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +52,6 @@ export function appInitServiceFactory(
     BrowserAnimationsModule,
     RouterModule,
     MatIconModule,
-    MatProgressBarModule,
     MatMenuModule,
     HttpClientModule,
     SharedModule,
@@ -62,6 +62,7 @@ export function appInitServiceFactory(
     ReactiveFormsModule,
     MatButtonModule,
     NgxMatDatetimePickerModule,
+    MatProgressBarModule,
   ],
   providers: [
     {
@@ -78,6 +79,16 @@ export function appInitServiceFactory(
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: DEFAULT_DIALOG_CONFIG,
+      useValue: {
+        hasBackdrop: true, disableClose: false,
+        minWidth: '300px',
+        maxWidth: '80vw',
+        minHeight: '300px',
+        maxHeight: '80vh',
+      }
     }
   ],
   bootstrap: [AppComponent]
