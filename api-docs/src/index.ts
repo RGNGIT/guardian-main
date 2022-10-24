@@ -25,8 +25,13 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested With, Content-Type, Accept');
     next();
 });
-app.use('/serapis/:parameter', (req, res) => {
-    res.redirect(`http://v8.serapis.19ivt.ru/${req.params.parameter}`);
+app.use('/serapis', (req, res) => {
+    const urlSplit = req.url.split('/');
+    let url = '';
+    for(const item of urlSplit) {
+        url += item + '/';
+    }
+    res.redirect(`http://v8.serapis.19ivt.ru/${url}`);
 });
 app.use('/', swaggerUi.serve);
 app.get('/', swaggerUi.setup(ReadSwaggerConfig(), false));
