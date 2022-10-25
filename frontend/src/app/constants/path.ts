@@ -6,5 +6,8 @@ export const URLS_PATHS: any = {
     passwordChange: '/password-change',
     confirm: '/confirm'
   },
-  finishRegistration: '/finish-registration'
+  finishRegistration: '/finish-registration',
+  policies: {
+    base: '/policies'
+  }
 }

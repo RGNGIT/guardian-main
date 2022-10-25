@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-import {DashboardComponent} from "../dashboard/dashboard.component";
-import {GoalsComponent} from "../goals/goals.component";
+import {DashboardComponent} from "../dashboard-page/dashboard.component";
+import {GoalsComponent} from "../goals-page/goals.component";
 import {MainPageComponent} from "./main-page/main-page.component";
 import {AuthGuard} from "@app/services/guards/auth.guard";
 import {replaceUrlFirstSlash} from "@app/utils/utils";
@@ -9,8 +9,8 @@ import {URLS_PATHS} from "@app/constants/path";
 import {ConfirmedUserGuard} from "@app/services/guards/confirmed-user.guard";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {HeaderComponent} from "../header/header.component";
-import {HeaderNavbarComponent} from "../header/header-navbar/header-navbar.component";
+import {HeaderComponent} from "./components/header/header.component";
+import {HeaderNavbarComponent} from "./components/header/header-navbar/header-navbar.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 
@@ -21,12 +21,12 @@ const routes: Routes = [
     component: MainPageComponent,
     children: [
       {
-        path: 'dashboard',
+        path: 'dashboard-page',
         component: DashboardComponent,
         canActivate: [ AuthGuard, ConfirmedUserGuard ]
       },
       {
-        path: 'goals',
+        path: 'goals-page',
         component: GoalsComponent,
         canActivate: [ AuthGuard, ConfirmedUserGuard ]
       },
@@ -49,10 +49,19 @@ const routes: Routes = [
         loadChildren: () => import('../finish-registration/finish-registration.module').then(
           m => m.FinishRegistrationModule
         )
+      },
+      {
+        path: replaceUrlFirstSlash(URLS_PATHS.policies.base),
+        loadChildren: () => import('../policies-page-module/policies-page.module').then(
+          m => m.PoliciesPageModule
+        )
       }
-    ]
+    ],
   },
-
+  // {
+  //   path: '**',
+  //   redirectTo: ''
+  // }
 ];
 
 

@@ -44,5 +44,11 @@
     "pathRewrite": {
       "/ws": ""
     }
+  },
+  "*": {
+    "target": "http://v8.serapis.19ivt.ru",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
   }
 }

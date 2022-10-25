@@ -91,7 +91,15 @@
     </div>
     <div class="flex-row item">
       <div class="item-title">Balance</div>
-      <div class="item-content">{{balance}}</div>
+      <div class="item-content">
+        <span class="balance"
+              [class.normal]="balanceType==='normal'"
+              [class.warning]="balanceType==='warn'"
+              [class.error]="balanceType==='error'"
+        >
+          {{balance}}
+        </span>
+      </div>
     </div>
     <div class="flex-row item">
       <div class="item-title">User Topic</div>

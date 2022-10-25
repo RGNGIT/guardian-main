@@ -1,0 +1,36 @@
+@use 'abstracts' as *;
+
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+mat-progress-bar {
+  margin-bottom: 20px;
+}
+
+.wrapper {
+  width: 100%;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.info {
+
+}
+
+.status-item + .status-item {
+  margin-top: 20px;
+}
+
+.status {
+  font-weight: 600;
+}
+
+.fullpage {
+  padding: 20px;
+  .info {
+    padding-left: 20px;
+  }
+}

@@ -67,7 +67,9 @@ export class ConfigPageComponent implements OnInit {
   }
 
   openDialog(template: TemplateRef<any>): void {
-    this._dialog.open(template);
+    this._dialog.open(template, {
+      maxHeight: '80hv'
+    });
   }
 
   closeDialog(): void {

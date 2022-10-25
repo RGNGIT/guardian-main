@@ -1,0 +1,71 @@
+<div *ngIf="asyncProcess || taskId; else table" class="loading">
+  <async-progress
+    [fullPage]="true"
+    class="loading-progress" [taskId]="taskId"
+    [expected]="expectedTaskMessages"
+    (error)="onAsyncError($event)"
+    (completed)="onAsyncCompleted()">
+  </async-progress>
+</div>
+
+<ng-template #table>
+  <div class="buttons flex-row flex-align-center">
+    <app-serapis-button type="filled" title="Add New Policy" (click)="openDialog(addNewPolicy)">
+      <mat-icon class="icons">add</mat-icon>
+    </app-serapis-button>
+    <app-serapis-button type="blue" title="Import Policy">
+      <mat-icon
+        class="icons"
+        svgIcon="import"
+        aria-hidden="false"
+      ></mat-icon
+      >
+    </app-serapis-button>
+  </div>
+  <div>
+    <app-data-grid [data]="data">
+
+    </app-data-grid>
+  </div>
+</ng-template>
+
+
+<ng-template #addNewPolicy>
+    <app-base-dialog>
+      <div header class="modal-header">New Policy</div>
+      <div body class="modal-body">
+        <form [formGroup]="dataForm">
+          <mat-form-field class="full-width mat-input" appearance="standard">
+            <mat-label>Token Name</mat-label>
+            <input matInput placeholder="Name" formControlName="name" required>
+            <mat-error *ngIf="getFormControlByName('name').hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width mat-input" appearance="standard">
+            <mat-label>Tag</mat-label>
+            <input matInput placeholder="Tag" formControlName="policyTag" required>
+            <mat-error *ngIf="getFormControlByName('policyTag').hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width mat-input" appearance="standard">
+            <mat-label>Topic Description</mat-label>
+            <input matInput placeholder="Topic Description" formControlName="topicDescription">
+          </mat-form-field>
+          <mat-form-field class="full-width mat-input" appearance="standard">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+          </mat-form-field>
+        </form>
+      </div>
+      <div footer>
+        <div class="footer">
+          <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
+          </app-serapis-button>
+          <app-serapis-button  type="filled" title="Save" (click)="createPolicy()" [disabled]="!dataForm.valid">
+          </app-serapis-button>
+        </div>
+      </div>
+    </app-base-dialog>
+</ng-template>

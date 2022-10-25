@@ -4,12 +4,10 @@ import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderComponent } from './pages/header/header.component';
-import { HeaderNavbarComponent } from './pages/header/header-navbar/header-navbar.component';
 import { RouterModule } from '@angular/router';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DashboardComponent } from './pages/dashboard-page/dashboard.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { GoalsComponent } from './pages/goals/goals.component';
+import { GoalsComponent } from './pages/goals-page/goals.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {CUSTOM_ICONS} from "../assets/icons/custom-icons";
 import {MatMenuModule} from "@angular/material/menu";
@@ -24,11 +22,13 @@ import {MatInputModule} from "@angular/material/input";
 import {AppConfigService} from "@app/services/app-config.service";
 import {DEFAULT_DIALOG_CONFIG} from "@angular/cdk/dialog";
 import {PageNotFoundComponent} from "./404page/page-not-found.component";
+import {WebSocketService} from "@app/services/web-socket.service";
 
 export function appInitServiceFactory(
   _sanitizer: DomSanitizer,
   _iconRegistry: MatIconRegistry,
   _service: AppConfigService,
+  _wsService: WebSocketService
 ): Function {
   for (const [key, value] of Object.entries(CUSTOM_ICONS)) {
     _iconRegistry.addSvgIconLiteral(
@@ -71,7 +71,8 @@ export function appInitServiceFactory(
       deps: [
         DomSanitizer,
         MatIconRegistry,
-        AppConfigService
+        AppConfigService,
+        WebSocketService
       ],
       multi: true
     },
@@ -83,11 +84,10 @@ export function appInitServiceFactory(
     {
       provide: DEFAULT_DIALOG_CONFIG,
       useValue: {
-        hasBackdrop: true, disableClose: false,
+        hasBackdrop: true,
+        disableClose: false,
         minWidth: '300px',
         maxWidth: '80vw',
-        minHeight: '300px',
-        maxHeight: '80vh',
       }
     }
   ],

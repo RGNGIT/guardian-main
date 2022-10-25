@@ -1,0 +1,28 @@
+@use 'abstracts' as *;
+
+.buttons {
+  height: 104px;
+}
+
+app-serapis-button {
+  display: inline-block;
+  height: 48px;
+  margin-left: 24px;
+}
+
+.icons {
+  margin-right: 5px;
+}
+
+.footer {
+  text-align: right;
+  padding: 40px 48px;
+}
+
+.modal-header {
+  padding-left: 20px;
+}
+
+.modal-body {
+  padding: 0 32px;
+}

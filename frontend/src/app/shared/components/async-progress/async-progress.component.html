@@ -1,14 +1,12 @@
-<div>
+<div class="wrapper">
   <mat-progress-bar mode="buffer" [value]="progressValue"></mat-progress-bar>
-</div>
-<div>
-  <mat-nav-list>
-    <div *ngFor="let status of statuses" class="status-grid">
-      <div [ngClass]="{'info': isInfo(status)}">
-        <span *ngIf="isInfo(status)">INFO: </span>
-        {{ status.message }}
+  <div [class.fullpage]="fullPage">
+    <div *ngFor="let status of statuses" class="flex-row justify-between status-item">
+      <div [class.info]="isInfo(status)">
+        <span *ngIf="isInfo(status)">INFO: </span>{{ status.message }}
       </div>
       <div class="status"><span *ngIf="!isInfo(status)">{{ status.type }}</span></div>
     </div>
-  </mat-nav-list>
+  </div>
 </div>
+

@@ -44,7 +44,6 @@ export class ForgotPasswordComponent {
         })
       )
       .subscribe( data => {
-      console.log(data);
     })
   }
 }

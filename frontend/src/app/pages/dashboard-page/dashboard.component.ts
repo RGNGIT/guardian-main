@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataGrid } from '@app/shared/components/data-grid/data-grid.model';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-page',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

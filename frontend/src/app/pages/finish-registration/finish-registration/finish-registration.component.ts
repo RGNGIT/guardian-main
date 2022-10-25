@@ -65,10 +65,6 @@ export class FinishRegistrationComponent implements OnInit {
       id: true
     }
     this.vcForm = this._formBuilder.group({});
-
-    this.hederaForm.valueChanges.subscribe( data => {
-      console.log(this.hederaForm)
-    })
   }
 
   ngOnInit() {

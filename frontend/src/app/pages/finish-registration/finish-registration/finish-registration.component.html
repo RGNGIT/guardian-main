@@ -1,7 +1,7 @@
 <div class="final-step-wrapper">
   <div class="title">Final Registration Step</div>
 
-  <div *ngIf="loading && taskId" class="loading">
+  <div *ngIf="loading && taskId" class="async">
     <async-progress class="loading-progress"
                     [taskId]="taskId"
                     [expected]="expectedTaskMessages"

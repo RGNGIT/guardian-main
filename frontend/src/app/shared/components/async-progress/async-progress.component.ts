@@ -9,14 +9,11 @@ import {IStatus, StatusType} from "@app/models/async";
   styleUrls: ['./async-progress.component.scss']
 })
 export class AsyncProgressComponent implements OnInit, OnDestroy {
-
-  progressValue!: number;
-  statusesCount: number = 3;
-  statuses: IStatus[] =[];
-
-  statusesRefMap: any = {};
-  private _taskId!: string;
-  @Input('taskId') set taskId(taskId: string) {
+  @Input() fullPage: boolean = false;
+  @Input('taskId') set taskId(taskId: string | undefined) {
+    if (!taskId) {
+      return;
+    }
     this._taskId = taskId;
     this.statusesCount = 0;
     this.statuses.length = 0;
@@ -26,9 +23,15 @@ export class AsyncProgressComponent implements OnInit, OnDestroy {
     return this._taskId;
   }
   @Input('expected') expected!: number;
-
   @Output() completed = new EventEmitter<string>();
   @Output() error = new EventEmitter<any>();
+
+  progressValue!: number;
+  statusesCount: number = 3;
+  statuses: IStatus[] =[];
+
+  statusesRefMap: any = {};
+  private _taskId!: string;
 
   private subscription = new Subscription();
 

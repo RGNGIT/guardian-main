@@ -63,12 +63,11 @@ export class WebSocketService {
         next: this.openWebSocket.bind(this)
       }
     };
-
+    this.connect();
     this.userService.accessTokenSubject.subscribe(() => {
       this.reconnectAttempts = 10;
       this.send('SET_ACCESS_TOKEN', this.userService.getAccessToken());
     })
-    this.connect();
 
   }
 
@@ -117,8 +116,10 @@ export class WebSocketService {
     const accessToken = this.userService.getAccessToken();
     this.wsSubjectConfig.url = this.getUrl(accessToken);
     this.socket = webSocket(this.wsSubjectConfig);
+    console.log(this.socket)
     this.socketSubscription = this.socket?.subscribe(
       (m: any) => {
+        console.log(m)
         this.accept(m);
       },
       (error: Event) => {
@@ -133,9 +134,10 @@ export class WebSocketService {
   private heartbeat() {
     this.socket?.next('ping');
     this.send(MessageAPI.GET_STATUS, null);
-    this.heartbeatTimeout = setTimeout(
-      this.heartbeat.bind(this), WebSocketService.HEARTBEAT_DELAY
-    );
+    this.heartbeatTimeout = setTimeout( () => {
+        this.heartbeat();
+        console.log("heartbeat")
+    }, WebSocketService.HEARTBEAT_DELAY);
   }
 
   private reconnect(): void {

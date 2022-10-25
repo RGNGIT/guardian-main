@@ -23,14 +23,14 @@ const routes: Routes = [
     canLoad: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
   },
-  {
-    path: '**',
-    component: PageNotFoundComponent
-  }
+  // {
+  //   path: '**',
+  //   redirectTo: '/'
+  // }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

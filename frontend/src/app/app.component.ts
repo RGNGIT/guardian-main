@@ -5,6 +5,7 @@ import {UserService} from "@app/services/user.service";
 import {userInfo} from "os";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {IAuthUser} from "@app/models/user";
+import {WebSocketService} from "@app/services/web-socket.service";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,12 @@ export class AppComponent {
     return this._userService.currentUser;
   }
 
-  constructor(private router: Router, public _loaderService: LoaderService, private _userService: UserService) {
+  constructor(
+    private router: Router,
+    public _loaderService: LoaderService,
+    private _userService: UserService,
+    private _swService: WebSocketService
+  ) {
 
   }
 

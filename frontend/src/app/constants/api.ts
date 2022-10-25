@@ -16,5 +16,9 @@ export const API_URLS = {
   schemas: {
     allSchemas: '/schemas',
     entity: 'schemas/system/entity/{entityName}'
+  },
+  policies: {
+    base: '/policies',
+    push: '/policies/push'
   }
 };

@@ -1,11 +1,13 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {mustMatch, SerapisErrorStateMatcher} from "@app/utils/utils";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {finalize} from "rxjs";
 import {SignService} from "../services/sign.service";
 import {LoaderService} from "@app/services/loader-service";
+import {API_URLS} from "@app/constants/api";
+import {URLS_PATHS} from "@app/constants/path";
 
 @UntilDestroy()
 @Component({
@@ -37,6 +39,7 @@ export class PasswordChangeComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _route: ActivatedRoute,
+    private _router: Router,
     private _apiService: SignService,
     private _loadService: LoaderService
   ) {
@@ -59,7 +62,7 @@ export class PasswordChangeComponent implements OnInit {
         })
       )
       .subscribe( data => {
-        console.log(data);
+        this._router.navigateByUrl(URLS_PATHS.auth.base+URLS_PATHS.auth.signIn);
       })
   }
 }
