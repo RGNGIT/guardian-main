@@ -9,12 +9,14 @@ import { ResponseCode, formResponse } from '@helpers/response-manager';
  */
 export const dashboardAPI = Router();
 
-dashboardAPI.get('/devices/:policyId', (req: Request, res: Response) => {
+dashboardAPI.get('/devices/:policyId', async (req: Request, res: Response) => {
     const guardians = new Guardians();
     try {
         const policyId = req.params.policyId;
+        const type = 'MRV';
+        const documents = await guardians.getVcDocuments({policyId, type});
         
-        res.send('Dashboard works');
+        // res.send('Dashboard works');
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send(formResponse(-1, error.message, ''));

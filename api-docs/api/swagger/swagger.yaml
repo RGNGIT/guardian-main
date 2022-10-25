@@ -33,7 +33,7 @@ components:
     Account:
       type: object
       required:
-        - username
+        - email
         - role
       properties:
         username:
