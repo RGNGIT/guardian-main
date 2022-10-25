@@ -28,7 +28,7 @@ export function appInitServiceFactory(
   _sanitizer: DomSanitizer,
   _iconRegistry: MatIconRegistry,
   _service: AppConfigService,
-  _wsService: WebSocketService
+  // _wsService: WebSocketService
 ): Function {
   for (const [key, value] of Object.entries(CUSTOM_ICONS)) {
     _iconRegistry.addSvgIconLiteral(
@@ -72,7 +72,7 @@ export function appInitServiceFactory(
         DomSanitizer,
         MatIconRegistry,
         AppConfigService,
-        WebSocketService
+        // WebSocketService
       ],
       multi: true
     },

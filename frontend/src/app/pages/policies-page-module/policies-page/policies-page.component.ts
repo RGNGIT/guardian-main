@@ -6,6 +6,7 @@ import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {finalize} from "rxjs";
 import {Dialog} from "@angular/cdk/dialog";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "@app/services/user.service";
 
 enum OperationMode {
   None,
@@ -41,6 +42,7 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
 
   constructor(
     private _policyApi: PoliciesService,
+    private _userService: UserService,
     private _loader: LoaderService,
     private _dialog: Dialog,
     private _fb: FormBuilder

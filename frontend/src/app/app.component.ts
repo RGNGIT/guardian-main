@@ -1,11 +1,9 @@
-import {AfterContentInit, AfterViewInit, Component} from '@angular/core';
-import {NavigationStart, Router} from "@angular/router";
+import {Component} from '@angular/core';
+import {Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
 import {UserService} from "@app/services/user.service";
-import {userInfo} from "os";
-import {BehaviorSubject, Observable, of} from "rxjs";
+import {Observable} from "rxjs";
 import {IAuthUser} from "@app/models/user";
-import {WebSocketService} from "@app/services/web-socket.service";
 
 @Component({
   selector: 'app-root',
@@ -23,7 +21,7 @@ export class AppComponent {
     private router: Router,
     public _loaderService: LoaderService,
     private _userService: UserService,
-    private _swService: WebSocketService
+    // private _swService: WebSocketService
   ) {
 
   }

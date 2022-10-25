@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {URLS_PATHS} from "@app/constants/path";
-import {AuthGuard} from "@app/services/guards/auth.guard";
-import * as path from "path";
 import {replaceUrlFirstSlash} from "@app/utils/utils";
 import {PageNotFoundComponent} from "./404page/page-not-found.component";
+import {AuthGuard} from "@app/services/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -23,10 +22,10 @@ const routes: Routes = [
     canLoad: [ AuthGuard ],
     canActivateChild: [ AuthGuard ],
   },
-  // {
-  //   path: '**',
-  //   redirectTo: '/'
-  // }
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  }
 ];
 
 @NgModule({

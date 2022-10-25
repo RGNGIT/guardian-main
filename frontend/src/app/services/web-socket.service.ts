@@ -20,7 +20,7 @@ import {UserService} from "@app/services/user.service";
 export class WebSocketService {
   private static HEARTBEAT_DELAY = 30 * 1000;
   private socket: WebSocketSubject<string> | null;
-  private wsSubjectConfig: WebSocketSubjectConfig<string>;
+  private wsSubjectConfig!: WebSocketSubjectConfig<string>;
   private socketSubscription: Subscription | null = null;
   private heartbeatTimeout: any = null;
   private reconnectInterval: number = 5000;  /// pause between connections
@@ -63,11 +63,11 @@ export class WebSocketService {
         next: this.openWebSocket.bind(this)
       }
     };
-    this.connect();
     this.userService.accessTokenSubject.subscribe(() => {
       this.reconnectAttempts = 10;
       this.send('SET_ACCESS_TOKEN', this.userService.getAccessToken());
     })
+    this.connect();
 
   }
 

@@ -48,20 +48,18 @@ const routes: Routes = [
         path: replaceUrlFirstSlash(URLS_PATHS.finishRegistration),
         loadChildren: () => import('../finish-registration/finish-registration.module').then(
           m => m.FinishRegistrationModule
-        )
+        ),
+        canLoad: [ AuthGuard, ConfirmedUserGuard ]
       },
       {
         path: replaceUrlFirstSlash(URLS_PATHS.policies.base),
         loadChildren: () => import('../policies-page-module/policies-page.module').then(
           m => m.PoliciesPageModule
-        )
+        ),
+        canLoad: [ AuthGuard, ConfirmedUserGuard ]
       }
     ],
   },
-  // {
-  //   path: '**',
-  //   redirectTo: ''
-  // }
 ];
 
 
