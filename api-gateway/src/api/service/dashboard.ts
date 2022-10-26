@@ -1,7 +1,6 @@
-import { Request, Response, Router } from 'express';
+import { Response, Router } from 'express';
 import { Guardians } from '@helpers/guardians';
-import { Users } from '@helpers/users';
-import { Logger } from '@guardian/common';
+import { Logger, AuthenticatedRequest } from '@guardian/common';
 import { ResponseCode, formResponse } from '@helpers/response-manager';
 
 /**
@@ -9,16 +8,23 @@ import { ResponseCode, formResponse } from '@helpers/response-manager';
  */
 export const dashboardAPI = Router();
 
-dashboardAPI.get('/devices/:policyId', async (req: Request, res: Response) => {
+dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Response) => {
     const guardians = new Guardians();
     try {
         const policyId = req.params.policyId;
-        const type = 'MRV';
-        const documents = await guardians.getVcDocuments({policyId, type});
-        
-        // res.send('Dashboard works');
+        const type = req.query.type;
+        let distinctDeviceIds: string[] = [];
+        const records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
+        /*
+        for(const record of records) {
+            if(!distinctDeviceIds.includes(record['document']['issuer'] as string)) {
+
+            }
+        }
+        */
+        res.send(records);
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).send(formResponse(-1, error.message, ''));
+        res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
     }
 });
