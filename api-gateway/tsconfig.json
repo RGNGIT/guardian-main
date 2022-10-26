@@ -10,7 +10,8 @@
     "skipLibCheck": true,
     "lib": [
       "es5",
-      "es6"
+      "es6",
+      "es2017"
     ],
     "module": "commonjs",
     "moduleResolution": "node",
