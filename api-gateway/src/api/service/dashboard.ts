@@ -3,9 +3,19 @@ import { Guardians } from '@helpers/guardians';
 import { Logger, AuthenticatedRequest } from '@guardian/common';
 import { ResponseCode, formResponse } from '@helpers/response-manager';
 
-enum EmissionTypes {
+enum StatusType {
+    ACTIVE = 'Active'
+};
+
+enum EmissionType {
     CURRENT_EMISSION = 0,
     TOTAL_EMISSION = 1
+};
+
+enum TrendType {
+    UP = 'up',
+    DOWN = 'down',
+    STILL = 'still'
 };
 
 interface IDashboardDevice {
@@ -22,12 +32,13 @@ function resolveTrend(id, emissionType, value): string {
     for(const device of prevDeviceValues) {
         if(device.deviceId === id) {
             switch(emissionType) {
-                case EmissionTypes.CURRENT_EMISSION:
-                    if(device.currentEmission == value) return 'still';
-                    return device.currentEmission > value ? 'down' : 'up';
-                case EmissionTypes.TOTAL_EMISSION:
-                    if(device.totalEmission == value) return 'still';
-                    return device.totalEmission > value ? 'down' : 'up';
+                case EmissionType.CURRENT_EMISSION:
+                    if(device.currentEmission == value) return TrendType.STILL;
+                    return device.currentEmission > value ? TrendType.DOWN : TrendType.UP;
+                case EmissionType.TOTAL_EMISSION:
+                    if(device.totalEmission == value) return TrendType.STILL;
+                    return device.totalEmission > value ? TrendType.DOWN : TrendType.UP;
+                default: break;
             }
         }
     }
@@ -49,7 +60,7 @@ function resolveDevices(records, distinctDeviceIds): IDashboardDevice[] {
     for(const id of distinctDeviceIds) {
         temp.push({
             deviceId: id,
-            status: 'Active', // TODO: Resolve status
+            status: StatusType.ACTIVE, // TODO: Resolve status
             currentEmission: {value: 0, trend: null},
             totalEmission: {value: 0, trend: null},
         });
@@ -60,8 +71,8 @@ function resolveDevices(records, distinctDeviceIds): IDashboardDevice[] {
                 item.currentEmission.value += Number(record['document']['credentialSubject']['field1']);
             }
         }
-        item.currentEmission.trend = resolveTrend(item.deviceId, EmissionTypes.CURRENT_EMISSION, item.currentEmission.value);
-        item.totalEmission.trend = resolveTrend(item.deviceId, EmissionTypes.TOTAL_EMISSION, item.totalEmission.value);
+        item.currentEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_EMISSION, item.currentEmission.value);
+        item.totalEmission.trend = resolveTrend(item.deviceId, EmissionType.TOTAL_EMISSION, item.totalEmission.value);
     }
     return temp;
 }
