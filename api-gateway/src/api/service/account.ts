@@ -89,6 +89,7 @@ accountAPI.post('/reset', async (req: Request, res: Response) => {
         const user = await users.getUserByEmail(email);
         if (!user) {
             res.status(404).json(formResponse(ResponseCode.RESET_PASSWORD_USER_NOT_FOUND, 'User with provided email cannot be found', 'RESET_PASSWORD_USER_NOT_FOUND'));
+            return;
         }
         await new EmailCode().addToQueueToResetPassword({ email, checkSum: null});
         res.status(200).json(formResponse(ResponseCode.RESET_PASSWORD_QUEUE_UPDATED, 'User added to the reset queue', 'RESET_PASSWORD_QUEUE_UPDATED'));
