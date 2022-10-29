@@ -2,6 +2,7 @@ import { Response, Router } from 'express';
 import { Guardians } from '@helpers/guardians';
 import { Logger, AuthenticatedRequest } from '@guardian/common';
 import { ResponseCode, formResponse } from '@helpers/response-manager';
+import { Users } from '@helpers/users';
 
 enum StatusType {
     ACTIVE = 'Active'
@@ -20,6 +21,7 @@ enum TrendType {
 
 interface IDashboardDevice {
     deviceId: string;
+    deviceName: string;
     status: string;
     currentEmission: {value: number, trend: string};
     totalEmission: {value: number, trend: string};
@@ -27,17 +29,23 @@ interface IDashboardDevice {
 
 let prevDeviceValues: IDashboardDevice[] = null;
 
+async function resolveDeviceName(did: string): Promise<string | null> {
+    const users = new Users();
+    const device = await users.getUserById(did);
+    return device ? device.username : null;
+}
+
 function resolveTrend(id, emissionType, value): string {
     if(!prevDeviceValues) return null;
     for(const device of prevDeviceValues) {
         if(device.deviceId === id) {
             switch(emissionType) {
                 case EmissionType.CURRENT_EMISSION:
-                    if(device.currentEmission == value) return TrendType.STILL;
-                    return device.currentEmission > value ? TrendType.DOWN : TrendType.UP;
+                    if(device.currentEmission.value == value) return TrendType.STILL;
+                    return device.currentEmission.value > value ? TrendType.DOWN : TrendType.UP;
                 case EmissionType.TOTAL_EMISSION:
-                    if(device.totalEmission == value) return TrendType.STILL;
-                    return device.totalEmission > value ? TrendType.DOWN : TrendType.UP;
+                    if(device.totalEmission.value == value) return TrendType.STILL;
+                    return device.totalEmission.value > value ? TrendType.DOWN : TrendType.UP;
                 default: break;
             }
         }
@@ -55,11 +63,12 @@ function resolveDistinctDeviceIds(records): string[] {
     return temp;
 }
 
-function resolveDevices(records, distinctDeviceIds): IDashboardDevice[] {
+async function resolveDevices(records, distinctDeviceIds): Promise<IDashboardDevice[]> {
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
         temp.push({
             deviceId: id,
+            deviceName: await resolveDeviceName(id),
             status: StatusType.ACTIVE, // TODO: Resolve status
             currentEmission: {value: 0, trend: null},
             totalEmission: {value: 0, trend: null},
@@ -68,7 +77,7 @@ function resolveDevices(records, distinctDeviceIds): IDashboardDevice[] {
         for(const record of records) {
             if(record['document']['issuer'] === id) {
                 // TODO: Correct calculations
-                item.currentEmission.value += Number(record['document']['credentialSubject']['field1']);
+                item.currentEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
             }
         }
         item.currentEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_EMISSION, item.currentEmission.value);
@@ -89,7 +98,7 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         const type = req.query.type;
         const records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
         const distinctDeviceIds = resolveDistinctDeviceIds(records);
-        const devices = resolveDevices(records, distinctDeviceIds);
+        const devices = await resolveDevices(records, distinctDeviceIds);
         prevDeviceValues = devices;
         res.json(devices);
     } catch (error) {

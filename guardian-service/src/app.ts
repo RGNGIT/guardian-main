@@ -76,13 +76,13 @@ Promise.all([
 
     // Check configuration
     try {
-        AccountId.fromString('0.0.48509960');
+        AccountId.fromString(OPERATOR_ID);
     } catch (error) {
         await new Logger().error('OPERATOR_ID field in settings: ' + error.message, ['GUARDIAN_SERVICE']);
         throw new Error('OPERATOR_ID field in settings: ' + error.message);
     }
     try {
-        PrivateKey.fromString('d8aca8baa4570a22ebd859dd57e62543f8fcc80272f4c1a7949df122fb1dbde2');
+        PrivateKey.fromString(OPERATOR_KEY);
     } catch (error) {
         await new Logger().error('OPERATOR_KEY field in .env file: ' + error.message, ['GUARDIAN_SERVICE']);
         throw new Error('OPERATOR_KEY field in .env file: ' + error.message);
