@@ -9,7 +9,7 @@ import {
 } from "@angular/router";
 import {UserService} from "@app/services/user.service";
 import {URLS_PATHS} from "@app/constants/path";
-import {Observable} from "rxjs";
+import {filter, Observable, of, switchMap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +19,17 @@ export class ConfirmedUserGuard implements CanActivate, CanLoad, CanActivateChil
   constructor(private _userService: UserService, private _router: Router) {
   }
 
-  private userIsConfirmed(): boolean {
-    const profile = this._userService.currentProfile.value;
-    if (profile) {
-      if (profile.confirmed) {
-        return true;
-      } else {
-        this._router.navigate([URLS_PATHS.finishRegistration])
-        return false;
-      }
-    }
-    return false;
+  private userIsConfirmed(): Observable<any> {
+    return this._userService.currentProfile
+      .pipe(
+        filter((value) => value != null),
+        switchMap( (profile) => {
+          if (!profile?.confirmed) {
+            this._router.navigateByUrl(URLS_PATHS.finishRegistration);
+          }
+          return of( profile?.confirmed )
+        })
+      );
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

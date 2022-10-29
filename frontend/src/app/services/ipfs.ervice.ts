@@ -1,9 +1,7 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {API_URLS} from "@app/constants/api";
-
-export const API_IPFS_GATEWAY_URL = 'https://ipfs.io/ipfs/';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { API_URLS } from "@app/constants/api";
 
 @Injectable({
   providedIn: 'root'

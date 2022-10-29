@@ -1,0 +1,67 @@
+<div class="dialog-content">
+  <div class="dialog-header">
+    <div *ngIf="type == 'new'" class="dialog-title">
+      New Schema
+    </div>
+    <div *ngIf="type == 'edit'" class="dialog-title">
+      Edit Schema
+    </div>
+    <div *ngIf="type == 'version'" class="dialog-title">
+      New Version
+    </div>
+<!--    <mat-button-toggle-group-->
+<!--      class="schema-extended-toggle"-->
+<!--      name="schemaExtended"-->
+<!--      aria-label="Schema Extended"-->
+<!--      value="simplified"-->
+<!--      (change)="handleChangeSchemaExtended($event)"-->
+<!--    >-->
+<!--      <mat-button-toggle value="simplified">Simplified</mat-button-toggle>-->
+<!--      <mat-button-toggle value="advanced">Advanced</mat-button-toggle>-->
+<!--    </mat-button-toggle-group>-->
+    <div class="dialog-cancel">
+      <div class="g-dialog-cancel-btn" (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!--  cdkDropList [cdkDropListData]="fields" (cdkDropListDropped)="drop($event)"-->
+
+  <div class="dialog-body">
+      <app-schema-configuration
+        #document
+        [value]="scheme"
+        [schemas-map]="schemasMap"
+        [type]="type"
+        [policies]="policies"
+        [topicId]="topicId"
+        [system]="system"
+        [extended]="extended"
+        (change-form)="onChangeForm($event)"
+        (change-fields)="onChangeFields($event)"
+      >
+      </app-schema-configuration>
+  </div>
+
+  <div class="dialog-actions">
+    <app-serapis-button
+      title="Create"
+      *ngIf="!scheme"
+      class="g-dialog-actions-btn"
+      style="margin-left: auto"
+      (click)="onCreate()"
+      [attr.disabled]="!(valid && started)"
+    >
+    </app-serapis-button>
+    <app-serapis-button
+      title="Save"
+      *ngIf="scheme"
+      class="g-dialog-actions-btn"
+      style="margin-left: auto"
+      (click)="onCreate()"
+      [attr.disabled]="!(valid && started)"
+    >
+    </app-serapis-button>
+  </div>
+</div>

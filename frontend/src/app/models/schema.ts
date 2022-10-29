@@ -109,6 +109,14 @@ export enum SchemaDataTypes {
 }
 
 /**
+ * Import type
+ */
+export enum ImportType {
+  FILE,
+  IPFS
+}
+
+/**
  * Schema data formats
  */
 export enum SchemaDataFormat {

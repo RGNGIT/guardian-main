@@ -49,7 +49,7 @@ const routes: Routes = [
         loadChildren: () => import('../finish-registration/finish-registration.module').then(
           m => m.FinishRegistrationModule
         ),
-        canLoad: [ AuthGuard, ConfirmedUserGuard ]
+        canLoad: [ AuthGuard ]
       },
       {
         path: replaceUrlFirstSlash(URLS_PATHS.policies.base),

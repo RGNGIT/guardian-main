@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Page} from "@app/models/page";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {API_URLS} from "@app/constants/api";
-import {IPolicy} from "@app/models/policy";
+import {IPolicy, IPolicyUploadPreview} from "@app/models/policy";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -11,6 +11,10 @@ import {Observable} from "rxjs";
 export class PoliciesService {
 
   constructor(private _http: HttpClient) {
+  }
+
+  public all(): Observable<any[]> {
+    return this._http.get<any[]>(`${API_URLS.policies.base}/`);
   }
 
   public getPolicies(page: Page): Observable<IPolicy[]> {
@@ -24,5 +28,42 @@ export class PoliciesService {
 
   public pushCreate(policy: any): Observable<{ taskId: string, expectation: number }> {
     return this._http.post<{ taskId: string, expectation: number }>(API_URLS.policies.push, policy);
+  }
+
+  public previewByFile(policyFile: any): Observable<IPolicyUploadPreview> {
+    return this._http.post<IPolicyUploadPreview>(API_URLS.policies.importFile, policyFile, {
+      headers: {
+        'Content-Type': 'binary/octet-stream'
+      }
+    });
+  }
+
+  public pushDelete(policyId: string): Observable<{ taskId: string, expectation: number }> {
+    return this._http.delete<{ taskId: string, expectation: number }>(
+      API_URLS.policies.pushDelete.replace('{policyId}', policyId)
+    );
+  }
+
+  public pushPublish(policyId: string, policyVersion: string): Observable<{ taskId: string, expectation: number }> {
+    return this._http.put<{ taskId: string, expectation: number }>(
+      API_URLS.policies.setActive.replace('{policyId}', policyId),
+      { policyVersion }
+    );
+  }
+
+  public pushImportByFile(policyFile: any, versionOfTopicId?: string): Observable<{ taskId: string, expectation: number }> {
+    let httpParams = new HttpParams();
+    if (versionOfTopicId) {
+      httpParams = httpParams.append('versionOfTopicId', versionOfTopicId);
+    }
+    return this._http.post<{ taskId: string, expectation: number }>(
+      API_URLS.policies.pushFile,
+      policyFile,
+      {
+        params: httpParams,
+        headers: {
+          'Content-Type': 'binary/octet-stream'
+        }
+    });
   }
 }

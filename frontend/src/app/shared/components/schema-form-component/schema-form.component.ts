@@ -7,14 +7,15 @@ import {
   ValidatorFn,
   Validators
 } from "@angular/forms";
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Schema, SchemaField} from "@app/models/schema";
-import {Subject, takeUntil} from "rxjs";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Schema, SchemaField } from "@app/models/schema";
+import { Subject, takeUntil } from "rxjs";
 import * as moment from "moment";
-import {UnitSystem} from "@app/enums/unit-system";
-import {API_IPFS_GATEWAY_URL, IPFSService} from "@app/services/ipfs.ervice";
-import {NGX_MAT_DATE_FORMATS, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
-import {NgxMatMomentAdapter} from "@angular-material-components/moment-adapter";
+import { UnitSystem } from "@app/enums/unit-system";
+import { IPFSService } from "@app/services/ipfs.ervice";
+import { NGX_MAT_DATE_FORMATS, NgxMatDateAdapter } from "@angular-material-components/datetime-picker";
+import { NgxMatMomentAdapter } from "@angular-material-components/moment-adapter";
+import { API_IPFS_GATEWAY_URL } from "@app/constants/api";
 
 
 export const DATETIME_FORMATS = {
@@ -35,7 +36,7 @@ enum PlaceholderByFieldType {
   URL = "example.com",
   String = "Please enter text here",
   IPFS = 'ipfs.io/ipfs/example-hash',
-  HederaAccount= '0.0.1'
+  HederaAccount = '0.0.1'
 }
 
 enum ErrorFieldMessageByFieldType {
@@ -65,8 +66,8 @@ enum ErrorArrayMessageByFieldType {
   templateUrl: './schema-form.component.html',
   styleUrls: ['./schema-form.component.scss'],
   providers: [
-    { provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter },
-    { provide: NGX_MAT_DATE_FORMATS, useValue: DATETIME_FORMATS }
+    {provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter},
+    {provide: NGX_MAT_DATE_FORMATS, useValue: DATETIME_FORMATS}
   ]
 })
 export class SchemaFormComponent implements OnInit {
@@ -99,7 +100,8 @@ export class SchemaFormComponent implements OnInit {
   constructor(
     private ipfs: IPFSService,
     protected changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
 
   ngOnInit(): void {
@@ -463,7 +465,7 @@ export class SchemaFormComponent implements OnInit {
     const type = item.format || item.type;
     const pattern = item.pattern;
     const customType = item.customType;
-    if(customType) {
+    if (customType) {
       switch (customType) {
         case 'hederaAccount':
           return PlaceholderByFieldType.HederaAccount;
@@ -509,8 +511,7 @@ export class SchemaFormComponent implements OnInit {
   getConditions(field: any) {
     if (!this.conditions) {
       return [];
-    }
-    else {
+    } else {
       return this.conditions!.filter((item: any) => item.ifCondition.field.name === field.name);
     }
   }
@@ -520,7 +521,7 @@ export class SchemaFormComponent implements OnInit {
     this.subscribeCondition(condition.conditionForm);
     fields.forEach(item => {
       // @ts-ignore
-      setTimeout(() => this.options?.removeControl(item.name, { emitEvent: false }));
+      setTimeout(() => this.options?.removeControl(item.name, {emitEvent: false}));
     });
   }
 

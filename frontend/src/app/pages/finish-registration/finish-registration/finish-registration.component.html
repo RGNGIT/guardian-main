@@ -1,15 +1,13 @@
-<div class="final-step-wrapper">
+<div *ngIf="loading && taskId" class="async">
+  <async-progress class="loading-progress"
+                  [taskId]="taskId"
+                  [expected]="expectedTaskMessages"
+                  (error)="onAsyncError($event)"
+                  (completed)="onAsyncCompleted()"></async-progress>
+</div>
+<div class="final-step-wrapper" *ngIf="!loading && !taskId">
   <div class="title">Final Registration Step</div>
-
-  <div *ngIf="loading && taskId" class="async">
-    <async-progress class="loading-progress"
-                    [taskId]="taskId"
-                    [expected]="expectedTaskMessages"
-                    (error)="onAsyncError($event)"
-                    (completed)="onAsyncCompleted()"></async-progress>
-  </div>
-
-  <div *ngIf="userProfile && !loading && !taskId" class="flex-column flex-align-center">
+  <div *ngIf="userProfile" class="flex-column flex-align-center">
     <div [ngSwitch]="(userProfile | async)?.role" class="form">
       <form [formGroup]="hederaForm" (ngSubmit)="onHederaSubmit()">
         <div *ngSwitchCase="userRoles.USER || userRoles.AUDITOR || userRoles.INSTALLER">

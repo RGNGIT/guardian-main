@@ -1,6 +1,8 @@
 
 const API_VERSION = 'v1'
-const BASE_API = '/api/' + API_VERSION;
+export const BASE_API = '/api/' + API_VERSION;
+
+export const API_IPFS_GATEWAY_URL = 'https://ipfs.io/ipfs/';
 
 export const API_URLS = {
   accounts: {
@@ -17,13 +19,21 @@ export const API_URLS = {
     balance: BASE_API + '/profiles/{username}/balance',
     push: BASE_API + '/profiles/push/{username}'
   },
+  demo: {
+    random: BASE_API + '/demo/randomKey',
+    pushRandom: BASE_API + '/demo/push/randomKey'
+  },
   schemas: {
     allSchemas: BASE_API + '/schemas',
     entity: BASE_API + 'schemas/system/entity/{entityName}'
   },
   policies: {
     base: BASE_API + '/policies',
-    push: BASE_API + '/policies/push'
+    push: BASE_API + '/policies/push',
+    importFile: BASE_API + '/policies/import/file/preview',
+    pushFile: BASE_API + '/policies/push/import/file',
+    setActive: BASE_API + '/policies/push/{policyId}/publish',
+    pushDelete: BASE_API + '/policies/push/{policyId}'
   },
   tasks: {
     base: BASE_API + '/tasks'

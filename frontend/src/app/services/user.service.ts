@@ -17,6 +17,7 @@ export class UserService {
 
   constructor(private _storage: LocalStorageService, private _http: HttpClient, private _router: Router) {
     this.currentUser.next(this.getUser());
+    this.currentProfile.next(this.getProfile());
     if(this.currentUser.value != null) {
       this.loadProfile();
     }
@@ -32,7 +33,7 @@ export class UserService {
 
   public loadProfile(): Promise<IUserProfile | any> {
     return new Promise<any>( (resolve, reject) => {
-      this.getProfile()
+      this.getProfileData()
         .pipe(
           catchError( (err: any) => {
             reject(err);
@@ -80,13 +81,17 @@ export class UserService {
     return JSON.parse(this._storage.getItem("user") as string) ?? null;
   }
 
+  public getProfile(): IUserProfile | null {
+    return JSON.parse(this._storage.getItem("profile") as string) ?? null;
+  }
+
   public logout(): void {
     this._storage.clear();
     this.currentUser.next(null);
     this._router.navigateByUrl('/auth/sign-in');
   }
 
-  public getProfile(): Observable<IUserProfile> {
+  public getProfileData(): Observable<IUserProfile> {
     return this._http.get<IUserProfile>(API_URLS.profile.base.replace('{username}', this.userName));
   }
 

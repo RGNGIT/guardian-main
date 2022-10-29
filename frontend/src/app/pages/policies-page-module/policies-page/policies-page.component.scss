@@ -19,10 +19,157 @@ app-serapis-button {
   padding: 40px 48px;
 }
 
+.id-cell {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.02em;
+  color: rgba(51, 51, 51, 0.5);
+}
+.name-cell{
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #333333;
+}
+.code-cell {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #333333;
+}
+.status-cell {
+  width: 160px;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 32px;
+}
+.draft {
+  background: $gray-bg-color;
+  color: $gray-color;
+}
+.publish {
+  background: $success-bg-color;
+  color: $success-color;
+}
+.description-cell {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  color: rgba(51, 51, 51, 0.5);
+}
+
+.group-title {
+  margin-top: 20px;
+}
+
 .modal-header {
   padding-left: 20px;
 }
 
 .modal-body {
   padding: 0 32px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  /* or 160% */
+  letter-spacing: -0.02em;
+}
+
+.file-info {
+  display: table;
+}
+
+.info-block-row {
+  display: table-row;
+}
+
+.info-block-title, .info-block-value {
+  display: table-cell;
+  padding-left: 20px;
+}
+
+:host {
+  ::ng-deep {
+    .mat-input-element {
+      font-size: 20px;
+      line-height: 20px;
+    }
+    .mat-form-field-label-wrapper {
+      font-size: 16px !important;
+    }
+    input:-webkit-autofill {
+      -webkit-box-shadow: inset 0 0 0 50px $white-100;
+      font-size: 20px !important;
+    }
+  }
+}
+
+.action-button {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #E1E1E1;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  color: $blue-100;
+}
+
+.delete-button:hover {
+  color: $error-color;
+}
+
+.action-button + .action-button {
+  margin-left: 10px;
+}
+
+.container {
+  min-width: 400px;
+  min-height: 100px;
+  background: transparent;
+  border: 1px solid #D3D3D3;
+  border-radius: 4px;
+  margin: 0 auto;
+  overflow: auto;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  /* or 160% */
+
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  padding: 10px;
+}
+
+.choose-file {
+  background: $blue-100;
+  color: $white-100;
+  padding: 10px;
+  border: 1px solid $blue-100;
+  border-radius: 100px;
+}
+
+.delete {
+  color: #efefef;
+}
+
+.delete:hover {
+  color: $error-color;
+}
+
+.fileDropRef {
+  display: none;
+}
+
+.fileover {
+  animation: shake 1s;
+  animation-iteration-count: infinite;
 }

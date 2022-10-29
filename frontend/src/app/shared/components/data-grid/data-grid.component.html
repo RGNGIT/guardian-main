@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="dataSource" matSort class="main-data-grid">
+<table *ngIf="dataSource" mat-table [dataSource]="dataSource" matSort class="main-data-grid">
   <ng-container
     *ngFor="let column of columnDefs; let i = index"
     [matColumnDef]="column.columnKey"

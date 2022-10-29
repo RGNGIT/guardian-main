@@ -13,7 +13,7 @@
     <app-serapis-button type="filled" title="Add New Policy" (click)="openDialog(addNewPolicy)">
       <mat-icon class="icons">add</mat-icon>
     </app-serapis-button>
-    <app-serapis-button type="blue" title="Import Policy">
+    <app-serapis-button type="blue" title="Import Policy" (click)="openDialog(importPolicy)">
       <mat-icon
         class="icons"
         svgIcon="import"
@@ -24,11 +24,172 @@
   </div>
   <div>
     <app-data-grid [data]="data">
-
+      <ng-template #idCellTempl let-element="element">
+        <span class="id-cell">{{element.id}}</span>
+      </ng-template>
+      <ng-template #nameCellTempl let-element="element">
+        <span class="name-cell">{{element.name}}</span>
+      </ng-template>
+      <ng-template #codeVersionCellTempl let-element="element">
+        <span class="code-cell">{{element.codeVersion}}</span>
+      </ng-template>
+      <ng-template #statusCellTempl let-element="element">
+        <div class="status-cell"
+             [class.draft]="element.status==='DRAFT'"
+             [class.publish]="element.status==='PUBLISH'"
+        >
+          <span *ngIf="element.status==='PUBLISH'"></span>
+          {{element.status}}
+        </div>
+      </ng-template>
+      <ng-template #descriptionCellTempl let-element="element">
+        <span class="description-cell">{{element.description}}</span>
+      </ng-template>
+      <ng-template #actionsTempl let-element="element">
+        <div class="action-button">
+          <span>{{ element.status === 'DRAFT' ? 'Edit' : 'Open' }}</span>
+        </div>
+        <div class="action-button" *ngIf="element.status !== 'PUBLISH'" (click)="setPolicyActive(element)">Publish</div>
+        <div class="action-button delete-button" *ngIf="element.status !== 'PUBLISH'"
+             (click)="selectedPolicy = element; openDialog(deleteConfirmModal)">Delete</div>
+      </ng-template>
     </app-data-grid>
   </div>
 </ng-template>
 
+<ng-template #deleteConfirmModal>
+  <app-base-dialog>
+    <div header class="modal-header">Delete Confirmation</div>
+    <div body class="modal-body">
+      Please confirm delete.
+    </div>
+    <div footer>
+      <div class="footer">
+        <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
+        </app-serapis-button>
+        <app-serapis-button  type="filled" title="Confirm" (click)="deletePolicy()">
+        </app-serapis-button>
+      </div>
+    </div>
+  </app-base-dialog>
+</ng-template>
+
+<ng-template #setActive>
+  <app-base-dialog>
+    <div header class="modal-header">Publish Policy</div>
+    <div body class="modal-body">
+      <mat-form-field class="full-width mat-input" appearance="standard">
+        <mat-label>Enter Version</mat-label>
+        <input matInput placeholder="1.0.0" [(ngModel)]="publishVersion">
+      </mat-form-field>
+    </div>
+    <div footer>
+      <div class="footer">
+        <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
+        </app-serapis-button>
+        <app-serapis-button  type="filled" title="Publish" [disabled]="!publishVersion" (click)="publish()">
+        </app-serapis-button>
+      </div>
+    </div>
+  </app-base-dialog>
+</ng-template>
+
+<ng-template #importPolicy>
+  <mat-progress-bar mode="indeterminate" *ngIf="modalLoading"></mat-progress-bar>
+  <app-base-dialog *ngIf="!fileInfo; else fileInformation">
+    <div header class="modal-header">Import Policy</div>
+    <div body class="modal-body">
+      <div>
+        <input type="file" #fileDropRef class="fileDropRef" multiple (change)="fileBrowseHandler($event.target)" accept=".policy"/>
+        <div>
+          <div class="container" appDnd (fileDropped)="onFileDropped($event)">
+            <div *ngIf="files.length === 0; else selectedFile">
+              <span (click)="openFileDropRef()" class="cursor-pointer choose-file">Choose File</span> or drop file there
+            </div>
+            <ng-template #selectedFile>
+              <div *ngFor="let file of files; let i = index" class="full-width">
+                <div class="flex-row flex-align-center justify-between full-width">
+                  <div>
+                    <div>{{ file?.name }}</div>
+                    <div>{{ formatBytes(file?.size, 0) }}</div>
+                  </div>
+                  <div style="margin-left: 10px"><div (click)="deleteFile(i)" class="delete cursor-pointer">X</div></div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 30px;">
+        <form [formGroup]="fileForm">
+          <div>Or enter hedera message timestamp</div>
+          <mat-form-field class="full-width" appearance="standard">
+            <mat-label>Message timestamp</mat-label>
+            <input matInput type="text" placeholder="Message timestamp" formControlName="timestamp">
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+    <div footer>
+      <div class="footer">
+        <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
+        </app-serapis-button>
+        <app-serapis-button  type="filled" title="Send" [disabled]="!(files.length !== 0 || fileForm.valid)" (click)="sendFile()">
+        </app-serapis-button>
+      </div>
+    </div>
+  </app-base-dialog>
+  <ng-template #fileInformation>
+    <app-base-dialog *ngIf="fileInfo">
+      <div header class="modal-header">Policy Import Preview</div>
+      <div body class="modal-body">
+        <div>Policy Info</div>
+        <div class="file-info">
+          <div class="info-block-row">
+            <div class="info-block-title">Name</div>
+            <div class="info-block-value">{{fileInfo.policy.name}}</div>
+          </div>
+          <div class="info-block-row">
+            <div class="info-block-title">Tag</div>
+            <div class="info-block-value">{{fileInfo.policy.policyTag}}</div>
+          </div>
+          <div class="info-block-row">
+            <div class="info-block-title">Description</div>
+            <div class="info-block-value">{{fileInfo.policy.description}}</div>
+          </div>
+          <div class="info-block-row">
+            <div class="info-block-title">Creator</div>
+            <div class="info-block-value">{{fileInfo.policy.creator}}</div>
+          </div>
+          <div class="info-block-row" *ngIf="schemas">
+            <div class="info-block-title">Schemas</div>
+            <div class="info-block-value">{{schemas}}</div>
+          </div>
+          <div class="info-block-row" *ngIf="tokens">
+            <div class="info-block-title">Tokens</div>
+            <div class="info-block-value">{{tokens}}</div>
+          </div>
+        </div>
+        <div class="group-title">Version of</div>
+        <mat-form-field appearance="standard" class="full-width">
+          <mat-label>Policy</mat-label>
+          <mat-select [(value)]="versionOfTopicId">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let policy of distinctPolicies" [value]="policy.topicId">{{policy.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div footer>
+        <div class="footer">
+          <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
+          </app-serapis-button>
+          <app-serapis-button type="filled" title="Import" (click)="importPolicyButtonHandler()">
+          </app-serapis-button>
+        </div>
+      </div>
+    </app-base-dialog>
+  </ng-template>
+</ng-template>
 
 <ng-template #addNewPolicy>
     <app-base-dialog>

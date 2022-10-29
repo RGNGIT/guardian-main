@@ -1,0 +1,21 @@
+<h1 mat-dialog-title class="dialog-title">{{title}}</h1>
+<mat-slide-toggle *ngIf="isVcDocument || isVpDocument" class="view-toggle" labelPosition='before'
+                  [(ngModel)]="viewDocument" color="primary">View as form</mat-slide-toggle>
+<div mat-dialog-content class="dialog-content">
+  <div class="content" [ngSwitch]="viewDocument">
+    <app-document-view [document]="document" [type]="type" *ngSwitchCase="true">
+    </app-document-view>
+    <div class="json" *ngSwitchCase="false">
+      {{json}}
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="dialog-actions">
+  <app-serapis-button
+    title="Cancel"
+    type="empty"
+    class="action-buttons"
+    (click)="onClick()"
+  >
+  </app-serapis-button>
+</div>

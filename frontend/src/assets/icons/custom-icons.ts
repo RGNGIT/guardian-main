@@ -88,5 +88,18 @@ export const CUSTOM_ICONS = {
     '<path d="M12 9C12 8.44772 12.4477 8 13 8H14C15.1046 8 16 8.89543 16 10V10H13C12.4477 10 12 9.55228 12 9V9Z" fill="currentColor"/>\n' +
     '<path d="M7 2L9 2L9 13C9 13.5523 8.55228 14 8 14V14C7.44772 14 7 13.5523 7 13L7 2Z" fill="currentColor"/>\n' +
     '<path d="M5 5L8 2L11 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>\n' +
-    '</svg>'
+    '</svg>',
+
+  edit:
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+    '<path d="M4 16L3.29289 15.2929L3 15.5858V16H4ZM17 3L17.7071 2.29289C17.3166 1.90237 16.6834 1.90237 16.2929 2.29289L17 3ZM21 7L21.7071 7.70711C22.0976 7.31658 22.0976 6.68342 21.7071 6.29289L21 7ZM8 20V21H8.41421L8.70711 20.7071L8 20ZM4 20H3C3 20.5523 3.44772 21 4 21V20ZM4.70711 16.7071L17.7071 3.70711L16.2929 2.29289L3.29289 15.2929L4.70711 16.7071ZM16.2929 3.70711L20.2929 7.70711L21.7071 6.29289L17.7071 2.29289L16.2929 3.70711ZM20.2929 6.29289L7.29289 19.2929L8.70711 20.7071L21.7071 7.70711L20.2929 6.29289ZM8 19H4V21H8V19ZM5 20V16H3V20H5ZM13.2929 6.70711L17.2929 10.7071L18.7071 9.29289L14.7071 5.29289L13.2929 6.70711Z" fill="currentColor" />\n' +
+    '</svg>\n',
+
+  cross: '<svg width="24" height="33" viewBox="0 0 24 33" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+    '<path d="M16 24L8 32M8.00003 24L16 32" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+    '</svg>\n',
+
+  delete: '<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+    '<path d="M15 4V16C15 17.1046 14.1046 18 13 18H5C3.89543 18 3 17.1046 3 16V4M12 4V3C12 1.89543 11.1046 1 10 1H8C6.89543 1 6 1.89543 6 3V4M1 4H17M7 8V14M11 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+    '</svg>\n',
 };

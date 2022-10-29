@@ -46,10 +46,8 @@ export class MainPageComponent implements OnDestroy {
           this._headerMenuService.currentMenuItems.next(DEFAULT_MENU);
           break;
       }
-      if (profile?.confirmed) {
+      if (this._router.url === '/') {
         this._router.navigateByUrl(this._headerMenuService.currentMenuItems.value[0].routerLink)
-      } else {
-        this._router.navigateByUrl(URLS_PATHS.finishRegistration)
       }
       this._loaderService.disable();
     } );

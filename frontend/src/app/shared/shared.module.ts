@@ -23,6 +23,12 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {DndDirective} from "@app/shared/direcives/dnd.directive";
+import {DragonglassComponent} from "@app/shared/components/dragonglass/dragonglass.component";
+import {ConfirmationDialogComponent} from "@app/shared/components/confirmation-dialog/confirmation-dialog.component";
+import {FileDragNDropComponent} from "@app/shared/components/file-grad-n-drop/file-drag-n-drop.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import {NgxFileDropModule} from "ngx-file-drop";
 
 
 const components = [
@@ -34,7 +40,11 @@ const components = [
   DataGridComponent,
   SchemaFormComponent,
   AsyncProgressComponent,
-  BaseDialogComponent
+  BaseDialogComponent,
+  DndDirective,
+  ConfirmationDialogComponent,
+  DragonglassComponent,
+  FileDragNDropComponent
 ];
 
 @NgModule({
@@ -65,6 +75,8 @@ const components = [
     MatProgressBarModule,
     MatListModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
+    NgxFileDropModule
   ],
   exports: [
     ...components

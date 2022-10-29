@@ -21,3 +21,9 @@ export interface IPolicy {
   userRole: string;
   userGroup: string;
 }
+
+export interface IPolicyUploadPreview {
+  policy: IPolicy;
+  schemas: any[]
+  tokens: any[]
+}

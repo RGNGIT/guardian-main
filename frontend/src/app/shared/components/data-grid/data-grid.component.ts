@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -13,12 +19,12 @@ import {
   styleUrls: ['./data-grid.component.scss']
 })
 export class DataGridComponent implements OnInit {
-  @Input() set data(data: DataGrid) {
-    this.dataSource = new MatTableDataSource(data.rowData);
-    this.columnDefs = data.columnDefs;
-    this.displayedColumns = data.columnDefs.map(
-      element => element.columnKey
-    );
+  @Input() set data(data: any) {
+      this.dataSource = new MatTableDataSource(data.rowData);
+      this.columnDefs = data.columnDefs;
+      this.displayedColumns = data.columnDefs.map(
+        (element: any) => element.columnKey
+      );
   }
   @ViewChild(MatSort) sort: any;
 
@@ -29,6 +35,10 @@ export class DataGridComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  ngOnChanges() {
+    this.dataSource.sort = this.sort;
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
