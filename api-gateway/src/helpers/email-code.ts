@@ -123,4 +123,19 @@ export class EmailCode {
         }
         return null;
     }
+
+    /**
+     * Check if user with the same credentials exists on pending registration queue
+     */
+    public checkExistingCredentialInfo(username: string, email: string): boolean {
+        if(pendingUsers.length == 0) {
+            return false;
+        }
+        for(const user of pendingUsers) {
+            if(user.username == username || user.email == email) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
