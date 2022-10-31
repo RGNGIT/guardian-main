@@ -33,7 +33,9 @@ export const API_URLS = {
     importFile: BASE_API + '/policies/import/file/preview',
     pushFile: BASE_API + '/policies/push/import/file',
     setActive: BASE_API + '/policies/push/{policyId}/publish',
-    pushDelete: BASE_API + '/policies/push/{policyId}'
+    pushDelete: BASE_API + '/policies/push/{policyId}',
+    dryRun: BASE_API + '/policies/{policyId}/dry-run',
+    draft: BASE_API + '/policies/{policyId}/draft'
   },
   tasks: {
     base: BASE_API + '/tasks'

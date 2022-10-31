@@ -102,4 +102,10 @@ export const CUSTOM_ICONS = {
   delete: '<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
     '<path d="M15 4V16C15 17.1046 14.1046 18 13 18H5C3.89543 18 3 17.1046 3 16V4M12 4V3C12 1.89543 11.1046 1 10 1H8C6.89543 1 6 1.89543 6 3V4M1 4H17M7 8V14M11 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
     '</svg>\n',
+
+  settings:
+    '<svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M11 3C11 1.89543 10.1046 1 9 1C7.89543 1 7 1.89543 7 3M11 3C11 4.10457 10.1046 5 9 5C7.89543 5 7 4.10457 7 3M11 3H17M7 3L1 3M13 10C13 11.1046 13.8954 12 15 12C16.1046 12 17 11.1046 17 10C17 8.89543 16.1046 8 15 8C13.8954 8 13 8.89543 13 10ZM13 10H1M5 17C5 15.8954 4.10457 15 3 15C1.89543 15 1 15.8954 1 17C1 18.1046 1.89543 19 3 19C4.10457 19 5 18.1046 5 17ZM5 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
+    '</svg>'
+
 };

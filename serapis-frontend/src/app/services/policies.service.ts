@@ -38,6 +38,14 @@ export class PoliciesService {
     });
   }
 
+  public dryRun(policyId: string): Observable<any> {
+    return this._http.put<any>(API_URLS.policies.dryRun.replace('{policyId}', policyId), null);
+  }
+
+  public draft(policyId: string): Observable<any> {
+    return this._http.put<any>(API_URLS.policies.draft.replace('{policyId}', policyId), null);
+  }
+
   public pushDelete(policyId: string): Observable<{ taskId: string, expectation: number }> {
     return this._http.delete<{ taskId: string, expectation: number }>(
       API_URLS.policies.pushDelete.replace('{policyId}', policyId)

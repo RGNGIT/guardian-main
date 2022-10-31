@@ -54,6 +54,10 @@ app-serapis-button {
   background: $success-bg-color;
   color: $success-color;
 }
+.dry {
+  background: $info-bg-color;
+  color: $info-color;
+}
 .description-cell {
   font-weight: 400;
   font-size: 14px;
@@ -116,18 +120,22 @@ app-serapis-button {
   letter-spacing: -0.02em;
   color: #E1E1E1;
   cursor: pointer;
+  padding: 10px;
 }
 
 .action-button:hover {
   color: $blue-100;
+  background: $info-bg-color;
+  border-radius: 4px;
 }
 
 .delete-button:hover {
   color: $error-color;
+  background: $error-bg-color;
 }
 
 .action-button + .action-button {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .container {

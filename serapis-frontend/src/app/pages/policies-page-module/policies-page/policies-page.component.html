@@ -37,6 +37,7 @@
         <div class="status-cell"
              [class.draft]="element.status==='DRAFT'"
              [class.publish]="element.status==='PUBLISH'"
+             [class.dry]="element.status==='DRY-RUN'"
         >
           <span *ngIf="element.status==='PUBLISH'"></span>
           {{element.status}}
@@ -47,9 +48,19 @@
       </ng-template>
       <ng-template #actionsTempl let-element="element">
         <div class="action-button">
-          <span>{{ element.status === 'DRAFT' ? 'Edit' : 'Open' }}</span>
+          <span>{{ element.status !== 'PUBLISH' ? 'Edit' : 'Open' }}</span>
+<!--          <mat-icon class="action-icon" svgIcon="settings" aria-hidden="false"></mat-icon>-->
         </div>
+        <span class="action-button" *ngIf="element.status === 'DRY-RUN' || element.status === 'PUBLISH'">
+          <span>Go</span>
+        </span>
+        <span class="action-button" *ngIf="element.status === 'DRY-RUN'" (click)="stop(element)">
+          <span>Stop</span>
+        </span>
+
         <div class="action-button" *ngIf="element.status !== 'PUBLISH'" (click)="setPolicyActive(element)">Publish</div>
+        <span class="action-button" *ngIf="element.status !== 'PUBLISH' && element.status !== 'DRY-RUN'" (click)="setDryRun(element)">Dry Run</span>
+
         <div class="action-button delete-button" *ngIf="element.status !== 'PUBLISH'"
              (click)="selectedPolicy = element; openDialog(deleteConfirmModal)">Delete</div>
       </ng-template>

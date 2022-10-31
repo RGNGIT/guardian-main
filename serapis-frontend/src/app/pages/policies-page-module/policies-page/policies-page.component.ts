@@ -334,4 +334,36 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
       this.mode = OperationMode.Delete;
     });
   }
+
+  setDryRun(element: IPolicy) {
+    this._policyApi.dryRun(element.id).subscribe((data: any) => {
+      const { policies, isValid, errors } = data;
+      if (!isValid) {
+        let text = [];
+        const blocks = errors.blocks;
+        const invalidBlocks = blocks.filter((block: any) => !block.isValid);
+        for (let i = 0; i < invalidBlocks.length; i++) {
+          const block = invalidBlocks[i];
+          for (let j = 0; j < block.errors.length; j++) {
+            const error = block.errors[j];
+            text.push(`<div>${block.id}: ${error}</div>`);
+          }
+        }
+        // this.toastr.error(text.join(''), 'The policy is invalid', {
+        //   timeOut: 30000,
+        //   closeButton: true,
+        //   positionClass: 'toast-bottom-right',
+        //   enableHtml: true
+        // });
+      }
+      this.loadPolicy();
+    });
+  }
+
+  stop(element: any) {
+    this._policyApi.draft(element.id).subscribe((data: any) => {
+      const { policies, isValid, errors } = data;
+      this.loadPolicy();
+    });
+  }
 }
