@@ -3,6 +3,7 @@ import { Guardians } from '@helpers/guardians';
 import { Logger, AuthenticatedRequest } from '@guardian/common';
 import { ResponseCode, formResponse } from '@helpers/response-manager';
 import { Users } from '@helpers/users';
+import { IVCDocument } from '@guardian/interfaces';
 
 enum StatusType {
     ACTIVE = 'Active'
@@ -35,7 +36,7 @@ async function resolveDeviceName(did: string): Promise<string | null> {
     return device ? device.username : null;
 }
 
-function resolveTrend(id, emissionType, value): string {
+function resolveTrend(id: string, emissionType: number, value: number): string {
     if(!prevDeviceValues) return null;
     for(const device of prevDeviceValues) {
         if(device.deviceId === id) {
@@ -53,7 +54,7 @@ function resolveTrend(id, emissionType, value): string {
     return null;
 }
 
-function resolveDistinctDeviceIds(records): string[] {
+function resolveDistinctDeviceIDs(records: IVCDocument[]): string[] {
     let temp: string[] = [];
     for(const record of records) {
         if(!temp.includes(record['document']['issuer'] as string)) {
@@ -63,7 +64,7 @@ function resolveDistinctDeviceIds(records): string[] {
     return temp;
 }
 
-async function resolveDevices(records, distinctDeviceIds): Promise<IDashboardDevice[]> {
+async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: string[]): Promise<IDashboardDevice[]> {
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
         temp.push({
@@ -76,7 +77,7 @@ async function resolveDevices(records, distinctDeviceIds): Promise<IDashboardDev
         const item = temp[temp.length - 1];
         for(const record of records) {
             if(record['document']['issuer'] === id) {
-                // TODO: Correct calculations
+                // TODO: Correct calculations by dates
                 item.currentEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
             }
         }
@@ -97,8 +98,8 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         const policyId = req.params.policyId;
         const type = req.query.type;
         const records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
-        const distinctDeviceIds = resolveDistinctDeviceIds(records);
-        const devices = await resolveDevices(records, distinctDeviceIds);
+        const distinctDeviceIds = resolveDistinctDeviceIDs(records);
+        const devices = await resolveDeviceList(records, distinctDeviceIds);
         prevDeviceValues = devices;
         res.json(devices);
     } catch (error) {
