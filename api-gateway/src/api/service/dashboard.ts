@@ -28,6 +28,18 @@ interface IDashboardDevice {
     totalEmission: {value: number, trend: string};
 }
 
+interface ITokensChart {
+
+}
+
+// Tokens Logic
+
+async function fetchTokens(records: IVCDocument[]) {
+    
+}
+
+// Devices Logic
+
 let prevDeviceValues: IDashboardDevice[] = null;
 
 async function resolveDeviceName(did: string): Promise<string | null> {
@@ -77,6 +89,7 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
         const item = temp[temp.length - 1];
         for(const record of records) {
             if(record['document']['issuer'] === id) {
+                // P15M
                 // TODO: Correct calculations by dates
                 item.currentEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
             }
@@ -102,6 +115,19 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         const devices = await resolveDeviceList(records, distinctDeviceIds);
         prevDeviceValues = devices;
         res.json(devices);
+    } catch (error) {
+        new Logger().error(error, ['API_GATEWAY']);
+        res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
+    }
+});
+
+dashboardAPI.get('/tokens/:policyId', async (req: AuthenticatedRequest, res: Response) => {
+    const guardians = new Guardians();
+    try {
+        const policyId = req.params.policyId;
+        const type = req.query.type;
+        const records = await guardians.getVcDocuments({type, policyId});
+
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
