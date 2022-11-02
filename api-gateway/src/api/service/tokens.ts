@@ -51,7 +51,7 @@ async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): 
         return [];
     }
     const guardians = new Guardians();
-    const users = await new Users().getAllUserAccounts() as [{username}];
+    const users = await new Users().getAllUserAccounts() as {username}[];
 
     for(const token of tokens) {
         token.userAmount = 0;
@@ -78,6 +78,7 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
             tokens = await guardians.getTokens({ did: user.did });
             const { policies } = await engineService.getPolicies({ filters: { owner: user.did } });
             tokens = setTokensPolicies(tokens, policies, policyId, false);
+            // tokens = await setAssociatedUsersAmount(tokens, user);
         } else if (user.did) {
             tokens = await guardians.getAssociatedTokens(user.did);
             const { policies } = await engineService.getPolicies({
@@ -87,7 +88,7 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
                 }
             });
             tokens = setTokensPolicies(tokens, policies, policyId, true);
-            tokens = await setAssociatedUsersAmount(tokens, user);
+            // tokens = await setAssociatedUsersAmount(tokens, user);
         }
         res.status(200).json(tokens);
     } catch (error) {
