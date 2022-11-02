@@ -49,12 +49,9 @@ function setTokensPolicies<T>(tokens: any[], policies: any[], policyId?: any, no
 
 async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): Promise<IToken[]> {
     const mirrornodeUserRequest = async (hederaAccountId) => {
-        new Promise((resolve) => {
-        axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts?account.id=${hederaAccountId}`)
-        .then(response => {
-            resolve(response);
-        });
-    });
+        const res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts?account.id=${hederaAccountId}`);
+        return res;
+    };
     }
     const checkToken = (hederaUserInfo, tokenId): boolean => {
         /*
