@@ -116,6 +116,45 @@ tokenAPI.get('/shit', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER
     }
 });
 
+tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const guardians = new Guardians();
+        const engineService = new PolicyEngine();
+
+        const user = req.user;
+        const policyId = req.query?.policy;
+        const tokenId = req.params.tokenId;
+
+        let tokens: IToken[] = [];
+        if (user.role === UserRole.STANDARD_REGISTRY) {
+            tokens = await guardians.getTokens({ did: user.did });
+            const { policies } = await engineService.getPolicies({ filters: { owner: user.did } });
+            tokens = setTokensPolicies(tokens, policies, policyId, false);
+            // tokens = await setAssociatedUsersAmount(tokens, user);
+        } else if (user.did) {
+            tokens = await guardians.getAssociatedTokens(user.did);
+            const { policies } = await engineService.getPolicies({
+                filters: {
+                    status: 'PUBLISH',
+                    owner: user.parent
+                }
+            });
+            tokens = setTokensPolicies(tokens, policies, policyId, true);
+            // tokens = await setAssociatedUsersAmount(tokens, user);
+        }
+        for(const token of tokens) {
+            if(token.tokenId == tokenId) {
+                res.status(200).json(token);
+                return;
+            }
+        }
+        res.status(404).send('Token not found');
+    } catch (error) {
+        new Logger().error(error, ['API_GATEWAY']);
+        res.status(500).send({ code: error.code || 500, message: error.message });
+    }
+});
+
 tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const guardians = new Guardians();
