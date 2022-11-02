@@ -1,3 +1,4 @@
+import { Users } from '@helpers/users';
 import { Guardians } from '@helpers/guardians';
 import { permissionHelper } from '@auth/authorization-helper';
 import { Response, Router } from 'express';
@@ -45,6 +46,17 @@ function setTokensPolicies<T>(tokens: any[], policies: any[], policyId?: any, no
 
 }
 
+async function setAssociatedUsersAmount<T>(tokens: any[]): Promise<T[]> {
+    if (!tokens) {
+        return [];
+    }
+    const users = await new Users().getAllUserAccounts();
+    
+    for(const token of tokens) {
+
+    }
+}
+
 tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const guardians = new Guardians();
@@ -67,6 +79,7 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
                 }
             });
             tokens = setTokensPolicies(tokens, policies, policyId, true);
+            tokens = await setAssociatedUsersAmount(tokens);
         }
         res.status(200).json(tokens);
     } catch (error) {

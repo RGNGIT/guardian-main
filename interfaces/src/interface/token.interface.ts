@@ -54,6 +54,10 @@ export interface IToken {
      * Supply key
      */
     supplyKey?: string;
+    /**
+     * Amount of associated users
+     */
+    userAmount?: number;
 }
 
 /**
