@@ -52,16 +52,13 @@ async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): 
         const res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts?account.id=${hederaAccountId}`);
         return res;
     };
-    }
     const checkToken = (hederaUserInfo, tokenId): boolean => {
-        /*
         for(const token of hederaUserInfo['accounts'][0]['balance']['tokens']) {
             if(tokenId == token.token_id) {
                 return true;
             }
         }
-        */
-        return true;
+        return false;
     };
     if (!tokens) {
         return [];
