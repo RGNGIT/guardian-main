@@ -1,9 +1,9 @@
 import { Users } from '@helpers/users';
 import { Guardians } from '@helpers/guardians';
 import { permissionHelper } from '@auth/authorization-helper';
-import { Response, Router } from 'express';
+import e, { Response, Router } from 'express';
 import { IToken, ITokenInfo, UserRole } from '@guardian/interfaces';
-import { AuthenticatedRequest, Logger } from '@guardian/common';
+import { AuthenticatedRequest, IAuthUser, Logger } from '@guardian/common';
 import { PolicyEngine } from '@helpers/policy-engine';
 import { findAllEntities } from '@helpers/utils';
 import { TaskManager } from '@helpers/task-manager';
@@ -46,15 +46,23 @@ function setTokensPolicies<T>(tokens: any[], policies: any[], policyId?: any, no
 
 }
 
-async function setAssociatedUsersAmount<T>(tokens: any[]): Promise<T[]> {
+async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): Promise<IToken[]> {
     if (!tokens) {
         return [];
     }
-    const users = await new Users().getAllUserAccounts();
-    
-    for(const token of tokens) {
+    const guardians = new Guardians();
+    const users = await new Users().getAllUserAccounts() as [{username}];
 
+    for(const token of tokens) {
+        token.userAmount = 0;
+        for(const user of users) {
+            const result = await guardians.getInfoToken(token.id, user.username, authUser.did) as ITokenInfo;
+            if(result.associated) {
+                token.userAmount++;
+            }
+        }
     }
+    return tokens;
 }
 
 tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
@@ -79,7 +87,7 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
                 }
             });
             tokens = setTokensPolicies(tokens, policies, policyId, true);
-            tokens = await setAssociatedUsersAmount(tokens);
+            tokens = await setAssociatedUsersAmount(tokens, user);
         }
         res.status(200).json(tokens);
     } catch (error) {
