@@ -53,10 +53,13 @@ async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): 
         return res;
     };
     const checkToken = (hederaUserInfo, tokenId): boolean => {
-        for(const token of hederaUserInfo['accounts'][0]['balance']['tokens']) {
-            if(tokenId == token.token_id) {
-                return true;
+        if(hederaUserInfo['accounts']) {
+            for(const token of hederaUserInfo['accounts'][0]['balance']['tokens']) {
+                if(tokenId == token.token_id) {
+                    return true;
+                }
             }
+            return false;
         }
         return false;
     };
