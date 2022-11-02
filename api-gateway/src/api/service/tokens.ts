@@ -77,10 +77,12 @@ async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): 
         token.userAmount = 0;
         for(const user of users) {
             const currentUser = await userRepository.getUser(user.username) as {hederaAccountId};
-            const hederaUserInfo = await mirrornodeUserRequest(currentUser.hederaAccountId);
-            console.log(hederaUserInfo);
-            if(checkToken(hederaUserInfo, token.tokenId)) {
-                token.userAmount++;
+            if(currentUser.hederaAccountId) {
+                const hederaUserInfo = await mirrornodeUserRequest(currentUser.hederaAccountId);
+                console.log(hederaUserInfo);
+                if(checkToken(hederaUserInfo, token.tokenId)) {
+                    token.userAmount++;
+                }
             }
         }
     }
