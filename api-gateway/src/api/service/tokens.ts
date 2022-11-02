@@ -1,7 +1,6 @@
-import { Users } from '@helpers/users';
 import { Guardians } from '@helpers/guardians';
 import { permissionHelper } from '@auth/authorization-helper';
-import e, { Response, Router } from 'express';
+import { Response, Router } from 'express';
 import { IToken, ITokenInfo, UserRole } from '@guardian/interfaces';
 import { AuthenticatedRequest, IAuthUser, Logger } from '@guardian/common';
 import { PolicyEngine } from '@helpers/policy-engine';
@@ -46,7 +45,7 @@ function setTokensPolicies<T>(tokens: any[], policies: any[], policyId?: any, no
     return tokens;
 
 }
-
+/*
 async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): Promise<IToken[]> {
     const mirrornodeUserRequest = async (hederaAccountId) => {
         const res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts?account.id=${hederaAccountId}`);
@@ -115,7 +114,7 @@ tokenAPI.get('/shit', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER
         res.status(500).send({ code: error.code || 500, message: error.message });
     }
 });
-
+*/
 tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const guardians = new Guardians();
@@ -130,7 +129,6 @@ tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.
             tokens = await guardians.getTokens({ did: user.did });
             const { policies } = await engineService.getPolicies({ filters: { owner: user.did } });
             tokens = setTokensPolicies(tokens, policies, policyId, false);
-            // tokens = await setAssociatedUsersAmount(tokens, user);
         } else if (user.did) {
             tokens = await guardians.getAssociatedTokens(user.did);
             const { policies } = await engineService.getPolicies({
@@ -140,7 +138,6 @@ tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.
                 }
             });
             tokens = setTokensPolicies(tokens, policies, policyId, true);
-            // tokens = await setAssociatedUsersAmount(tokens, user);
         }
         for(const token of tokens) {
             if(token.tokenId == tokenId) {
@@ -168,7 +165,6 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
             tokens = await guardians.getTokens({ did: user.did });
             const { policies } = await engineService.getPolicies({ filters: { owner: user.did } });
             tokens = setTokensPolicies(tokens, policies, policyId, false);
-            // tokens = await setAssociatedUsersAmount(tokens, user);
         } else if (user.did) {
             tokens = await guardians.getAssociatedTokens(user.did);
             const { policies } = await engineService.getPolicies({
@@ -178,7 +174,6 @@ tokenAPI.get('/', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), a
                 }
             });
             tokens = setTokensPolicies(tokens, policies, policyId, true);
-            // tokens = await setAssociatedUsersAmount(tokens, user);
         }
         res.status(200).json(tokens);
     } catch (error) {

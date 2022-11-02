@@ -34,7 +34,15 @@ interface ITokensChart {
 
 // Tokens Logic
 
-async function fetchTokens(records: IVCDocument[]) {
+async function fetchCETTokens(records: IVCDocument[]) {
+    
+}
+
+async function fetchCRUTokens(records: IVCDocument[]) {
+    
+}
+
+async function fetchCCPTokens(records: IVCDocument[]) {
     
 }
 
