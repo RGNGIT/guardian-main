@@ -115,7 +115,7 @@ tokenAPI.get('/shit', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER
     }
 });
 */
-tokenAPI.get('/token/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
+tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const guardians = new Guardians();
         const engineService = new PolicyEngine();
