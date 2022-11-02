@@ -57,24 +57,28 @@ async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): 
     });
     }
     const checkToken = (hederaUserInfo, tokenId): boolean => {
+        /*
         for(const token of hederaUserInfo['accounts'][0]['balance']['tokens']) {
             if(tokenId == token.token_id) {
                 return true;
             }
         }
-        return false;
+        */
+        return true;
     };
     if (!tokens) {
         return [];
     }
     const userRepository = new Users();
     const users = await userRepository.getAllUserAccounts() as {username}[];
-
+    console.log(users);
+    
     for(const token of tokens) {
         token.userAmount = 0;
         for(const user of users) {
             const currentUser = await userRepository.getUser(user.username) as {hederaAccountId};
             const hederaUserInfo = await mirrornodeUserRequest(currentUser.hederaAccountId);
+            console.log(hederaUserInfo);
             if(checkToken(hederaUserInfo, token.tokenId)) {
                 token.userAmount++;
             }
