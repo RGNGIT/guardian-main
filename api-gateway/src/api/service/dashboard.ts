@@ -4,9 +4,11 @@ import { Logger, AuthenticatedRequest } from '@guardian/common';
 import { ResponseCode, formResponse } from '@helpers/response-manager';
 import { Users } from '@helpers/users';
 import { IVCDocument } from '@guardian/interfaces';
+import { Temporal } from '@js-temporal/polyfill';
 
 enum StatusType {
-    ACTIVE = 'Active'
+    ACTIVE = 'Active',
+    INACTIVE = 'Inactive'
 };
 
 enum EmissionType {
@@ -28,22 +30,62 @@ interface IDashboardDevice {
     totalEmission: {value: number, trend: string};
 }
 
-interface ITokensChart {
-    
+interface ITokenMeta {
+    todayAmount: number;
+    periodAmount: number;
+    totalAmount: number;
+}
+
+class TokensData {
+    todayCETValue: number;
+    todayCRUValue: number;
+    totalCETValue: number;
+    totalCRUValue: number;
+    periodCETValue: number;
+    periodCRUValue: number;
+    CETOfAllPercent: number;
+    CRUOfAllPercent: number;
+
+    calculatePercents() {
+        const formula = (x, y) => {
+            return Math.round((x / y) * 100);
+        };
+        this.CETOfAllPercent = formula(this.periodCETValue, this.totalCETValue);
+        this.CRUOfAllPercent = formula(this.periodCRUValue, this.totalCRUValue);
+    }
+
 }
 
 // Tokens Logic
-
-async function fetchCETTokens(records: IVCDocument[]) {
-    
-}
-
-async function fetchCRUTokens(records: IVCDocument[]) {
-    
-}
-
-async function fetchCCPTokens(records: IVCDocument[]) {
-    
+// TODO: Adjusting for actual policy
+async function fetchTokens(records: IVCDocument[], period): Promise<TokensData> {
+    const tokenTypes = ['CET', 'CRU'];
+    const tokensData = new TokensData();
+    const todayDate = new Date(Date.now()).toISOString();
+    // Token (type)
+    const fetchTokens = (type: string): ITokenMeta => {
+        let temp = {
+            todayAmount: 0,
+            periodAmount: 0,
+            totalAmount: 0
+        }
+        for(const record of records) {
+            if(record['document']['credentialSubject'][0]['type'] == type) {
+                // If today
+                // If within period
+                // If always
+            }
+        }
+        return temp;
+    }
+    for(const tokenType of tokenTypes) {
+        const meta = fetchTokens(tokenType);
+        tokensData[`today${tokenType}Value`] = meta.todayAmount;
+        tokensData[`period${tokenType}Value`] = meta.periodAmount;
+        tokensData[`total${tokenType}Value`] = meta.totalAmount;
+    }
+    tokensData.calculatePercents();
+    return tokensData;
 }
 
 // Devices Logic
@@ -57,7 +99,7 @@ async function resolveDeviceName(did: string): Promise<string | null> {
 }
 
 function resolveTrend(id: string, emissionType: number, value: number): string {
-    if(!prevDeviceValues) return null;
+    if(!prevDeviceValues) return TrendType.STILL;
     for(const device of prevDeviceValues) {
         if(device.deviceId === id) {
             switch(emissionType) {
@@ -71,7 +113,7 @@ function resolveTrend(id: string, emissionType: number, value: number): string {
             }
         }
     }
-    return null;
+    return TrendType.STILL;
 }
 
 function resolveDistinctDeviceIDs(records: IVCDocument[]): string[] {
@@ -83,7 +125,13 @@ function resolveDistinctDeviceIDs(records: IVCDocument[]): string[] {
     }
     return temp;
 }
-
+// Sort from latest to oldest
+function sortByDate(records: IVCDocument[]): IVCDocument[] {
+    return records.sort((recordA, recordB) => { 
+        return Number(new Date(recordB.document.issuanceDate)) - Number(new Date(recordA.document.issuanceDate))
+    });
+}
+// TODO: Adjusting for actual policy
 async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: string[]): Promise<IDashboardDevice[]> {
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
@@ -118,7 +166,8 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
     try {
         const policyId = req.params.policyId;
         const type = req.query.type;
-        const records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
+        let records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
+        records = sortByDate(records);
         const distinctDeviceIds = resolveDistinctDeviceIDs(records);
         const devices = await resolveDeviceList(records, distinctDeviceIds);
         prevDeviceValues = devices;
@@ -134,8 +183,10 @@ dashboardAPI.get('/tokens/:policyId', async (req: AuthenticatedRequest, res: Res
     try {
         const policyId = req.params.policyId;
         const type = req.query.type;
+        const period = req.query.period;
         const records = await guardians.getVcDocuments({type, policyId});
-
+        const tokens = await fetchTokens(records, period);
+        res.json(tokens);
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
