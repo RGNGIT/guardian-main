@@ -47,23 +47,35 @@ class TokensData {
     CRUOfAllPercent: number;
 
     calculatePercents() {
-        const formula = (x, y) => {
+        const f = (x: number, y: number): number => {
             return Math.round((x / y) * 100);
         };
-        this.CETOfAllPercent = formula(this.periodCETValue, this.totalCETValue);
-        this.CRUOfAllPercent = formula(this.periodCRUValue, this.totalCRUValue);
+        this.CETOfAllPercent = f(this.periodCETValue, this.totalCETValue);
+        this.CRUOfAllPercent = f(this.periodCRUValue, this.totalCRUValue);
     }
 
 }
+// Some date works
+const isToday = (date1: Temporal.PlainDate, date2: Temporal.PlainDate): boolean => {
+    return date1.year === date2.year && date1.month === date2.month && date1.day === date2.day;
+};
+
+const isWithinPeriod = (dateToCheck: Temporal.PlainDate, from: Temporal.PlainDate, to: Temporal.PlainDate): boolean => {
+    const check = (what: string): boolean => {
+        return (dateToCheck[what] > from[what] && dateToCheck[what] < to[what]) || (dateToCheck[what] === from[what] && from[what] === to[what]);
+    };
+    return check('year') && check('month') && check('day');
+};
 
 // Tokens Logic
 // TODO: Adjusting for actual policy
-async function fetchTokens(records: IVCDocument[], period): Promise<TokensData> {
+async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<TokensData> {
     const tokenTypes = ['CET', 'CRU'];
     const tokensData = new TokensData();
-    const todayDate = new Date(Date.now()).toISOString();
+    const todayDateISO = new Date(Date.now()).toISOString();
+    const todayDate = Temporal.PlainDate.from(todayDateISO);
     // Token (type)
-    const fetchTokens = (type: string): ITokenMeta => {
+    const fetchTokensCount = (type: string): ITokenMeta => {
         let temp = {
             todayAmount: 0,
             periodAmount: 0,
@@ -71,18 +83,26 @@ async function fetchTokens(records: IVCDocument[], period): Promise<TokensData> 
         }
         for(const record of records) {
             if(record['document']['credentialSubject'][0]['type'] == type) {
+                const issuanceDate = Temporal.PlainDate.from(record['document']['issuanceDate']);
                 // If today
+                if(isToday(issuanceDate, todayDate)) {
+                    temp.todayAmount++;
+                }
                 // If within period
+                if(isWithinPeriod(issuanceDate, Temporal.PlainDate.from(period.from), Temporal.PlainDate.from(period.to))) {
+                    temp.periodAmount++;
+                }
                 // If always
+                temp.totalAmount++;
             }
         }
         return temp;
     }
     for(const tokenType of tokenTypes) {
-        const meta = fetchTokens(tokenType);
-        tokensData[`today${tokenType}Value`] = meta.todayAmount;
-        tokensData[`period${tokenType}Value`] = meta.periodAmount;
-        tokensData[`total${tokenType}Value`] = meta.totalAmount;
+        const tokensCount = fetchTokensCount(tokenType);
+        tokensData[`today${tokenType}Value`] = tokensCount.todayAmount;
+        tokensData[`period${tokenType}Value`] = tokensCount.periodAmount;
+        tokensData[`total${tokenType}Value`] = tokensCount.totalAmount;
     }
     tokensData.calculatePercents();
     return tokensData;
@@ -171,7 +191,7 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         const distinctDeviceIds = resolveDistinctDeviceIDs(records);
         const devices = await resolveDeviceList(records, distinctDeviceIds);
         prevDeviceValues = devices;
-        res.json(devices);
+        res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, devices, 'GET_DASHBOARD_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
@@ -183,10 +203,11 @@ dashboardAPI.get('/tokens/:policyId', async (req: AuthenticatedRequest, res: Res
     try {
         const policyId = req.params.policyId;
         const type = req.query.type;
-        const period = req.query.period;
+        const from = req.query.from;
+        const to = req.query.to;
         const records = await guardians.getVcDocuments({type, policyId});
-        const tokens = await fetchTokens(records, period);
-        res.json(tokens);
+        const tokens = await fetchTokens(records, {from, to});
+        res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, tokens, 'GET_DASHBOARD_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
         res.status(500).send(formResponse(ResponseCode.GET_DASHBOARD_FAIL, error.message, 'GET_DASHBOARD_FAIL'));
