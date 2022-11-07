@@ -23,6 +23,7 @@ enum TrendType {
 };
 
 interface IDashboardDevice {
+    emissionDateTime: Date;
     deviceId: string;
     deviceName: string;
     status: string;
@@ -56,24 +57,41 @@ class TokensData {
 
 }
 // Some date works
-const isToday = (date1: Temporal.PlainDate, date2: Temporal.PlainDate): boolean => {
+const isToday = (date1: Temporal.PlainDateTime, date2: Temporal.PlainDateTime): boolean => {
     return date1.year === date2.year && date1.month === date2.month && date1.day === date2.day;
 };
 
-const isWithinPeriod = (dateToCheck: Temporal.PlainDate, from: Temporal.PlainDate, to: Temporal.PlainDate): boolean => {
+const isWithinPeriod = (dateToCheck: Temporal.PlainDateTime, from: Temporal.PlainDateTime, to: Temporal.PlainDateTime): boolean => {
     const check = (what: string): boolean => {
-        return (dateToCheck[what] > from[what] && dateToCheck[what] < to[what]) || (dateToCheck[what] === from[what] && from[what] === to[what]);
+        return ((dateToCheck[what] >= from[what] && dateToCheck[what] <= to[what]) || (dateToCheck[what] === from[what] && from[what] === to[what]));
     };
     return check('year') && check('month') && check('day');
 };
+
+const isCurrentYearQuarter = (emissionDate): boolean => {
+    const today = new Date();
+    const eDate = new Date(emissionDate);
+    const currentQuarter = Math.floor((today.getMonth() + 3) / 3);
+    const eQuarter = Math.floor((eDate.getMonth() + 3) / 3);
+    return currentQuarter == eQuarter;
+};
+
+const isLastFifteenMin = (emissionDate): boolean => {
+    const eDate = Temporal.PlainDateTime.from(emissionDate);
+    const todayDate = Temporal.PlainDateTime.from(new Date(Date.now()).toISOString().split('.')[0]);
+    
+    return false;
+}
 
 // Tokens Logic
 // TODO: Adjusting for actual policy
 async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<TokensData> {
     const tokenTypes = ['CET', 'CRU'];
     const tokensData = new TokensData();
-    const todayDateISO = new Date(Date.now()).toISOString();
-    const todayDate = Temporal.PlainDate.from(todayDateISO);
+    const todayDateISO = new Date(Date.now()).toISOString().split('.')[0];
+    const todayDate = Temporal.PlainDateTime.from(todayDateISO);
+    period.from = Temporal.PlainDateTime.from(period.from);
+    period.to = Temporal.PlainDateTime.from(period.to);
     // Token (type)
     const fetchTokensCount = (type: string): ITokenMeta => {
         let temp = {
@@ -83,13 +101,13 @@ async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<
         }
         for(const record of records) {
             if(record['document']['credentialSubject'][0]['type'] == type) {
-                const issuanceDate = Temporal.PlainDate.from(record['document']['issuanceDate']);
+                const issuanceDate = Temporal.PlainDateTime.from(record['document']['issuanceDate']);
                 // If today
                 if(isToday(issuanceDate, todayDate)) {
                     temp.todayAmount++;
                 }
                 // If within period
-                if(isWithinPeriod(issuanceDate, Temporal.PlainDate.from(period.from), Temporal.PlainDate.from(period.to))) {
+                if(isWithinPeriod(issuanceDate, period.from, period.to)) {
                     temp.periodAmount++;
                 }
                 // If always
@@ -156,6 +174,7 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
         temp.push({
+            emissionDateTime: null,
             deviceId: id,
             deviceName: await resolveDeviceName(id),
             status: StatusType.ACTIVE, // TODO: Resolve status
@@ -166,8 +185,14 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
         for(const record of records) {
             if(record['document']['issuer'] === id) {
                 // P15M
-                // TODO: Correct calculations by dates
-                item.currentEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
+                // Emission from the last 15 min block
+                if(isLastFifteenMin(record['document']['credentialSubject'][0]['field0'])) {
+                    item.currentEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
+                }
+                // This year's quarter emission
+                if(isCurrentYearQuarter(record['document']['credentialSubject'][0]['field0'])) {
+                    item.totalEmission.value += Number(record['document']['credentialSubject'][0]['field1']);   
+                }
             }
         }
         item.currentEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_EMISSION, item.currentEmission.value);
