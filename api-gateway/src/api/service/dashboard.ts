@@ -79,8 +79,7 @@ const isCurrentYearQuarter = (emissionDate): boolean => {
 const isLastFifteenMin = (emissionDate): boolean => {
     const eDate = Temporal.PlainDateTime.from(emissionDate);
     const todayDate = Temporal.PlainDateTime.from(new Date(Date.now()).toISOString().split('.')[0]);
-    
-    return false;
+    return eDate.until(todayDate).years == 0 && eDate.until(todayDate).days == 0 && eDate.until(todayDate).minutes <= 15;
 }
 
 // Tokens Logic
