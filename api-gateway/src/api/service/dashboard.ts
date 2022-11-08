@@ -80,7 +80,7 @@ const isLastFifteenMin = (emissionDate): boolean => {
     const eDate = Temporal.PlainDateTime.from(emissionDate);
     const todayDate = Temporal.PlainDateTime.from(new Date(Date.now()).toISOString().split('.')[0]);
     return eDate.until(todayDate).years == 0 && eDate.until(todayDate).days == 0 && eDate.until(todayDate).minutes <= 15;
-}
+};
 
 // Tokens Logic
 // TODO: Adjusting for actual policy
@@ -100,7 +100,7 @@ async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<
         }
         for(const record of records) {
             if(record['document']['credentialSubject'][0]['type'] == type) {
-                const issuanceDate = Temporal.PlainDateTime.from(record['document']['issuanceDate']);
+                const issuanceDate = Temporal.PlainDateTime.from(record['document']['issuanceDate'].split('.')[0]);
                 // If today
                 if(isToday(issuanceDate, todayDate)) {
                     temp.todayAmount++;
