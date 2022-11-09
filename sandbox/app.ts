@@ -1,10 +1,9 @@
 import { Temporal } from '@js-temporal/polyfill';
 
-const isLastFifteenMin = (emissionDate) => {
-    const eDate = Temporal.PlainDateTime.from(emissionDate);
-    const todayDate = Temporal.PlainDateTime.from(new Date(Date.now()).toISOString().split('.')[0]);
-    return eDate.until(todayDate).years == 0 && eDate.until(todayDate).days == 0 && eDate.until(todayDate).minutes <= 15;
-}
+const fixDateTime = (date) => {
+    return Temporal.ZonedDateTime.from(date);
+};
+
 (() => {
-    console.log(isLastFifteenMin('2022-11-08T10:35:30'));
+    console.log(fixDateTime('2022-10-26T12:46:27.010Z').toString());
 })();

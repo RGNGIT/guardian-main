@@ -6,6 +6,8 @@ import { Users } from '@helpers/users';
 import { IVCDocument } from '@guardian/interfaces';
 import { Temporal } from '@js-temporal/polyfill';
 
+const {IANA_TIMEZONE} = process.env;
+
 enum StatusType {
     ACTIVE = 'Active',
     INACTIVE = 'Inactive'
@@ -80,6 +82,10 @@ const isLastFifteenMin = (emissionDate): boolean => {
     const eDate = Temporal.PlainDateTime.from(emissionDate);
     const todayDate = Temporal.PlainDateTime.from(new Date(Date.now()).toISOString().split('.')[0]);
     return eDate.until(todayDate).years == 0 && eDate.until(todayDate).days == 0 && eDate.until(todayDate).minutes <= 15;
+};
+
+const fixDateTime = (date: Temporal.PlainDateTime, ianaFrom: string) => {
+    return date.toZonedDateTime(IANA_TIMEZONE);
 };
 
 // Tokens Logic
