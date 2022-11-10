@@ -105,7 +105,6 @@
             (click)="handleEditSchema(element)"
             matTooltip="Edit"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               svgIcon="edit"
@@ -131,7 +130,6 @@
             (click)="handleEditSchema(element)"
             matTooltip="Edit"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               svgIcon="edit"
@@ -145,7 +143,6 @@
             (click)="handleNewVersionSchema(element)"
             matTooltip="New Version"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               class="schema-action-icon"
@@ -159,7 +156,6 @@
             (click)="handleCloneSchema(element)"
             matTooltip="Copy Schema"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               class="schema-action-icon"
@@ -176,7 +172,6 @@
             (click)="handleDeleteSchema(element)"
             matTooltip="Delete"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               svgIcon="delete"
@@ -201,7 +196,6 @@
             (click)="handleDeleteSchema(element)"
             matTooltip="Delete"
             matTooltipPosition="above"
-            matTooltipClass="guardian-tooltip"
           >
             <mat-icon
               svgIcon="delete"
@@ -224,6 +218,8 @@
           svgIcon="document"
           aria-hidden="false"
           class="schema-action-icon"
+          matTooltip="View"
+          matTooltipPosition="above"
           (click)="handleOpenDocument(element)"
         ></mat-icon>
         <mat-icon
@@ -231,6 +227,8 @@
           svgIcon="export"
           aria-hidden="false"
           class="schema-action-icon"
+          matTooltip="Export"
+          matTooltipPosition="above"
           (click)="handleExportSchema(element)"
         ></mat-icon>
       </div>

@@ -1,6 +1,6 @@
 {
   "/api/v1/*": {
-    "target": "http://v8.serapis.19ivt.ru",
+    "target": "https://dev.serapis.app/api/v1/",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true,
@@ -10,7 +10,7 @@
     }
   },
   "/ws/*": {
-    "target": "http://v8.serapis.19ivt.ru",
+    "target": "https://dev.serapis.app/ws/",
     "secure": false,
     "ws": true,
     "logLevel": "debug",

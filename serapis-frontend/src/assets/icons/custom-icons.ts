@@ -95,17 +95,38 @@ export const CUSTOM_ICONS = {
     '<path d="M4 16L3.29289 15.2929L3 15.5858V16H4ZM17 3L17.7071 2.29289C17.3166 1.90237 16.6834 1.90237 16.2929 2.29289L17 3ZM21 7L21.7071 7.70711C22.0976 7.31658 22.0976 6.68342 21.7071 6.29289L21 7ZM8 20V21H8.41421L8.70711 20.7071L8 20ZM4 20H3C3 20.5523 3.44772 21 4 21V20ZM4.70711 16.7071L17.7071 3.70711L16.2929 2.29289L3.29289 15.2929L4.70711 16.7071ZM16.2929 3.70711L20.2929 7.70711L21.7071 6.29289L17.7071 2.29289L16.2929 3.70711ZM20.2929 6.29289L7.29289 19.2929L8.70711 20.7071L21.7071 7.70711L20.2929 6.29289ZM8 19H4V21H8V19ZM5 20V16H3V20H5ZM13.2929 6.70711L17.2929 10.7071L18.7071 9.29289L14.7071 5.29289L13.2929 6.70711Z" fill="currentColor" />\n' +
     '</svg>\n',
 
-  cross: '<svg width="24" height="33" viewBox="0 0 24 33" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+  cross:
+    '<svg width="24" height="33" viewBox="0 0 24 33" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
     '<path d="M16 24L8 32M8.00003 24L16 32" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
     '</svg>\n',
 
-  delete: '<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+  delete:
+    '<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
     '<path d="M15 4V16C15 17.1046 14.1046 18 13 18H5C3.89543 18 3 17.1046 3 16V4M12 4V3C12 1.89543 11.1046 1 10 1H8C6.89543 1 6 1.89543 6 3V4M1 4H17M7 8V14M11 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
     '</svg>\n',
 
   settings:
     '<svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    '<path d="M11 3C11 1.89543 10.1046 1 9 1C7.89543 1 7 1.89543 7 3M11 3C11 4.10457 10.1046 5 9 5C7.89543 5 7 4.10457 7 3M11 3H17M7 3L1 3M13 10C13 11.1046 13.8954 12 15 12C16.1046 12 17 11.1046 17 10C17 8.89543 16.1046 8 15 8C13.8954 8 13 8.89543 13 10ZM13 10H1M5 17C5 15.8954 4.10457 15 3 15C1.89543 15 1 15.8954 1 17C1 18.1046 1.89543 19 3 19C4.10457 19 5 18.1046 5 17ZM5 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'+
-    '</svg>'
+    '<path d="M11 3C11 1.89543 10.1046 1 9 1C7.89543 1 7 1.89543 7 3M11 3C11 4.10457 10.1046 5 9 5C7.89543 5 7 4.10457 7 3M11 3H17M7 3L1 3M13 10C13 11.1046 13.8954 12 15 12C16.1046 12 17 11.1046 17 10C17 8.89543 16.1046 8 15 8C13.8954 8 13 8.89543 13 10ZM13 10H1M5 17C5 15.8954 4.10457 15 3 15C1.89543 15 1 15.8954 1 17C1 18.1046 1.89543 19 3 19C4.10457 19 5 18.1046 5 17ZM5 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '</svg>',
 
+  linkHedera:
+    '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M17 0.999997L6.99997 11M17 0.999997L17 6.99999M17 0.999997L11 0.999985M7 0.999997H1V17H17V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>',
+
+  peoples:
+    '<svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M23 19V17C23 14.7909 21.2091 13 19 13H18.5M15 9C17.2091 9 19 7.20914 19 5C19 2.79086 17.2091 1 15 1M17 19V17C17 14.7909 15.2091 13 13 13H5C2.79086 13 1 14.7909 1 17V19M13 5C13 7.20914 11.2091 9 9 9C6.79086 9 5 7.20914 5 5C5 2.79086 6.79086 1 9 1C11.2091 1 13 2.79086 13 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>',
+
+  refresh:
+    '<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M1 1V7M1 7H7M1 7L3.64033 4.63067C5.02134 3.25209 6.81301 2.35964 8.74537 2.08779C10.6777 1.81593 12.6461 2.17941 14.3539 3.12343C16.0617 4.06746 17.4165 5.54091 18.214 7.32177C19.0115 9.10262 19.2086 11.0944 18.7756 12.997C18.3426 14.8996 17.303 16.61 15.8133 17.8704C14.3237 19.1308 12.4647 19.873 10.5165 19.9851C8.56836 20.0972 6.63652 19.5732 5.01208 18.492C3.38765 17.4108 2.15862 15.831 1.51018 13.9907" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>',
+
+  close:
+    '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M9.00002 1L1 9.00002M1.00003 1L9.00005 9.00002" stroke="#333333" stroke-opacity="0.25" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>'
 };

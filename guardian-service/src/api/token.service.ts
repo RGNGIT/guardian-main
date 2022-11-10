@@ -100,7 +100,7 @@ async function createToken(token: any, owner: any, tokenRepository: DataBaseHelp
             tokenSymbol,
             tokenType
         }
-    }, 1);
+    }, 1, 1);
     tokenData.owner = root.did;
 
     notifier.completedAndStart('Save token in DB');
@@ -151,7 +151,7 @@ async function associateToken(tokenId: any, did: any, associate: any, tokenRepos
             userKey,
             associate
         }
-    }, 1);
+    }, 1, 1);
 
     notifier.completed();
     return status;
@@ -197,7 +197,7 @@ async function grantKycToken(tokenId, username, owner, grant, tokenRepository: D
             kycKey: token.kycKey,
             grant
         }
-    }, 10);
+    }, 10, 1);
 
     const info = await workers.addTask({
         type: WorkerTaskType.GET_ACCOUNT_INFO,
@@ -206,7 +206,7 @@ async function grantKycToken(tokenId, username, owner, grant, tokenRepository: D
             userKey: root.hederaAccountKey,
             hederaAccountId: user.hederaAccountId,
         }
-    }, 10);
+    }, 10, 1);
 
     const result = getTokenInfo(info, { tokenId });
     notifier.completed();
@@ -244,8 +244,8 @@ export async function tokenAPI(
             const tokens = await tokenRepository.findAll();
             return new MessageResponse(tokens);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error);
         }
     });
 
@@ -296,11 +296,12 @@ export async function tokenAPI(
                 data: {
                     hederaAccountId: root.hederaAccountId,
                     hederaAccountKey: root.hederaAccountKey,
+                    userHederaAccountId: user.hederaAccountId,
                     freezeKey: token.freezeKey,
                     tokenId,
                     freeze
                 }
-            }, 1);
+            }, 1, 1);
 
             const info = await workers.addTask({
                 type: WorkerTaskType.GET_ACCOUNT_INFO,
@@ -309,13 +310,13 @@ export async function tokenAPI(
                     userKey: root.hederaAccountKey,
                     hederaAccountId: user.hederaAccountId,
                 }
-            }, 10);
+            }, 10, 1);
 
             const result = getTokenInfo(info, { tokenId });
             return new MessageResponse(result);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message, 400);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error, 400);
         }
     });
 
@@ -325,8 +326,8 @@ export async function tokenAPI(
             const result = await grantKycToken(tokenId, username, owner, grant, tokenRepository, emptyNotifier());
             return new MessageResponse(result);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message, 400);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error, 400);
         }
     });
 
@@ -353,8 +354,8 @@ export async function tokenAPI(
             const status = await associateToken(tokenId, did, associate, tokenRepository, emptyNotifier());
             return new MessageResponse(status);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message, 400);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error, 400);
         }
     })
 
@@ -403,14 +404,14 @@ export async function tokenAPI(
                     userKey: root.hederaAccountKey,
                     hederaAccountId: user.hederaAccountId
                 }
-            }, 1);
+            }, 1, 1);
 
             const result = getTokenInfo(info, token);
 
             return new MessageResponse(result);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message, 400);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error, 400);
         }
     })
 
@@ -441,7 +442,7 @@ export async function tokenAPI(
                     userKey,
                     hederaAccountId: user.hederaAccountId
                 }
-            }, 1);
+            }, 1, 1);
 
             const tokens: any = await tokenRepository.find(user.parent
                 ? {
@@ -461,8 +462,8 @@ export async function tokenAPI(
             }
             return new MessageResponse(result);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message, 400);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error, 400);
         }
     })
 
@@ -525,8 +526,8 @@ export async function tokenAPI(
             const tokens = await tokenRepository.findAll();
             return new MessageResponse(tokens);
         } catch (error) {
-            new Logger().error(error.message, ['GUARDIAN_SERVICE']);
-            return new MessageError(error.message);
+            new Logger().error(error, ['GUARDIAN_SERVICE']);
+            return new MessageError(error);
         }
     })
 }

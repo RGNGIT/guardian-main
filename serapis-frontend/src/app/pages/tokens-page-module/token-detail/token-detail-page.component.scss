@@ -1,0 +1,124 @@
+@use 'abstracts' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+.buttons {
+  height: 104px;
+}
+
+.hedera-link {
+  margin-left: 10px;
+  color: #E1E1E1;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  text-underline: none;
+}
+
+.hedera-link:hover {
+  color: #1960EC;
+}
+
+.icons {
+  margin-left: 10px;
+  width: 16px;
+  height: 16px;
+}
+
+.back-button {
+  margin: 0 23px 0 28px;
+  cursor: pointer;
+}
+
+.top-block {
+
+}
+
+.link {
+  margin-left: 10px;
+}
+
+.users-span {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: -0.04em;
+}
+
+.token-span {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+  vertical-align: bottom;
+  letter-spacing: -0.04em;
+  margin-left: 10px;
+}
+
+.lds {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.lds div {
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  width: 8px;
+  background: #1960EC;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds div:nth-child(1) {
+  left: 4px;
+  animation-delay: -0.24s;
+}
+.lds div:nth-child(2) {
+  left: 16px;
+  animation-delay: -0.12s;
+}
+.lds div:nth-child(3) {
+  left: 28px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 4px;
+    height: 32px;
+  }
+  50%, 100% {
+    top: 12px;
+    height: 16px;
+  }
+}
+
+.yes-no-block {
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yes {
+  background: #C7E8AE; color: #157C83;
+}
+.no {
+  background: #FFDCD5; color: #FE4444;
+}
+
+.link-button {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  color: #E1E1E1;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: #1960EC;
+}

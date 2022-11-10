@@ -222,6 +222,7 @@ export class SchemasPageComponent implements OnInit {
   handleAddNewSchema() {
     const dialogRef = this.dialog.open(SchemaDialogComponent, {
       width: '950px',
+      height: '90vh',
       panelClass: 'g-dialog',
       disableClose: true,
       data: {
@@ -265,6 +266,7 @@ export class SchemasPageComponent implements OnInit {
   handleEditSchema(element: Schema) {
     const dialogRef = this.dialog.open(SchemaDialogComponent, {
       width: '950px',
+      height: '90vh',
       panelClass: 'g-dialog',
       disableClose: true,
       data: {
@@ -298,6 +300,7 @@ export class SchemasPageComponent implements OnInit {
   handleNewVersionSchema(element: Schema) {
     const dialogRef = this.dialog.open(SchemaDialogComponent, {
       width: '950px',
+      height: '90vh',
       panelClass: 'g-dialog',
       disableClose: true,
       data: {
@@ -337,6 +340,7 @@ export class SchemasPageComponent implements OnInit {
     delete newDocument.previousVersion;
     const dialogRef = this.dialog.open(SchemaDialogComponent, {
       width: '950px',
+      height: '90vh',
       panelClass: 'g-dialog',
       disableClose: true,
       data: {

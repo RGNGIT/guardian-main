@@ -74,4 +74,16 @@ export class PoliciesService {
         }
     });
   }
+
+  public pushPreviewByMessage(messageId: string): Observable<{ taskId: string, expectation: number }> {
+    return this._http.post<{ taskId: string, expectation: number }>(API_URLS.policies.pushIPFS, { messageId });
+  }
+
+  public pushImportByMessage(messageId: string, versionOfTopicId?: string): Observable<{ taskId: string, expectation: number }> {
+    let httpParams = new HttpParams();
+    if (versionOfTopicId) {
+      httpParams = httpParams.append('versionOfTopicId', versionOfTopicId);
+    }
+    return this._http.post<{ taskId: string, expectation: number }>(API_URLS.policies.pushMessage, { messageId }, {params: httpParams});
+  }
 }

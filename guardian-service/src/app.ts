@@ -3,6 +3,7 @@ import { documentsAPI } from '@api/documents.service';
 import { loaderAPI } from '@api/loader.service';
 import { profileAPI } from '@api/profile.service';
 import { schemaAPI, setDefaultSchema } from '@api/schema.service';
+import { goalAPI } from '@api/goals.service';
 import { tokenAPI } from '@api/token.service';
 import { trustChainAPI } from '@api/trust-chain.service';
 import { DidDocument } from '@entity/did-document';
@@ -211,6 +212,7 @@ Promise.all([
 
     await configAPI(channel, settingsRepository, topicRepository);
     await schemaAPI(channel, apiGatewayChannel);
+    await goalAPI(channel, apiGatewayChannel);
     await tokenAPI(channel, apiGatewayChannel, tokenRepository);
     await loaderAPI(channel, didDocumentRepository, schemaRepository);
     await profileAPI(channel, apiGatewayChannel);

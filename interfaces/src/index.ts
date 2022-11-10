@@ -19,6 +19,7 @@ export { IDidObject } from './interface/did-object.interface';
 export { did } from './interface/did.interface';
 export { IRootConfig } from './interface/root-config.interface';
 export { ISchema } from './interface/schema.interface';
+export { IGoal } from './interface/goal.interface';
 export { IToken, ITokenInfo } from './interface/token.interface';
 export { uuid } from './interface/uuid.interface';
 export { IVCDocument } from './interface/vc-document.interface';

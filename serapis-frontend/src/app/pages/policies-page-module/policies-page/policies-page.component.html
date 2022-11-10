@@ -9,7 +9,7 @@
 </div>
 
 <ng-template #table>
-  <div class="buttons flex-row flex-align-center">
+  <div class="buttons flex-row flex-align-center" *appIsRoleAllowDirective="{role: 'STANDARD_REGISTRY'}">
     <app-serapis-button type="filled" title="Add New Policy" (click)="openDialog(addNewPolicy)">
       <mat-icon class="icons">add</mat-icon>
     </app-serapis-button>
@@ -47,14 +47,14 @@
         <span class="description-cell">{{element.description}}</span>
       </ng-template>
       <ng-template #actionsTempl let-element="element">
-        <div class="action-button">
+        <div class="action-button" *appIsRoleAllowDirective="{role: 'STANDARD_REGISTRY'}">
           <span>{{ element.status !== 'PUBLISH' ? 'Edit' : 'Open' }}</span>
 <!--          <mat-icon class="action-icon" svgIcon="settings" aria-hidden="false"></mat-icon>-->
         </div>
         <span class="action-button" *ngIf="element.status === 'DRY-RUN' || element.status === 'PUBLISH'">
           <span>Go</span>
         </span>
-        <span class="action-button" *ngIf="element.status === 'DRY-RUN'" (click)="stop(element)">
+        <span class="action-button" *appIsRoleAllowDirective="{role: 'STANDARD_REGISTRY', additionalConditions: [element.status === 'DRY-RUN']}" (click)="stop(element)">
           <span>Stop</span>
         </span>
 
@@ -109,7 +109,7 @@
   <mat-progress-bar mode="indeterminate" *ngIf="modalLoading"></mat-progress-bar>
   <app-base-dialog *ngIf="!fileInfo; else fileInformation">
     <div header class="modal-header">Import Policy</div>
-    <div body class="modal-body">
+    <div *ngIf="!importTaskId" body class="modal-body">
       <div>
         <input type="file" #fileDropRef class="fileDropRef" multiple (change)="fileBrowseHandler($event.target)" accept=".policy"/>
         <div>
@@ -141,13 +141,21 @@
         </form>
       </div>
     </div>
-    <div footer>
+    <div *ngIf="!importTaskId" footer>
       <div class="footer">
         <app-serapis-button type="empty" title="Cancel" (click)="closeDialog()">
         </app-serapis-button>
         <app-serapis-button  type="filled" title="Send" [disabled]="!(files.length !== 0 || fileForm.valid)" (click)="sendFile()">
         </app-serapis-button>
       </div>
+    </div>
+    <div *ngIf="importTaskId" body class="async-message">
+        <async-progress class="loading-progress"
+                        [taskId]="importTaskId"
+                        [expected]="importExpectedTaskMessages"
+                        (error)="onAsyncError($event)"
+                        (completed)="onImportAsyncCompleted()">
+        </async-progress>
     </div>
   </app-base-dialog>
   <ng-template #fileInformation>
@@ -208,7 +216,7 @@
       <div body class="modal-body">
         <form [formGroup]="dataForm">
           <mat-form-field class="full-width mat-input" appearance="standard">
-            <mat-label>Token Name</mat-label>
+            <mat-label>Policy Name</mat-label>
             <input matInput placeholder="Name" formControlName="name" required>
             <mat-error *ngIf="getFormControlByName('name').hasError('required')">
               Last name is <strong>required</strong>

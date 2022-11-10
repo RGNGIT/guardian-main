@@ -1,0 +1,125 @@
+<div class="dialog-header">
+  <div class="dialog-title">
+    {{addingMode ? 'Add New' : 'Edit'}} Goal
+  </div>
+  <div class="dialog-cancel">
+    <div class="g-dialog-cancel-btn" (click)="handleCloseDialog()">
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+</div>
+
+<div class="dialog-main-container">
+  <form [formGroup]="dataForm">
+    <div class="range-filter">
+      <div>Reporting Period:</div>
+      <mat-form-field appearance="fill" class="range-form">
+        <mat-label>Enter Reporting Period</mat-label>
+        <mat-date-range-input [rangePicker]="reportingPicker">
+          <input
+            matStartDate
+            placeholder="Start date"
+            formControlName="reportingDateFrom"
+          />
+          <input
+            matEndDate
+            placeholder="End date"
+            formControlName="reportingDateTo"
+          />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="reportingPicker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #reportingPicker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+
+    <div class="range-filter">
+      <div>Comparison Period:</div>
+      <mat-form-field appearance="fill" class="range-form">
+        <mat-label>Enter Comparison Period</mat-label>
+        <mat-date-range-input [rangePicker]="comparisonPicker">
+          <input
+            matStartDate
+            placeholder="Start date"
+            formControlName="comparisonDateFrom"
+          />
+          <input
+            matEndDate
+            placeholder="End date"
+            formControlName="comparisonDateTo"
+          />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="comparisonPicker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #comparisonPicker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="goal-field">
+      <mat-label>Comparison Emissions</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Comparison Emissions"
+        formControlName="comparisonEmissions"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="goal-field">
+      <mat-label>Removal, tons</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Removal, tons"
+        formControlName="removal"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="goal-field">
+      <mat-label>Reduction, tons</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Reduction, tons"
+        formControlName="reduction"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="goal-field">
+      <mat-label>Goal Emissions, tons</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Goal Emissions, tons"
+        formControlName="goalEmissions"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="goal-field">
+      <mat-label>Total Removal, %</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Total Removal, %"
+        formControlName="totalRemoval"
+      />
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="dialog-footer-container">
+  <div class="save-button">
+    <app-serapis-button
+      title="Save"
+      type="filled"
+      style="margin-left: auto"
+      (click)="handleCreateGoal()"
+      [disabled]="!formValid"
+    >
+    </app-serapis-button>
+  </div>
+</div>

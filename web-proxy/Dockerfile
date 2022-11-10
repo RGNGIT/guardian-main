@@ -14,7 +14,7 @@ RUN npm run build
 FROM nginx:latest
 ENV PLATFORM="docker"
 COPY ./web-proxy/configs/default.conf /etc/nginx/conf.d/default.conf
-COPY ./web-proxy/certs/serapis.app/ /etc/nginx/certs/serapis.app/
+COPY ./web-proxy/certs/dev.serapis.app/ /etc/nginx/certs/dev.serapis.app/
 COPY --from=frontendBuilder /usr/local/frontend/dist/serapis-frontend /usr/share/nginx/html
 
 EXPOSE 80

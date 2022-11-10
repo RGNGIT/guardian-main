@@ -12,6 +12,7 @@ import {TasksService} from "@app/services/task.service";
 import {DemoService} from "@app/services/demo.service";
 import {WebSocketService} from "@app/services/web-socket.service";
 import {Router} from "@angular/router";
+import {HeaderMenuService} from "@app/services/header-menu.service";
 
 enum OperationMode {
   None, Generate, SetProfile, Associate
@@ -58,7 +59,8 @@ export class FinishRegistrationComponent implements OnInit {
     private _taskService: TasksService,
     private _demoService: DemoService,
     private _wsService: WebSocketService,
-    private _router: Router
+    private _router: Router,
+    private _headerMenuService: HeaderMenuService
   ) {
 
     this.hideVC = {
@@ -187,14 +189,14 @@ export class FinishRegistrationComponent implements OnInit {
         case OperationMode.SetProfile:
           this._wsService.updateProfile();
           this._userService.loadProfile().then( () => {
-              this._router.navigateByUrl("/")
+              this._router.navigateByUrl(this._headerMenuService.currentMenuItems.value[0].routerLink)
             }
           );
           // this.loadDate();
           break;
         case OperationMode.Associate:
           this._userService.loadProfile().then( () => {
-              this._router.navigateByUrl("/")
+            this._router.navigateByUrl(this._headerMenuService.currentMenuItems.value[0].routerLink)
             }
           );
           // this.loadDate();

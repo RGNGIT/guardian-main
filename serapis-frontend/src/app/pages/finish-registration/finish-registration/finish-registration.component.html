@@ -1,9 +1,11 @@
 <div *ngIf="loading && taskId" class="async">
   <async-progress class="loading-progress"
+                  [fullPage]="true"
                   [taskId]="taskId"
                   [expected]="expectedTaskMessages"
                   (error)="onAsyncError($event)"
-                  (completed)="onAsyncCompleted()"></async-progress>
+                  (completed)="onAsyncCompleted()">
+  </async-progress>
 </div>
 <div class="final-step-wrapper" *ngIf="!loading && !taskId">
   <div class="title">Final Registration Step</div>
@@ -42,11 +44,10 @@
         <button mat-raised-button type="submit" (click)="randomKey()">Generate</button>
 
         <div class="submit-button">
-          <app-serapis-button title="Submit" [disabled]="!hederaForm.valid" (click)="onHederaSubmit()">
+          <app-serapis-button title="Submit" [disabled]="!hederaForm.valid || !vcForm.valid" (click)="onHederaSubmit()">
           </app-serapis-button>
         </div>
       </form>
     </div>
-
   </div>
 </div>

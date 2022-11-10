@@ -15,6 +15,7 @@ import { DocumentStatus, IVC, SchemaEntity, TopicType } from '@guardian/interfac
 import { BaseEntity, DataBaseHelper } from '@guardian/common';
 import { PolicyInvitations } from '@entity/policy-invitations';
 import { MultiDocuments } from '@entity/multi-documents';
+import { Goal as GoalCollection } from '@entity/goal';
 
 /**
  * Database server
@@ -40,6 +41,7 @@ export class DatabaseServer {
         this.classMap.set(VpDocumentCollection, 'VpDocumentCollection');
         this.classMap.set(DidDocumentCollection, 'DidDocumentCollection');
         this.classMap.set(SchemaCollection, 'SchemaCollection');
+        this.classMap.set(GoalCollection, 'GoalCollection');
         this.classMap.set(DocumentState, 'DocumentState');
         this.classMap.set(Policy, 'Policy');
         this.classMap.set(AggregateVC, 'AggregateVC');
@@ -1136,6 +1138,55 @@ export class DatabaseServer {
             system: true,
             active: true
         });
+    }
+
+    /**
+     * Get goals
+     * @param filters
+     */
+    public static async getGoalsAndCount(filters?: any, options?: any): Promise<[GoalCollection[], number]> {
+        return await new DataBaseHelper(GoalCollection).findAndCount(filters, options);
+    }
+
+    /**
+     * Update goal
+     * @param goalId
+     * @param item
+     */
+    public static async updateGoal(goalId: any, item: GoalCollection): Promise<void> {
+        await new DataBaseHelper(GoalCollection).update(item, { _id: goalId });
+    }
+
+    /**
+     * Create goal
+     * @param item
+     */
+    public static createGoal(item: Partial<GoalCollection>): GoalCollection {
+        return new DataBaseHelper(GoalCollection).create(item);
+    }
+
+    /**
+     * Save goal
+     * @param item
+     */
+    public static async saveGoal(item: GoalCollection): Promise<GoalCollection> {
+        return await new DataBaseHelper(GoalCollection).save(item);
+    }
+
+    /**
+     * Get goals
+     * @param filters
+     */
+    public static async getGoals(filters?: any, options?: any): Promise<GoalCollection[]> {
+        return await new DataBaseHelper(GoalCollection).find(filters, options);
+    }
+
+    /**
+     * Get goal
+     * @param filters
+     */
+    public static async getGoal(filters?: any): Promise<GoalCollection> {
+        return await new DataBaseHelper(GoalCollection).findOne(filters);
     }
 
     /**
