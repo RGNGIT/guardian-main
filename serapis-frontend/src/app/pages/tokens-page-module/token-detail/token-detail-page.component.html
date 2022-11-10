@@ -1,0 +1,82 @@
+
+<ng-template class="loading" #async>
+  <async-progress
+    [fullPage]="true"
+    class="loading-progress" [taskId]="taskId"
+    [expected]="expectedTaskMessages"
+    (error)="onAsyncError($event)"
+    (completed)="onAsyncCompleted()">
+  </async-progress>
+</ng-template>
+
+<ng-container *ngIf="!(taskId); else async">
+  <div class="buttons flex-row flex-align-center">
+    <mat-icon class="back-button" routerLink="..">keyboard_backspace</mat-icon>
+    <div class="top-block">
+      <span class="users-span">Users</span>
+      <span class="token-span">Token ID {{tokenId}}</span>
+      <span >
+        <a [href]="tokenUrl + tokenId" target="_blank" class="hedera-link">
+            <span>Open In Hedera</span>
+        </a>
+      </span>
+    </div>
+
+  </div>
+  <div>
+    <app-data-grid [data]="data">
+      <ng-template #actionsCellTempl let-element="element">
+        <div class="flex-row flex-align-center hedera-link" style="margin-left: 0" (click)="refresh(element)" >
+          <span *ngIf="!element.loading">Refresh</span>
+          <mat-icon *ngIf="!element.loading"
+                    style="margin-left: 10px"
+                    class="icons"
+                    svgIcon="refresh"
+                    aria-hidden="false">
+          </mat-icon>
+          <div class="lds" *ngIf="element.loading"><div></div><div></div><div></div></div>
+        </div>
+
+      </ng-template>
+      <ng-template #assocCell let-element="element">
+        <ng-container
+          [ngTemplateOutlet]="yesNoNa"
+          [ngTemplateOutletContext]="{element: element.associated}"
+        ></ng-container>
+      </ng-template>
+      <ng-template #kycCell let-element="element">
+        <div class="flex-row flex-align-center">
+          <ng-container
+            [ngTemplateOutlet]="yesNoNa"
+            [ngTemplateOutletContext]="{element: element.kyc}"
+          ></ng-container>
+          <span class="link-button" *ngIf="element.associated">
+          <span *ngIf="!element.kyc" (click)="kyc(element, true)">Grant KYC</span>
+          <span *ngIf="element.kyc" (click)="kyc(element, false)">Revoke KYC</span>
+        </span>
+        </div>
+      </ng-template>
+      <ng-template #frozenCell let-element="element">
+        <div class="flex-row flex-align-center">
+          <ng-container
+            [ngTemplateOutlet]="yesNoNa"
+            [ngTemplateOutletContext]="{element: element.frozen}"
+          ></ng-container>
+          <span class="link-button" *ngIf="element.associated">
+          <span *ngIf="!element.frozen" (click)="freeze(element, true)">Freeze</span>
+          <span *ngIf="element.frozen" (click)="freeze(element, false)">Unfreeze</span>
+        </span>
+        </div>
+      </ng-template>
+    </app-data-grid>
+  </div>
+</ng-container>
+
+
+<ng-template #yesNoNa let-element="element">
+  <div [ngSwitch]="element" class="yes-no-block" [class.yes]="element === true" [class.no]="element === false">
+    <span *ngSwitchCase="true">Yes</span>
+    <span *ngSwitchCase="false">No</span>
+    <span *ngSwitchDefault>n/a</span>
+  </div>
+</ng-template>

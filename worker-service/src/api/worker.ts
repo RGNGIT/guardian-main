@@ -409,12 +409,20 @@ export class Worker {
                 }
 
                 case WorkerTaskType.FREEZE_TOKEN: {
-                    const {hederaAccountId, hederaAccountKey, freezeKey, freeze, tokenId, dryRun} = task.data;
+                    const { 
+                        hederaAccountId,
+                        hederaAccountKey,
+                        userHederaAccountId,
+                        tokenId,
+                        freezeKey,
+                        freeze,
+                        dryRun
+                    } = task.data;
                     const client = new HederaSDKHelper(hederaAccountId, hederaAccountKey, dryRun);
                     if (freeze) {
-                        result.data = await client.freeze(tokenId, hederaAccountId, freezeKey);
+                        result.data = await client.freeze(tokenId, userHederaAccountId, freezeKey); 
                     } else {
-                        result.data = await client.unfreeze(tokenId, hederaAccountId, freezeKey);
+                        result.data = await client.unfreeze(tokenId, userHederaAccountId, freezeKey); 
                     }
 
                     break;

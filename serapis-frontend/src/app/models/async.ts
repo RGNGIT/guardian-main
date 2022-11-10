@@ -20,3 +20,8 @@ export interface IStatus {
    */
   type: StatusType;
 }
+
+export interface IPushResponse {
+  taskId: string;
+  expectation: number;
+}

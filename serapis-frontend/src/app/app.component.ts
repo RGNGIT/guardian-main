@@ -12,7 +12,7 @@ import {WebSocketService} from "@app/services/web-socket.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'serapis-frontend';
+  title = 'Serapis';
 
   get showHeader(): Observable<IAuthUser | null> {
     return this._userService.currentUser;

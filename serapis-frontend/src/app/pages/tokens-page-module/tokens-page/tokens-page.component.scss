@@ -1,0 +1,88 @@
+@use 'abstracts' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+.buttons {
+  height: 104px;
+}
+
+.hedera-link {
+  margin-left: 20px;
+  color: #E1E1E1;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  text-underline: none;
+}
+
+.hedera-link:hover {
+  color: #1960EC;
+}
+
+.icons {
+  margin-left: 10px;
+  width: 16px;
+  height: 16px;
+}
+
+app-serapis-button {
+  display: inline-block;
+  height: 48px;
+  margin-left: 24px;
+}
+
+.checkbox + .checkbox {
+  margin-top: 28px;
+}
+
+.checkboxes {
+  margin-top: 32px;
+}
+
+.body {
+  max-width: 500px;
+  padding: 0 16px;
+}
+
+.half-width {
+  width: 50%;
+}
+
+app-serapis-button {
+  min-width: 160px;
+}
+
+.footer {
+  text-align: right;
+  padding: 32px;
+}
+
+.yes-no-block {
+  height: 32px;
+  width: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yes {
+  background: #C7E8AE; color: #157C83;
+}
+.no {
+  background: #FFDCD5; color: #FE4444;
+}
+
+.link-button {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.link-button:hover {
+  color: #1960EC;
+}

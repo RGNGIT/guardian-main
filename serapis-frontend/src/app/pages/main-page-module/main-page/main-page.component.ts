@@ -1,14 +1,12 @@
 import {Component, OnDestroy} from "@angular/core";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
-import {AUDITOR_MENU, DEFAULT_MENU, ROOT_AUTHORITY_MENU} from "@app/constants/menu";
+import {AUDITOR_MENU, DEFAULT_MENU, INSTALLER_MENU, ROOT_AUTHORITY_MENU} from "@app/constants/menu";
 import {UserService} from "@app/services/user.service";
 import {HeaderMenuService} from "@app/services/header-menu.service";
 import {Router} from "@angular/router";
 import {LoaderService} from "@app/services/loader-service";
-import {combineLatest, filter, Observable, Subscription} from "rxjs";
-import {URLS_PATHS} from "@app/constants/path";
+import {combineLatest, filter, Subscription} from "rxjs";
 import {USER_ROLES} from "@app/enums/user-roles";
-import {IAuthUser} from "@app/models/user";
 
 @UntilDestroy()
 @Component({
@@ -41,6 +39,9 @@ export class MainPageComponent implements OnDestroy {
           break;
         case USER_ROLES.AUDITOR:
           this._headerMenuService.currentMenuItems.next(AUDITOR_MENU);
+          break;
+        case USER_ROLES.USER:
+          this._headerMenuService.currentMenuItems.next(INSTALLER_MENU);
           break;
         default:
           this._headerMenuService.currentMenuItems.next(DEFAULT_MENU);

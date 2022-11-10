@@ -5,6 +5,7 @@ import {
     IChainItem,
     IDidObject,
     ISchema,
+    IGoal,
     IToken,
     ITokenInfo,
     IUser,
@@ -372,6 +373,64 @@ export class Guardians extends ServiceRequestsBase {
      */
     public async generateDemoKeyAsync(role: string, taskId: string): Promise<any> {
         return await this.request(MessageAPI.GENERATE_DEMO_KEY_ASYNC, { role, taskId });
+    }
+
+    /**
+     * Return goals
+     * @param {string} did
+     * @param {string} [pageIndex]
+     * @param {string} [pageSize]
+     * @param {Date} [startDate]
+     * @param {Date} [endDate]
+     *
+     * @returns {IGoal[]} - all goals
+     */
+    public async getGoals<T extends {
+        /**
+         * Goals array
+         */
+        goals: IGoal[],
+        /**
+         * Total count
+         */
+        count: number
+    }>(
+        did: string,
+        pageIndex?: any,
+        pageSize?: any,
+        startDate?: Date,
+        endDate?: Date
+    ): Promise<T> {
+        console.log('test')
+        return await this.request<T>(MessageAPI.GET_GOALS, {
+            did,
+            pageIndex,
+            pageSize,
+            startDate,
+            endDate,
+        });
+    }
+
+    /**
+     * Create goal
+     *
+     * @param {IGoal} item - goal
+     *
+     * @returns {IGoal[]} - all goals
+     */
+    public async createGoal(item: IGoal | any): Promise<IGoal[]> {
+        return await this.request<IGoal[]>(MessageAPI.CREATE_GOAL, item);
+    }
+
+    /**
+     * Update schema
+     *
+     * @param {IGoal} item - goal
+     *
+     * @returns {IGoal[]} - all goals
+     */
+    public async updateGoal(item: IGoal | any): Promise<IGoal[]> {
+        return await this.request<IGoal[]>(MessageAPI.UPDATE_GOAL, item);
     }
 
     /**

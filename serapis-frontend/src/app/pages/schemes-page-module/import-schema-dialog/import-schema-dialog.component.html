@@ -14,9 +14,9 @@
             <input matInput type="text" placeholder="Message timestamp" formControlName="timestamp">
           </mat-form-field>
           <div mat-dialog-actions>
-            <button mat-raised-button color="primary" type="submit"
-                    [disabled]="!dataForm.valid">Ok</button>
-            <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+            <app-serapis-button title="Ok" type="filled" style="height: 35px"
+                    [disabled]="!dataForm.valid"></app-serapis-button>
+            <app-serapis-button title="Cancel" type="empty" style="height: 35px; margin-left: 20px" (click)="onNoClick()"></app-serapis-button>
           </div>
         </form>
       </div>

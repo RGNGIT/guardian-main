@@ -1,6 +1,6 @@
 <div class="wrapper">
   <mat-progress-bar mode="buffer" [value]="progressValue"></mat-progress-bar>
-  <div [class.fullpage]="fullPage">
+  <div class="progress-container" [class.fullpage]="fullPage">
     <div *ngFor="let status of statuses" class="flex-row justify-between status-item">
       <div [class.info]="isInfo(status)">
         <span *ngIf="isInfo(status)">INFO: </span>{{ status.message }}

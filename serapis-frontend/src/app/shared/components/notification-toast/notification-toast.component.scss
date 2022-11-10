@@ -1,0 +1,47 @@
+@use "abstracts" as *;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 8px;
+  filter: drop-shadow(0px 12px 16px rgba(0, 0, 0, 0.06));
+
+  &.success {
+    background-color: $success-bg-color;
+    color: $success-color;
+  }
+
+  &.error {
+    background-color: $error-bg-color;
+    color: $error-color;
+  }
+
+  &.info {
+    background-color: $info-bg-color;
+    color: $info-color;
+  }
+
+  &.warning {
+    // todo there are not colors for Warning
+    background-color: $gray-bg-color;
+    color: gray;
+  }
+}
+
+.message {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+}
+
+.close-icon {
+  display: flex;
+  padding: 6px;
+  box-sizing: border-box;
+  cursor: pointer;
+}

@@ -119,7 +119,7 @@ export class WebSocketService {
     console.log(this.socket)
     this.socketSubscription = this.socket?.subscribe(
       (m: any) => {
-        console.log(m)
+        // console.log(m)
         this.accept(m);
       },
       (error: Event) => {
@@ -194,10 +194,10 @@ export class WebSocketService {
         case MessageAPI.UPDATE_STATUS:
           this.updateStatus(event.data);
           const allStatesReady = !this.serviesStates.find((item: any) => item.state !== ApplicationStates.READY)
-          if (!allStatesReady) {
-            const last = location.pathname === '/status' ? null : btoa(location.href);
-            this.router.navigate(['/status'], { queryParams: { last } });
-          }
+          // if (!allStatesReady) {
+          //   const last = location.pathname === '/status' ? null : btoa(location.href);
+          //   this.router.navigate(['/status'], { queryParams: { last } });
+          // }
           this.servicesReady.next(allStatesReady);
           break;
         case 'update-event': {

@@ -1,7 +1,5 @@
 import {NgModule} from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-import {DashboardComponent} from "../dashboard-page/dashboard.component";
-import {GoalsComponent} from "../goals-page/goals.component";
 import {MainPageComponent} from "./main-page/main-page.component";
 import {AuthGuard} from "@app/services/guards/auth.guard";
 import {replaceUrlFirstSlash} from "@app/utils/utils";
@@ -21,16 +19,6 @@ const routes: Routes = [
     component: MainPageComponent,
     children: [
       {
-        path: 'dashboard-page',
-        component: DashboardComponent,
-        canActivate: [ AuthGuard, ConfirmedUserGuard ]
-      },
-      {
-        path: 'goals-page',
-        component: GoalsComponent,
-        canActivate: [ AuthGuard, ConfirmedUserGuard ]
-      },
-      {
         path: 'config',
         loadChildren: () => import('../config-page-module/config-page.module').then(
           m => m.ConfigPageModule
@@ -45,6 +33,20 @@ const routes: Routes = [
         canLoad: [ AuthGuard, ConfirmedUserGuard ]
       },
       {
+        path: 'goals',
+        loadChildren: () => import('../goals-page-module/goals-page.module').then(
+          m => m.GoalsPageModule
+        ),
+        canLoad: [ AuthGuard, /*ConfirmedUserGuard*/ ]
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('../dashboard-page-module/dashboard-page.module').then(
+          m => m.DashboardPageModule
+        ),
+        canLoad: [ AuthGuard, /*ConfirmedUserGuard*/ ]
+      },
+      {
         path: replaceUrlFirstSlash(URLS_PATHS.finishRegistration),
         loadChildren: () => import('../finish-registration/finish-registration.module').then(
           m => m.FinishRegistrationModule
@@ -55,6 +57,13 @@ const routes: Routes = [
         path: replaceUrlFirstSlash(URLS_PATHS.policies.base),
         loadChildren: () => import('../policies-page-module/policies-page.module').then(
           m => m.PoliciesPageModule
+        ),
+        canLoad: [ AuthGuard, ConfirmedUserGuard ]
+      },
+      {
+        path: replaceUrlFirstSlash(URLS_PATHS.tokens.base),
+        loadChildren: () => import('../tokens-page-module/tokens-page.module').then(
+          m => m.TokensPageModule
         ),
         canLoad: [ AuthGuard, ConfirmedUserGuard ]
       }

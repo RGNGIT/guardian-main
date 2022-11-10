@@ -3,12 +3,12 @@ import {DataGrid} from "@app/shared/components/data-grid/data-grid.model";
 import {PoliciesService} from "@app/services/policies.service";
 import {LoaderService} from "@app/services/loader-service";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
-import {delay, finalize, take} from "rxjs";
+import {catchError, delay, finalize, take, throwError} from "rxjs";
 import {Dialog} from "@angular/cdk/dialog";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {UserService} from "@app/services/user.service";
 import {formatBytes} from  "@app/utils/utils";
-import {IPolicy, IPolicyUploadPreview} from "../../../models/policy";
+import {IPolicy, IPolicyUploadPreview} from "@app/models/policy";
 import {TasksService} from "@app/services/task.service";
 
 enum OperationMode {
@@ -46,8 +46,13 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
   });
   asyncProcess: boolean = false;
   mode: OperationMode = OperationMode.None;
+
   taskId: string | undefined = undefined;
   expectedTaskMessages: number = 0;
+
+  importTaskId: string | undefined = undefined;
+  importExpectedTaskMessages: number = 0;
+
   files: any[] = [];
   fileInfo!: IPolicyUploadPreview | null;
   modalLoading = false;
@@ -85,8 +90,6 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
       this.taskId = taskId;
       this.expectedTaskMessages = expectation;
       this.mode = OperationMode.Create;
-    }, (e) => {
-      this.asyncProcess = false;
     });
   }
 
@@ -198,35 +201,54 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
   }
 
   sendFile(): void {
-    const reader = new FileReader()
-    reader.readAsArrayBuffer(this.files[0]);
-    console.log(this.files[0].data)
-    reader.addEventListener('load', (e: any) => {
-      this.fileData = e.target.result;
-      this.modalLoading = true;
-      this._policyApi.previewByFile(this.fileData)
-        .pipe(
-          delay(2000),
-          untilDestroyed(this),
-          take(1),
-          finalize(() => {
-            this.modalLoading = false;
-          })
-        )
-        .subscribe((result) => {
-          this.fileInfo = result;
-          const schemas = result.schemas || [];
-          const tokens = result.tokens || [];
+    const messageId = this.fileForm.get('timestamp')?.value
+    if (!!messageId) {
+      this._policyApi.pushPreviewByMessage(messageId).pipe(
+        catchError((err) => {
+          this.clearUploadInfo();
+          return throwError(() => err)
+        })
+      ).subscribe((result) => {
+        const { taskId, expectation } = result;
+        this.importTaskId = taskId;
+        this.importExpectedTaskMessages = expectation;
+      });
+    } else {
+      const reader = new FileReader()
+      reader.readAsArrayBuffer(this.files[0]);
+      console.log(this.files[0].data)
+      reader.addEventListener('load', (e: any) => {
+        this.fileData = e.target.result;
+        this.modalLoading = true;
+        this._policyApi.previewByFile(this.fileData)
+          .pipe(
+            delay(2000),
+            untilDestroyed(this),
+            take(1),
+            finalize(() => {
+              this.modalLoading = false;
+            })
+          )
+          .subscribe((result) => {
+            this.fileInfo = result;
+            this.schemas = this.getSchemas(result.schemas || []);
+            this.tokens = this.getTokens(result.tokens || []);
+          });
+      });
+    }
+  }
 
-          this.schemas = schemas.map((s: any) => {
-            if (s.version) {
-              return `${s.name} (${s.version})`;
-            }
-            return s.name;
-          }).join(', ');
-          this.tokens = tokens.map((s: any) => s.tokenName).join(', ');
-        });
-    });
+  private getTokens(data: any[]): string {
+    return data.map((s: any) => s.tokenName).join(', ');
+  }
+
+  private getSchemas(data: any[]): string {
+    return data.map((s: any) => {
+      if (s.version) {
+        return `${s.name} (${s.version})`;
+      }
+      return s.name;
+    }).join(', ');
   }
 
   public publish(): void {
@@ -242,16 +264,29 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
 
   importPolicyButtonHandler(): void {
     this.modalLoading = true;
-    this._policyApi.pushImportByFile(this.fileData, this.versionOfTopicId || '')
-      .pipe(finalize(() => this.modalLoading = false))
-      .subscribe( result => {
-      const { taskId, expectation } = result;
-      this.taskId = taskId;
-      this.expectedTaskMessages = expectation;
-      this.mode = OperationMode.Import;
-      this._dialog.closeAll();
-      this.clearUploadInfo();
-    });
+    const messageId = this.fileForm.get('timestamp')?.value
+    if(!!messageId) {
+      this._policyApi.pushImportByMessage(messageId, this.versionOfTopicId || '').subscribe(
+        (result) => {
+          const { taskId, expectation } = result;
+          this.taskId = taskId;
+          this.expectedTaskMessages = expectation;
+          this.mode = OperationMode.Import;
+          this._dialog.closeAll();
+          this.clearUploadInfo();
+        });
+    } else {
+      this._policyApi.pushImportByFile(this.fileData, this.versionOfTopicId || '')
+        .pipe(finalize(() => this.modalLoading = false))
+        .subscribe( result => {
+          const { taskId, expectation } = result;
+          this.taskId = taskId;
+          this.expectedTaskMessages = expectation;
+          this.mode = OperationMode.Import;
+          this._dialog.closeAll();
+          this.clearUploadInfo();
+        });
+    }
   }
 
   private getDistinctPolicy(policies: IPolicy[]): any[] {
@@ -278,6 +313,9 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
     this.fileInfo = null;
     this.files = [];
     this.versionOfTopicId = null;
+    this.fileForm = this._fb.group({
+      timestamp: ['', Validators.required]
+    });
   }
 
   setPolicyActive(element: IPolicy) {
@@ -337,7 +375,7 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
 
   setDryRun(element: IPolicy) {
     this._policyApi.dryRun(element.id).subscribe((data: any) => {
-      const { policies, isValid, errors } = data;
+      const { isValid, errors } = data;
       if (!isValid) {
         let text = [];
         const blocks = errors.blocks;
@@ -361,9 +399,23 @@ export class PoliciesPageComponent implements AfterViewInit, OnInit {
   }
 
   stop(element: any) {
-    this._policyApi.draft(element.id).subscribe((data: any) => {
-      const { policies, isValid, errors } = data;
+    this._policyApi.draft(element.id).subscribe(_ => {
       this.loadPolicy();
     });
+  }
+
+  onImportAsyncCompleted() {
+    if (this.importTaskId) {
+      const taskId: string = this.importTaskId;
+      this.importTaskId = undefined;
+      this._taskService.get(taskId).pipe(catchError((err) => {
+        this.clearUploadInfo();
+        return throwError(() => err)
+      })).subscribe((data) => {
+        this.fileInfo = data.result;
+        this.schemas = this.getSchemas(data.result.schemas || []);
+        this.tokens = this.getTokens(data.result.tokens || []);
+      });
+    }
   }
 }

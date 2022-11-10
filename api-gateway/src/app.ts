@@ -7,7 +7,8 @@ import {
     tokenAPI,
     externalAPI,
     ipfsAPI,
-    dashboardAPI
+    dashboardAPI,
+    goalAPI
 } from '@api/service';
 import { Guardians } from '@helpers/guardians';
 import express from 'express';
@@ -51,14 +52,14 @@ Promise.all([
 
     const server = createServer(app);
     const wsService = new WebSocketsService(server, apiGatewayChannel);
-    wsService.init();
+    wsService.init(); 
 
     new TaskManager().setDependecies(wsService, apiGatewayChannel);
 
     ////////////////////////////////////////
 
     const corsOpt = {
-        origin: "*",
+        origin: '*',
         optionsSuccessStatus: 200
     };
 
@@ -73,6 +74,7 @@ Promise.all([
     app.use('/settings/', authorizationHelper, settingsAPI);
     app.use('/schema', authorizationHelper, singleSchemaRoute);
     app.use('/schemas', authorizationHelper, schemaAPI);
+    app.use('/goals', authorizationHelper, goalAPI);
     app.use('/tokens', authorizationHelper, tokenAPI);
     app.use('/trustchains/', authorizationHelper, trustchainsAPI);
     app.use('/external/', externalAPI);

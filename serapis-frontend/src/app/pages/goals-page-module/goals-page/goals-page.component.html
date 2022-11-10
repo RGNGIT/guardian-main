@@ -1,0 +1,52 @@
+<div class="goals-header-container">
+  <div class="goals-title">Goals</div>
+
+  <div class="goals-filters">
+    <!--    <div class="date-filter">-->
+    <!--      <span class="filter-title">Date Range:</span>-->
+
+    <!--      <mat-form-field appearance="fill">-->
+    <!--        <mat-label>Enter a date range</mat-label>-->
+    <!--        <mat-date-range-input [rangePicker]="picker">-->
+    <!--          <input matStartDate placeholder="Start date" />-->
+    <!--          <input matEndDate placeholder="End date" />-->
+    <!--        </mat-date-range-input>-->
+    <!--        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+    <!--        <mat-date-range-picker #picker></mat-date-range-picker>-->
+    <!--      </mat-form-field>-->
+    <!--    </div>-->
+    <!--    <div class="status-filter">-->
+    <!--      <span class="filter-title">Status:</span-->
+    <!--      ><span class="status-label">Active</span>-->
+    <!--    </div>-->
+  </div>
+
+  <app-serapis-button
+    title="Add New Goal"
+    type="filled"
+    class="add-new-goal-button"
+    (click)="handleAddNewGoal()"
+  >
+    <mat-icon class="action-icon" svgIcon="plus" aria-hidden="false"></mat-icon>
+  </app-serapis-button>
+</div>
+
+<div class="goals-main-container">
+  <app-data-grid [data]="data">
+    <ng-template #actionsColumnCellTemplate let-element="element">
+      <div class="actions-column-cell">
+        <div
+          class="edit-icon"
+          (click)="handleEditGoal(element)"
+          matTooltip="Edit"
+          matTooltipPosition="above"
+        >
+          <mat-icon
+            svgIcon="edit"
+            aria-hidden="false"
+            class="schema-action-icon"
+          ></mat-icon>
+        </div></div
+    ></ng-template>
+  </app-data-grid>
+</div>

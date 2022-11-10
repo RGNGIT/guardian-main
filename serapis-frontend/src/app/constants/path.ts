@@ -9,5 +9,8 @@ export const URLS_PATHS: any = {
   finishRegistration: '/finish-registration',
   policies: {
     base: '/policies'
+  },
+  tokens: {
+    base: '/tokens'
   }
 }

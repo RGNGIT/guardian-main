@@ -2,11 +2,10 @@ import { Guardians } from '@helpers/guardians';
 import { permissionHelper } from '@auth/authorization-helper';
 import { Response, Router } from 'express';
 import { IToken, ITokenInfo, UserRole } from '@guardian/interfaces';
-import { AuthenticatedRequest, IAuthUser, Logger } from '@guardian/common';
+import { AuthenticatedRequest, Logger } from '@guardian/common';
 import { PolicyEngine } from '@helpers/policy-engine';
 import { findAllEntities } from '@helpers/utils';
 import { TaskManager } from '@helpers/task-manager';
-import axios from 'axios';
 
 /**
  * Token route
@@ -45,76 +44,7 @@ function setTokensPolicies<T>(tokens: any[], policies: any[], policyId?: any, no
     return tokens;
 
 }
-/*
-async function setAssociatedUsersAmount(tokens: IToken[], authUser: IAuthUser): Promise<IToken[]> {
-    const mirrornodeUserRequest = async (hederaAccountId) => {
-        const res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts?account.id=${hederaAccountId}`);
-        return res;
-    };
-    const checkToken = (hederaUserInfo, tokenId): boolean => {
-        if(hederaUserInfo['accounts']) {
-            for(const token of hederaUserInfo['accounts'][0]['balance']['tokens']) {
-                if(tokenId == token.token_id) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    };
-    if (!tokens) {
-        return [];
-    }
-    const userRepository = new Users();
-    const users = await userRepository.getAllUserAccounts() as {username}[];
-    
-    for(const token of tokens) {
-        token.userAmount = 0;
-        for(const user of users) {
-            const currentUser = await userRepository.getUser(user.username) as {hederaAccountId};
-            if(currentUser.hederaAccountId) {
-                const hederaUserInfo = await mirrornodeUserRequest(currentUser.hederaAccountId);
-                if(checkToken(hederaUserInfo, token.tokenId)) {
-                    token.userAmount++;
-                }
-            }
-        }
-    }
-    return tokens;
-}
 
-tokenAPI.get('/shit', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const guardians = new Guardians();
-        const engineService = new PolicyEngine();
-
-        const user = req.user;
-        const policyId = req.query?.policy;
-
-        let tokens: IToken[] = [];
-        if (user.role === UserRole.STANDARD_REGISTRY) {
-            tokens = await guardians.getTokens({ did: user.did });
-            const { policies } = await engineService.getPolicies({ filters: { owner: user.did } });
-            tokens = setTokensPolicies(tokens, policies, policyId, false);
-            tokens = await setAssociatedUsersAmount(tokens, user);
-        } else if (user.did) {
-            tokens = await guardians.getAssociatedTokens(user.did);
-            const { policies } = await engineService.getPolicies({
-                filters: {
-                    status: 'PUBLISH',
-                    owner: user.parent
-                }
-            });
-            tokens = setTokensPolicies(tokens, policies, policyId, true);
-            tokens = await setAssociatedUsersAmount(tokens, user);
-        }
-        res.status(200).json(tokens);
-    } catch (error) {
-        new Logger().error(error, ['API_GATEWAY']);
-        res.status(500).send({ code: error.code || 500, message: error.message });
-    }
-});
-*/
 tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.USER), async (req: AuthenticatedRequest, res: Response) => {
     try {
         const guardians = new Guardians();
@@ -410,7 +340,6 @@ tokenAPI.put('/:tokenId/:username/freeze', permissionHelper(UserRole.STANDARD_RE
             return;
         }
         const result = await guardians.freezeToken(tokenId, username, owner);
-
         res.status(200).json(result);
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);

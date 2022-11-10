@@ -9,3 +9,4 @@ export {ipfsAPI} from '@api/service/ipfs'
 export {loggerAPI} from '@api/service/logger';
 export {settingsAPI} from '@api/service/settings';
 export {dashboardAPI} from '@api/service/dashboard';
+export {goalAPI} from '@api/service/goals';

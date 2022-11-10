@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, catchError, Observable, Subject, throwError} from "rxjs";
+import {BehaviorSubject, catchError, Observable, Subject, switchMap, throwError} from "rxjs";
 import {IAuthUser, IStandardRegistryAccount, IStandardRegistryAccountResponse, IUserProfile} from "@app/models/user";
 import {LocalStorageService} from "@app/services/local-storage";
 import {HttpClient} from "@angular/common/http";
 import {API_URLS} from "@app/constants/api";
 import {Router} from "@angular/router";
 import {URLS_PATHS} from "@app/constants/path";
+import {BaseResponse} from "@app/models/base-response";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class UserService {
     if(this.currentUser.value != null) {
       this.loadProfile();
     }
+  }
+
+  get currentRole(): string {
+    return this.currentUser.value?.role || '';
   }
 
   get userName(): string {
@@ -103,4 +108,7 @@ export class UserService {
     return this._http.get<any>(API_URLS.accounts.balance);
   }
 
+  public getUsers(): Observable<BaseResponse<IAuthUser[], any>> {
+    return this._http.get<BaseResponse<IAuthUser[], any>>(API_URLS.accounts.all);
+  }
 }

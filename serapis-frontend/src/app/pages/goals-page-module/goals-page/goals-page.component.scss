@@ -1,0 +1,46 @@
+.goals-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 45px 25px 45px 25px;
+}
+
+.goals-title {
+  font-size: 24px;
+}
+
+.add-new-goal-button {
+  width: 184px;
+  height: 48px;
+}
+
+.goals-filters {
+  display: flex;
+  align-items: center;
+}
+
+.filter-title {
+  color: rgba(51, 51, 51, 0.35);
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.status-filter {
+  margin-left: 30px;
+}
+
+.status-label {
+  color: rgba(25, 96, 236, 1);
+}
+
+.edit-icon {
+  cursor: pointer;
+  color: rgba(51, 51, 51, 0.15);
+}
+
+.edit-icon:hover {
+  color: rgba(25, 96, 236, 1);
+}
+
+.goals-main-container {
+}

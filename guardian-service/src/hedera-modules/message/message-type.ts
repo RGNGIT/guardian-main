@@ -10,5 +10,6 @@ export enum MessageType {
     Schema = 'Schema',
     Topic = 'Topic',
     StandardRegistry = 'Standard Registry',
-    Token = 'Token'
+    Token = 'Token',
+    Goal = 'Goal'
 }

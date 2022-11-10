@@ -13,16 +13,14 @@ import {Observable} from "rxjs";
 export class HeaderComponent implements OnInit {
 
   menuItems: Observable<NavItem[]> = this._headMenuService.currentMenuItems;
+  userName = this._userService.userName;
+  userLetters = this.userName.split(/[\s,. ]+/).map( item => item.charAt(0)).join('').toUpperCase();
 
   constructor(private _headMenuService: HeaderMenuService, private _userService: UserService) {
 
   }
 
   ngOnInit(): void {}
-
-  get userName(): string {
-    return this._userService.userName
-  }
 
   logoutHandler() {
     this._userService.logout();
