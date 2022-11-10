@@ -140,7 +140,7 @@ tokenAPI.get('/:tokenId', permissionHelper(UserRole.STANDARD_REGISTRY, UserRole.
             tokens = setTokensPolicies(tokens, policies, policyId, true);
         }
         for(const token of tokens) {
-            if(token.tokenId == tokenId) {
+            if(token.tokenId === tokenId) {
                 res.status(200).json(token);
                 return;
             }
@@ -410,6 +410,7 @@ tokenAPI.put('/:tokenId/:username/freeze', permissionHelper(UserRole.STANDARD_RE
             return;
         }
         const result = await guardians.freezeToken(tokenId, username, owner);
+
         res.status(200).json(result);
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
