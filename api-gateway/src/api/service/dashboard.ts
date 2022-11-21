@@ -6,7 +6,7 @@ import { Users } from '@helpers/users';
 import { IVCDocument } from '@guardian/interfaces';
 import { Temporal } from '@js-temporal/polyfill';
 
-const {IANA_TIMEZONE} = process.env;
+// const {IANA_TIMEZONE} = process.env;
 
 enum StatusType {
     ACTIVE = 'Active',
@@ -14,8 +14,8 @@ enum StatusType {
 };
 
 enum EmissionType {
-    CURRENT_EMISSION = 0,
-    TOTAL_EMISSION = 1
+    CURRENT_RANGE_EMISSION = 0,
+    // TOTAL_EMISSION = 1
 };
 
 enum TrendType {
@@ -29,8 +29,8 @@ interface IDashboardDevice {
     deviceId: string;
     deviceName: string;
     status: string;
-    currentEmission: {value: number, trend: string};
-    totalEmission: {value: number, trend: string};
+    currentRangeEmission: {value: number, trend: string};
+    // totalEmission: {value: number, trend: string};
 }
 
 interface ITokenMeta {
@@ -51,7 +51,7 @@ class TokensData {
 
     calculatePercents() {
         const f = (x: number, y: number): number => {
-            return Math.round((x / y) * 100);
+            return y !== 0 ? Math.round((x / y) * 100) : -1;
         };
         this.CETOfAllPercent = f(this.periodCETValue, this.totalCETValue);
         this.CRUOfAllPercent = f(this.periodCRUValue, this.totalCRUValue);
@@ -69,7 +69,7 @@ const isWithinPeriod = (dateToCheck: Temporal.PlainDateTime, from: Temporal.Plai
     };
     return check('year') && check('month') && check('day');
 };
-
+/*
 const isCurrentYearQuarter = (emissionDate): boolean => {
     const today = new Date();
     const eDate = new Date(emissionDate);
@@ -87,7 +87,7 @@ const isLastFifteenMin = (emissionDate): boolean => {
 const fixDateTime = (date: Temporal.PlainDateTime, ianaFrom: string) => {
     return date.toZonedDateTime(IANA_TIMEZONE);
 };
-
+*/
 // Tokens Logic
 // TODO: Adjusting for actual policy
 async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<TokensData> {
@@ -146,13 +146,17 @@ function resolveTrend(id: string, emissionType: number, value: number): string {
     for(const device of prevDeviceValues) {
         if(device.deviceId === id) {
             switch(emissionType) {
-                case EmissionType.CURRENT_EMISSION:
-                    if(device.currentEmission.value == value) return TrendType.STILL;
-                    return device.currentEmission.value > value ? TrendType.DOWN : TrendType.UP;
+                case EmissionType.CURRENT_RANGE_EMISSION:
+                    if(device.currentRangeEmission.value == value) return TrendType.STILL;
+                    return device.currentRangeEmission.value > value ? TrendType.DOWN : TrendType.UP;
+                /*
                 case EmissionType.TOTAL_EMISSION:
                     if(device.totalEmission.value == value) return TrendType.STILL;
                     return device.totalEmission.value > value ? TrendType.DOWN : TrendType.UP;
-                default: break;
+                */
+                default: 
+                    console.log(`Unknown emission type ${emissionType}`);
+                break;
             }
         }
     }
@@ -175,7 +179,7 @@ function sortByDate(records: IVCDocument[]): IVCDocument[] {
     });
 }
 // TODO: Adjusting for actual policy
-async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: string[]): Promise<IDashboardDevice[]> {
+async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: string[], {from, to}): Promise<IDashboardDevice[]> {
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
         temp.push({
@@ -183,12 +187,13 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
             deviceId: id,
             deviceName: await resolveDeviceName(id),
             status: StatusType.ACTIVE, // TODO: Resolve status
-            currentEmission: {value: 0, trend: null},
-            totalEmission: {value: 0, trend: null},
+            currentRangeEmission: {value: 0, trend: null},
+            // totalEmission: {value: 0, trend: null},
         });
         const item = temp[temp.length - 1];
         for(const record of records) {
             if(record['document']['issuer'] === id) {
+                /*
                 // P15M
                 // Emission from the last 15 min block
                 if(isLastFifteenMin(record['document']['credentialSubject'][0]['field0'])) {
@@ -198,10 +203,15 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
                 if(isCurrentYearQuarter(record['document']['credentialSubject'][0]['field0'])) {
                     item.totalEmission.value += Number(record['document']['credentialSubject'][0]['field1']);   
                 }
+                */
+                // By period
+                if(isWithinPeriod(record['document']['credentialSubject'][0]['field0'], from, to)) {
+                    item.currentRangeEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
+                }
             }
         }
-        item.currentEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_EMISSION, item.currentEmission.value);
-        item.totalEmission.trend = resolveTrend(item.deviceId, EmissionType.TOTAL_EMISSION, item.totalEmission.value);
+        item.currentRangeEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_RANGE_EMISSION, item.currentRangeEmission.value);
+        // item.totalEmission.trend = resolveTrend(item.deviceId, EmissionType.TOTAL_EMISSION, item.totalEmission.value);
     }
     return temp;
 }
@@ -215,11 +225,11 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
     const guardians = new Guardians();
     try {
         const policyId = req.params.policyId;
-        const type = req.query.type;
+        const {type, from, to} = req.query;
         let records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
         records = sortByDate(records);
         const distinctDeviceIds = resolveDistinctDeviceIDs(records);
-        const devices = await resolveDeviceList(records, distinctDeviceIds);
+        const devices = await resolveDeviceList(records, distinctDeviceIds, {from, to});
         prevDeviceValues = devices;
         res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, devices, 'GET_DASHBOARD_SUCCESS'));
     } catch (error) {
@@ -232,9 +242,7 @@ dashboardAPI.get('/tokens/:policyId', async (req: AuthenticatedRequest, res: Res
     const guardians = new Guardians();
     try {
         const policyId = req.params.policyId;
-        const type = req.query.type;
-        const from = req.query.from;
-        const to = req.query.to;
+        const {type, from, to} = req.query;
         const records = await guardians.getVcDocuments({type, policyId});
         const tokens = await fetchTokens(records, {from, to});
         res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, tokens, 'GET_DASHBOARD_SUCCESS'));
