@@ -25,6 +25,7 @@ enum TrendType {
 };
 
 interface IDashboardDevice {
+    documentAmount: number;
     emissionDateTime: Date;
     deviceId: string;
     deviceName: string;
@@ -133,7 +134,7 @@ async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<
 
 // Devices Logic
 
-let prevDeviceValues: IDashboardDevice[] = null;
+let prevDeviceValues = {};
 
 async function resolveDeviceName(did: string): Promise<string | null> {
     const users = new Users();
@@ -141,10 +142,13 @@ async function resolveDeviceName(did: string): Promise<string | null> {
     return device ? device.username : null;
 }
 
-function resolveTrend(id: string, emissionType: number, value: number): string {
+function resolveTrend(policyId: string, id: string, emissionType: number, value: number, documentAmount: number): string {
     if(!prevDeviceValues) return TrendType.STILL;
-    for(const device of prevDeviceValues) {
+    for(const device of prevDeviceValues[policyId]) {
         if(device.deviceId === id) {
+            if(device.documentAmount === documentAmount) {
+                return device.currentRangeEmission.trend;
+            }
             switch(emissionType) {
                 case EmissionType.CURRENT_RANGE_EMISSION:
                     if(device.currentRangeEmission.value == value) return TrendType.STILL;
@@ -179,10 +183,11 @@ function sortByDate(records: IVCDocument[]): IVCDocument[] {
     });
 }
 // TODO: Adjusting for actual policy
-async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: string[], {from, to}): Promise<IDashboardDevice[]> {
+async function resolveDeviceList(policyId: string, records: IVCDocument[], distinctDeviceIds: string[], {from, to}): Promise<IDashboardDevice[]> {
     const temp: IDashboardDevice[] = [];
     for(const id of distinctDeviceIds) {
         temp.push({
+            documentAmount: 0,
             emissionDateTime: null,
             deviceId: id,
             deviceName: await resolveDeviceName(id),
@@ -206,11 +211,12 @@ async function resolveDeviceList(records: IVCDocument[], distinctDeviceIds: stri
                 */
                 // By period
                 if(isWithinPeriod(record['document']['credentialSubject'][0]['field0'], from, to)) {
+                    item.documentAmount++;
                     item.currentRangeEmission.value += Number(record['document']['credentialSubject'][0]['field1']);
                 }
             }
         }
-        item.currentRangeEmission.trend = resolveTrend(item.deviceId, EmissionType.CURRENT_RANGE_EMISSION, item.currentRangeEmission.value);
+        item.currentRangeEmission.trend = resolveTrend(policyId, item.deviceId, EmissionType.CURRENT_RANGE_EMISSION, item.currentRangeEmission.value, item.documentAmount);
         // item.totalEmission.trend = resolveTrend(item.deviceId, EmissionType.TOTAL_EMISSION, item.totalEmission.value);
     }
     return temp;
@@ -229,8 +235,8 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         let records = await guardians.getVcDocuments({type, "document.credentialSubject.policyId": policyId});
         records = sortByDate(records);
         const distinctDeviceIds = resolveDistinctDeviceIDs(records);
-        const devices = await resolveDeviceList(records, distinctDeviceIds, {from, to});
-        prevDeviceValues = devices;
+        const devices = await resolveDeviceList(policyId, records, distinctDeviceIds, {from, to});
+        prevDeviceValues[policyId] = devices;
         res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, devices, 'GET_DASHBOARD_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
