@@ -134,7 +134,7 @@ async function fetchTokens(records: IVCDocument[], period: {from, to}): Promise<
 
 // Devices Logic
 
-let prevDeviceValues = {};
+let prevDeviceValues = new Map<string, IDashboardDevice[]>();
 
 async function resolveDeviceName(did: string): Promise<string | null> {
     const users = new Users();
@@ -143,8 +143,8 @@ async function resolveDeviceName(did: string): Promise<string | null> {
 }
 
 function resolveTrend(policyId: string, id: string, emissionType: number, value: number, documentAmount: number): string {
-    if(!prevDeviceValues) return TrendType.STILL;
-    for(const device of prevDeviceValues[policyId]) {
+    if(prevDeviceValues.size === 0 || !prevDeviceValues.has(policyId)) return TrendType.STILL;
+    for(const device of prevDeviceValues.get(policyId)) {
         if(device.deviceId === id) {
             if(device.documentAmount === documentAmount) {
                 return device.currentRangeEmission.trend;
@@ -236,7 +236,9 @@ dashboardAPI.get('/devices/:policyId', async (req: AuthenticatedRequest, res: Re
         records = sortByDate(records);
         const distinctDeviceIds = resolveDistinctDeviceIDs(records);
         const devices = await resolveDeviceList(policyId, records, distinctDeviceIds, {from, to});
-        prevDeviceValues[policyId] = devices;
+        if(!prevDeviceValues.has(policyId)) {
+            prevDeviceValues.set(policyId, devices);
+        }
         res.json(formResponse(ResponseCode.GET_DASHBOARD_SUCCESS, devices, 'GET_DASHBOARD_SUCCESS'));
     } catch (error) {
         new Logger().error(error, ['API_GATEWAY']);
